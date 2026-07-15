@@ -133,6 +133,11 @@ function convertFontsToFile({ filePath, fonts, relativePath, translation, destin
         finalFonts = fileArray ? fonts[fileArray[1].toLowerCase() as keyof typeof fonts] : undefined,                                
         fontSrc = `${relativePath}/${basename(filePath)}`,
         format = fileArray?.[2] === 'ttf' ? 'truetype' : fileArray?.[2]
+
+    console.log(fontSrc);
+    
+
+    return
                             
 
     if(!baseName || !finalFonts || !format || !fontSrc) {
