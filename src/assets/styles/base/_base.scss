@@ -1,0 +1,93 @@
+@use "sass:map";
+@use "sass:math";
+
+:root {
+  line-height:      map.get($BASE, line_height);
+  font-size:        map.get($BASE, font_size);
+  font-family:      map.get($BASE, font_family);
+  font-weight:      map.get($BASE, font_weight);
+  color:            if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+  background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+
+  @include initiateThemeVars;
+}
+
+textarea,
+input {
+  &::placeholder {
+    transition: opacity map.get($ANIMATIONSPEEDS, base) ease-in-out;
+  }
+
+  &:focus {
+    &::placeholder {
+      opacity: 0;
+    }
+  }
+}
+
+body {
+  &.active {
+    overflow: hidden;
+    touch-action: none;
+    overscroll-behavior: none;
+
+    &::before {
+      content: "";
+        background: rgba(0,0,0, .85);
+        width: 100dvw;
+        height: 100dvh;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: map.get($ZINDEXES, highest);
+    }
+  }
+}
+
+.root {
+  min-height: 100%;
+  overflow: clip;
+  position: relative;
+  display: flex;
+  flex-flow: column nowrap;
+
+  & > main {
+    flex: 1 1 auto;
+  }
+  // Фикс слайдеров
+  > * {
+    min-width: 0;
+  }
+}
+
+.container {
+    $padding_x: map.get($BASE, container_padding_x);
+
+    width: 100%;
+    margin: 0 auto;
+    @include rem(min-width, map.get($BASE, min_width));
+
+    @if map.get($SETTINGS, responsive_type) == 1 {
+      @include rem((
+        padding: 0 math.div($padding_x, 2),
+        max-width: map.get($BASE, max_width)
+      ));
+    }
+    @else if map.get($SETTINGS, responsive_type) == 2 {
+      max-width: 100%;
+      @include rem(padding, 0 math.div($padding_x, 2));
+
+      @each $type, $props in $CONTAINER {
+        @include media($type, double) {
+          $padding_x: map.get($props, padding-x);
+          $max_width: map.get($props, max-width);
+
+          @include rem((
+            max-width: ($max_width + $padding_x),
+            padding: 0 math.div($padding_x, 2)
+          ))
+        }
+      }
+    }
+   
+}

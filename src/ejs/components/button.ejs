@@ -1,0 +1,62 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('src/ejs/components/button.ejs', { 
+//	button_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		wrapper: {
+//			parent: 'wrapperParentClass',
+//			block: 'wrapperChildBlockClass',
+//			class: ['wrapperChildClass'],
+//			id: ['wrapperChildID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		label: 'Button',
+//		link: '#',
+//		icon_component: {},
+//	}
+//}) %>
+%>
+<%
+	if(typeof button_component === 'undefined' || !button_component) {
+		return
+	}
+
+	button_component.this = {
+		...button_component.this,
+		tag: button_component.link ? 'a' : button_component.this && button_component.this.tag ? button_component.this.tag : 'button',
+		dataAttribute:  button_component.link ? `href=${button_component.link}` : button_component.this && button_component.this.dataAttribute ? button_component.this.dataAttribute : '',
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...button_component.this, componentName: 'button'})
+	var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...button_component.wrapper, componentName: 'button'})
+
+	var isWrapper = typeof button_component.wrapper === 'object' && button_component.wrapper
+%>
+
+<% if(isWrapper) { %>
+	<<%=wrapperThisTag%> <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
+<% } %>
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	<% if(typeof button_component.label !== 'undefined' && button_component.label) { %>
+		<%= button_component.label %>
+	<% } %>
+	<% if(typeof button_component.icon_component !== 'undefined' && button_component.icon_component) { %>
+		<%- include('externe/components/Icon/Icon.ejs', {
+			icon_component: button_component.icon_component
+		}) %>
+	<% } %>
+</<%=thisTag%>>
+<% if(isWrapper) { %>
+	</<%=wrapperThisTag%>>
+<% } %>

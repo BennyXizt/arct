@@ -1,0 +1,126 @@
+@use "sass:meta";
+@use "sass:map";
+@use "sass:list";
+@use "sass:math";
+
+@import './default/functions';
+
+@function pxToRem($px, $base: null) {
+    @if map.get($SETTINGS, pixels_only) or math.unit($px) != 'px' {
+        @return $px;
+    }   
+    
+    @if not $base {
+        $base: map.get($BASE, font_size);
+    }
+
+    @if($base <= abs($px) + 5px) {
+       @return calc(round(($px / $base) * 100) / 100) * 1rem;
+    } @else {
+        @return $px;
+    }
+}
+@function pxAdaptive($px, $base: null) {
+    @if meta.type-of($px) != 'number' {
+        @warn 'FUNCTION pxAdaptive($px, $base): The value ' + $px + ' is NOT a number';
+        @return undefined;
+    }
+
+    @if map.get($SETTINGS, pixels_only) or math.unit($px) != 'px' {
+        @return $px;
+    }   
+    @return pxToRem($px, $base);
+}
+
+/// Fluid sizing function for responsive values.
+///
+/// Generates a fluid value based on provided arguments.
+/// Can be used for responsive typography, spacing, widths, etc.
+///
+/// @param {Number|List}   $arg1 - Base value     (usually min/max size or single list)
+/// @param {Number|null|_} $arg2 - Max value      (optional, enables fluid scaling)
+/// @param {Number|null|_} $arg3 - Restriction    (optional, breakpoint)
+/// @param {Number|null}   $arg4 - Base Font Size (optional, breakpoint)
+///
+/// @return {String} - Returns a calc() expression
+@function fluid($arg1, $arg2: null, $arg3: null, $arg4: null) {
+    $min: null;
+    $max: null;
+    $restriction: null;
+
+    @if meta.type-of($arg1) == 'list' {
+        @for $i from 1 through list.length($arg1) {
+            $value: list.nth($arg1, $i);
+
+            @if meta.type-of($value) != 'number' {
+                @warn 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4): The value ' + $value + ' is NOT a number';
+                @return undefined;
+            }
+            @if math.unit($value) != 'px' {
+                @warn 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4): The number ' + $value + ' is NOT in px';
+                @return undefined;
+            }
+
+            @if $i == 1 {
+                $min: $value;
+            } @else if $i == 2 {
+                $max: $value;
+            } @else if $i == 3 {
+                $restriction: $value;
+            }
+        }
+    } @else {
+        @if not ($arg2) {
+            @warn 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4): Second argument is empty!';
+            @return unfefined;
+        }
+
+        $min: $arg1;
+        $max: $arg2;
+
+        @if math.unit($min) != 'px' or math.unit($max) != 'px' {
+            @warn 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4): The numbers (' + $min + ', ' + $max + ') is NOT in px';
+            @return undefined;
+        }
+
+        @if $arg3 {
+            $restriction: $arg3;
+        }
+    }
+
+    @if not $restriction {
+        $restriction: $HEADERS_CLAMP_WIDTH;
+    } @else if math.unit($restriction) != 'px' {
+        @warn 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4): The number ' + $restriction + ' is NOT in px';
+        @return undefined;
+    }
+
+    @if $min > $max {
+        $temp: $min;
+        $min: min($min, $max);
+        $max: max($temp, $max);
+
+        $modificator: 0.01 * $restriction;
+        $preffered: math.div($max, $modificator) + vw;
+        $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+        $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+
+        @return clamp($min, $preffered, $max);
+    }
+    @else {
+        $temp: $min;
+        $min: max($min, $max);
+        $max: min($temp, $max);
+
+        $range: $max - $min;
+        $mod: math.abs(math.div($range, $restriction));
+
+        $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+        $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+        $restriction: pxAdaptive($restriction);
+        $mod: pxAdaptive($mod);
+        $preferred: calc(#{$max} + (($restriction - 100vw) * #{$mod}));
+
+        @return clamp($max, $preferred, $min);
+    }
+}

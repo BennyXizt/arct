@@ -1,0 +1,252 @@
+@use 'sass:map';
+
+
+[data-fsc-combobox-id] {
+    @mixin hoverEffect {
+        --animationDelay: 0s;
+           
+        &[data-fsc-combobox-prestyled-list] {
+            ul {
+                max-height: 50dvh;
+                opacity: 1;
+                visibility: visible;
+            }
+        }
+
+        &[data-fsc-combobox-prestyled-icons] {
+            svg {
+                &[data-fsc-combobox-input-icon-dispose] {
+                    transform: translate(0, -50%) rotate(180deg);
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+
+        &[data-fsc-combobox-prestyled-all] {
+            ul {
+                max-height: 50dvh;
+                opacity: 1;
+                visibility: visible;
+            }
+            svg {
+                &[data-fsc-combobox-input-icon-dispose] {
+                    transform: translate(0, -50%) rotate(180deg);
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+        }
+    }
+
+    ul {
+        padding: unset;
+        margin: unset;
+
+        li::marker {
+            content: none;
+        }
+    }
+    &[data-fsc-combobox-prestyled] {
+        --animationDuration: .5s;
+        --animationDelay: .3s;
+        --maxHeightDuration: .8s;
+
+        position: relative;
+        display: flex;
+        z-index: map.get($ZINDEXES, highest);
+
+        &[data-fsc-combobox-prestyled-list] {
+            ul {
+                position: absolute;
+                // z-index: map.get($ZINDEXES, highest);
+                top: 100%;
+                max-height: 0;
+                width: 100%;
+                overflow: auto;
+                @include rem(border-radius, 8px);   
+                transition: 
+                    max-height var(--maxHeightDuration) ease-in-out,
+                    opacity var(--animationDuration) ease-in-out var(--animationDelay), 
+                    visibility var(--animationDuration) ease-in-out var(--animationDelay);
+                opacity: 0;
+                visibility: hidden;
+
+                li {
+                    cursor: pointer;
+
+                    p {
+                        position: relative;
+                    }
+                }
+            }
+        }
+        &[data-fsc-combobox-prestyled-input] {
+            input {
+                flex: 1;
+                // z-index: map.get($ZINDEXES, highest);
+            }
+            label {
+                // z-index: map.get($ZINDEXES, highest);
+            }
+        }
+        &[data-fsc-combobox-prestyled-icons] {
+            svg {
+                &[data-fsc-combobox-input-icon-dispose],
+                &[data-fsc-combobox-p-icon],
+                &[data-fsc-combobox-input-icon-close] {
+                    position: absolute;
+                    // z-index: map.get($ZINDEXES, highest);
+                    top: 50%;           
+                    transform: translate(0, -50%);
+                    transform-origin: center;
+                    transition: transform var(--animationDuration) ease-in-out var(--animationDelay);   
+                    @include rem(right, 7px);   
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px
+                    ));
+                    cursor: pointer;
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px,
+                        right: 40px 30px
+                    ));
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: 
+                        visibility var(--animationDuration) ease-in-out var(--animationDelay),
+                        opacity var(--animationDuration) ease-in-out var(--animationDelay);
+                }
+            }
+        }
+        &[data-fsc-combobox-prestyled-all] {
+            flex-flow: column nowrap;
+            @include rem(min-width, 240px);
+
+            label {
+                position: absolute;
+                background-color: #fff;
+                // z-index: map.get($ZINDEXES, highest);
+                @include rem((
+                    top: -12px,
+                    left: 8px,
+                    font-size: 14px,
+                    padding: 3px
+                ));
+            }
+            input {
+                outline: unset;
+                border: 2px solid black;
+                background-color: #fff;
+                flex: 1;
+                // z-index: map.get($ZINDEXES, highest);
+                @include rem((
+                    border-radius: 8px,
+                    font-size: 18px,
+                ));
+                @include fluid((
+                    padding-top: 20px 10px,
+                    padding-bottom: 20px 10px,
+                    padding-right: 90px 75px,
+                    padding-left: 20px 10px,
+                ));
+                @include line-height(23px, 18px);
+
+                &:focus,
+                &:focus-visible {
+                    border-color: #2e3aa8;
+                }
+            }
+            svg {
+                &[data-fsc-combobox-input-icon-dispose],
+                &[data-fsc-combobox-p-icon],
+                &[data-fsc-combobox-input-icon-close] {
+                    position: absolute;
+                    // z-index: map.get($ZINDEXES, highest);
+                    top: 50%;          
+                    @include rem(right, 7px);
+                    transform: translate(0, -50%);
+                    transform-origin: center;
+                    transition: transform var(--animationDuration) ease-in-out var(--animationDelay);      
+                    @include fluid((
+                        width: 30px 14px,
+                        height: 30px 14px,
+                    ));
+                    cursor: pointer;
+                }
+                &[data-fsc-combobox-input-icon-close] {
+                    @include fluid((
+                        right: 40px 30px
+                    ));
+                    visibility: hidden;
+                    opacity: 0;
+                    transition: visibility var(--animationDuration) ease-in-out var(--animationDelay), opacity var(--animationDuration) ease-in-out var(--animationDelay);
+                }
+            }
+            
+            ul {               
+                position: absolute;
+                background-color: #fff;
+                // z-index: map.get($ZINDEXES, highest);
+                top: 100%;
+                max-height: 0;
+                width: 100%;
+                overflow: auto;
+                @include rem(border-radius, 8px);
+                transition: 
+                    max-height var(--maxHeightDuration) ease-in-out,
+                    opacity var(--animationDuration) ease-in-out var(--animationDelay), 
+                    visibility var(--animationDuration) ease-in-out var(--animationDelay);
+                opacity: 0;
+                visibility: hidden; 
+                box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1), 0 6px 15px rgba(0, 0, 0, 0.3);
+
+                li {
+                    padding: 12px;
+                    cursor: pointer;
+
+                    p {
+                        position: relative;
+                        margin: unset;
+                        font-weight: 500;
+                        @include rem(font-size, 18px);
+                        @include line-height(23px, 18px);
+                    }
+
+                    span[data-fsc-combobox-highlited] {
+                        color: rgb(255, 71, 172);
+                    }
+
+                    @media (hover: hover) and (pointer: fine) {
+                        &:hover {
+                            background-color: rgb(255, 71, 172);
+
+                            span[data-fsc-combobox-highlited] {
+                                color: rgb(255, 255, 255);
+                            }
+                        }
+                    }
+                }
+            }     
+        }
+        &[data-fsc-combobox-collapsed='true'] {
+           @include hoverEffect;
+        }
+    }
+}
+
+[data-fsc-combobox-blank] {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    min-height: 100%;
+    z-index: map.get($ZINDEXES, high);
+}

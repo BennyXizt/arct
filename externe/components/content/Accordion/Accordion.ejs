@@ -1,0 +1,126 @@
+<%
+// Компонент Accordion: разворачивающийся блок с заголовком и содержимым
+// - Позволяет скрывать и раскрывать контент по клику на заголовок
+// - Поддерживает настройку поведения, классов, иконок и структуры заголовка
+// - Может содержать как текст, так и список элементов
+// - Управляется через объект настроек accordion_component
+//
+// Использование:
+//
+// Accordion({
+//     this: {
+//         parent: 'parentClass',
+//         block: 'childBlockClass',
+//         class: ['childClass'],
+//         id: ['childID'],
+//         tag: 'div',
+//         style: ['customStyle'],
+//         dataAttribute: ['customDataAttributes'], 
+//     }  
+//     summary:   {this: {wrapperNeeded: 'true' | 'false'}, content: ['']},                       // заголовок аккордиона
+//     body:      {this: {wrapperNeeded: 'true' | 'false'}, content: ['']},                       // контент
+//     behaviour: 'default' | 'alternative' | 'active',                                           // режим поведения (например: default - одиночное раскрытие, alternative - один раскрытый аккордион на сайт, active - изначально раскрыт)                                                                                  
+//     media:     {type:'min-width' | 'max-width' | 'min-height' | 'max-height', label: '999px'}  // с какого диапазона в пикселях будет работать аккордион
+// })
+//
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/content/Accordion/Accordion.ejs', {
+//     accordion_component: {
+// 		this: {
+// 			parent: 'parentClass',
+// 		},
+//         summary: {
+//             this: {
+//                 wrapperNeeded: 'false', 
+//             },
+//             content: ['']
+//         },
+//         body: {
+//             this: {
+//                 wrapperNeeded: 'false', 
+//             },
+//             content: ['']
+//         },
+//         behaviour: 'default',
+//         media: {
+//             type:'min-width',
+//             label: '999px'
+//         }     
+//     }
+// }) %>
+%>
+
+<%
+	if (typeof accordion_component === 'undefined' || !accordion_component) {
+		return
+	}
+
+    var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...accordion_component.this, componentName: 'accordion'})
+
+    accordion_component.summary.this = {
+        ...accordion_component.summary.this,
+        block: accordion_component.summary.this && accordion_component.summary.this.class ? accordion_component.summary.this.class : `${blockClass}__summary`
+    }
+    accordion_component.body.this = {
+        ...accordion_component.body.this,
+        block: accordion_component.body.this && accordion_component.body.this.class ? accordion_component.body.this.class : `${blockClass}__body`
+    }
+
+    var {thisClass: summaryThisClass, thisID: summaryThisID, thisTag: summaryThisTag, thisStyles: summaryThisStyles, thisDataAttributes: summaryThisDataAttributes} = externe.setupEJSComponent({...accordion_component.summary.this, componentName: blockClass})
+    var {thisClass: bodyThisClass, thisID: bodyThisID, thisTag: bodyThisTag, thisStyles: bodyThisStyles, thisDataAttributes: bodyThisDataAttributes} = externe.setupEJSComponent({...accordion_component.body.this, componentName: blockClass})
+    
+    if (typeof accordion_component.behaviour !== 'undefined' && accordion_component.behaviour) {
+        thisDataAttributes += ` data-fsc-accordion-behaviour=${accordion_component.behaviour}`
+    } else {
+        thisDataAttributes += ` data-fsc-accordion-behaviour=default`
+    }
+
+    var mediaVisibilityTypes = ['min-width', 'max-width', 'min-height', 'max-height']
+    if (
+        (typeof accordion_component.media !== 'undefined' && accordion_component.media) &&
+        (typeof accordion_component.media.type !== 'undefined' && accordion_component.media.type) &&
+        (typeof accordion_component.media.label !== 'undefined' && accordion_component.media.label) &&
+        (mediaVisibilityTypes.includes(accordion_component.media.type))
+    ) {
+        thisDataAttributes += ` data-fsc-accordion-media-query='${accordion_component.media.type}: ${accordion_component.media.label}'`
+    }
+
+%>
+
+<<%=thisTag%> data-fsc-accordion <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+    <% if(accordion_component.summary !== 'undefined' && accordion_component.summary) { 
+        isWrapperNeeded = accordion_component.summary.this.wrapperNeeded ?? true
+    %>
+        <% if(isWrapperNeeded) { %>
+            <<%=summaryThisTag%> data-fsc-accordion-summary <%-summaryThisDataAttributes%> class='<%=summaryThisClass%>' <%-summaryThisID%> <%-summaryThisStyles%>>
+        <% } %>
+
+            <% for (var content of accordion_component.summary.content) { 
+                var regEx = /(<svg\s+)(class=)/
+                
+                content = content.replace(regEx, `$1data-fsc-accordion-touch $2`)
+            %>
+                <%-content%>
+            <% } %>
+
+        <% if(isWrapperNeeded) { %>
+            </<%=summaryThisTag%>>
+        <% } %>
+    <% } %>
+    <% if(accordion_component.body !== 'undefined' && accordion_component.body) { 
+        isWrapperNeeded = accordion_component.body.this.wrapperNeeded ?? true    
+    %>
+        <% if(isWrapperNeeded) { %>
+            <<%=bodyThisTag%> data-fsc-accordion-body <%-bodyThisDataAttributes%> class='<%=bodyThisClass%>' <%-bodyThisID%> <%-bodyThisStyles%>>
+        <% } %>
+
+            <% for (var content of accordion_component.body.content) { %>
+                <%-content%>
+            <% } %>
+
+        <% if(isWrapperNeeded) { %>
+            </<%=bodyThisTag%>>
+        <% } %>
+     <% } %>
+</<%=thisTag%>>

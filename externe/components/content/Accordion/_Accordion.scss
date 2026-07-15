@@ -1,0 +1,49 @@
+@use 'sass:map';
+
+.accordion {
+    &[data-fsc-accordion-behaviour='default'] {
+        @mixin accordionHover {
+            .accordion {
+                &__body {
+                    opacity: 1;
+                    visibility: visible;
+                    transform: scaleY(1);
+                    max-height: 500px;
+                }
+                &__title {
+                    &-icon {
+                        transform: rotate(180deg);
+                    }
+                }
+            }
+        }
+
+        .accordion {
+            &__summary {
+                cursor: pointer;
+                display: flex;
+                justify-content: space-between;
+            }
+
+            &__body {
+                transform: scaleY(0);
+                transform-origin: top;
+                max-height: 0;
+                opacity: 0;
+                visibility: hidden;
+
+                @include transition(max-height, transform, opacity, visibility);
+            }
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                @include accordionHover;
+            }
+        }
+
+        &[data-fsc-accordion-active] {
+            @include accordionHover;
+        }
+    }
+}

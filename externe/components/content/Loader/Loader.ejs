@@ -1,0 +1,45 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/content/Loader/Loader.ejs', { 
+//	loader_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//}) %>
+%>
+<%
+	if(typeof loader_component === 'undefined' || !loader_component) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...loader_component.this, componentName: 'loader'})
+
+    var loadersMap = {
+        'default': ` ${blockClass}--default`,
+        'custom-1': ` ${blockClass}--custom-1`,
+        'custom-2': ` ${blockClass}--custom-2`,
+        'custom-3': ` ${blockClass}--custom-3`,
+        'custom-4': ` ${blockClass}--custom-4`,
+        'custom-5': ` ${blockClass}--custom-5`,
+        'skeleton': ` ${blockClass}--skeleton`,
+        'skeleton-2': ` ${blockClass}--skeleton-2`,
+        'skeleton-3': ` ${blockClass}--skeleton-3`,
+    }
+
+    if(typeof loader_component.type !== 'undefined' && loader_component.type && loadersMap[loader_component.type]) {
+        thisClass += loadersMap[loader_component.type]
+    }
+    else {
+        thisClass += ` ${blockClass}--default`
+    }
+%>
+
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>></<%=thisTag%>>

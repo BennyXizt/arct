@@ -1,0 +1,45 @@
+
+    
+@if $BUILD_ENV == "development" { 
+   h1 {
+      text-align: center;
+   }
+
+   svg {
+      color: rgb(194, 0, 0);
+      width: 30px;
+      height: 30px;
+   }
+
+   .icons {
+      margin-top: 20px;
+      padding: 10px;
+      display: flex;
+      flex-flow: row wrap;
+      gap: 10px;
+   }
+
+   .icon {
+      flex: 1 1 400px;
+      display: grid;
+      align-items: center;
+      justify-items: center;
+      grid-template-columns: 30px 1fr 1fr; 
+      grid-template-rows: 30px 1fr 1fr;
+      border: 1px solid black;
+      padding: 12px;
+      font-weight: bold;
+
+      div {
+         grid-column: 2 / -1;
+      }
+      svg,
+      div {
+         grid-row: 2 / -1;
+      }
+      span {
+         text-align: center;
+         grid-column: 1 / -1;
+      }
+   }
+}

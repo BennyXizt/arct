@@ -1,0 +1,62 @@
+<%
+// Пример вызова в шаблоне (EJS): #TODO
+//
+// <\%- include('externe/components/Logo/Logo.ejs', { 
+//	logo_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//	}) %>
+%>
+<%
+	if(typeof logo_component === 'undefined' || !logo_component) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...logo_component.this, componentName: 'logo'})
+
+
+    var linkBlockClass = ''
+    if((typeof logo_component.this !== 'undefined' && logo_component.this) && (typeof logo_component.this.block !== 'undefined' && logo_component.this.block)) {
+        linkBlockClass = logo_component.this.block
+    }
+
+    var thisLinkClass = 'link'
+    if((typeof logo_component.this !== 'undefined' && logo_component.this) && (typeof logo_component.this.parent !== 'undefined' && logo_component.this.parent)) {
+        thisLinkClass = `${logo_component.this.parent}__${thisLinkClass} ${logo_component.this.parent}__${thisLinkClass}--logo`
+    }
+    else if((typeof logo_component.this !== 'undefined' && logo_component.this) && (typeof logo_component.this.class !== 'undefined' && logo_component.this.class)) {
+		if(typeof logo_component.this.class === 'string') {
+            thisLinkClass = `${logo_component.this.class} ${logo_component.this.class}--logo`
+        }
+        else if(typeof logo_component.this.class === 'object') {
+            thisLinkClass = `${logo_component.this.class.join(' ')}--logo`
+        }
+	} 
+    else thisLinkClass = linkBlockClass
+%>
+
+<%if(logo_component.homePage === false) { %>
+    <a href="./" class='<%=thisLinkClass%>'>
+<% } %>
+
+<% if(typeof logo_component.image_component !== 'undefined' && logo_component.image_component) { %>
+    <%- include('externe/components/media/Image/Image.ejs', {
+        image_component: logo_component.image_component
+    })%>
+<% } else if(typeof logo_component.icon_component !== 'undefined' && logo_component.icon_component) { %>
+    <%- include('externe/components/media/Icon/Icon.ejs', {
+        icon_component: logo_component.icon_component
+    })%>
+<% } %>
+
+<%if(logo_component.homePage === false) { %>
+    </a>
+<% } %>

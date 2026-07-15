@@ -1,0 +1,25 @@
+@use 'sass:map';
+
+.text-trigger {
+    cursor: pointer;
+    position: relative;
+    color: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+    @include transition(color);
+
+    &__disabled {
+        display: none;
+    }
+
+    &.active {
+        z-index: map.get($ZINDEXES, highest);
+
+        .text-trigger {
+            &__disabled {
+                display: inline;
+            }
+            &__active {
+                display: none;
+            }
+        }
+    }
+}

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <%- include('externe/components/content/DummyAside/DummyAside.ejs') %>
+    <div class="root">
+        <article class="components _marquee">
+            <h1>Marquee</h1>
+            <%- include('externe/components/content/Marquee/Marquee.ejs', {
+                marquee_component: {
+                    data: [
+                        'someText',
+                        '-',
+                        'anotherText',
+                        '-'
+                    ]
+                }
+            }) %>
+            <%- include('externe/components/content/Marquee/Marquee.ejs', {
+                marquee_component: {
+                    this: {
+                        dataAttribute: 'data-fsc-marquee-direction=right',
+                    },
+                    data: [
+                        'someText',
+                        '-',
+                        'anotherText',
+                        '-'
+                    ]
+                }
+            }) %>
+        </article>
+        <article class="components _accordion">
+            <h1>Accordion</h1>
+            <%- include('externe/components/content/Accordion/Accordion.ejs', {
+                accordion_component: {
+                    summary: {
+                        content: 'Accordion Summary'
+                    },
+                    body: {
+                        content: 'Accordion Body'
+                    }
+                }
+            })%>
+        </article>
+        <article class="components _loader">
+            <h1>Loaders</h1>
+            <div class="flex flex-col gap-5">
+                <div class="flex flex-row items-center gap-12">
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {}
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'custom-1'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'custom-2'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'custom-3'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'custom-4'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'custom-5'
+                        }
+                    }) %>
+                </div>
+                <div class="flex flex-row flex-wrap items-center gap-3">
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'skeleton'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'skeleton-2'
+                        }
+                    }) %>
+                    <%- include('externe/components/content/Loader/Loader.ejs', { 
+                        loader_component: {
+                            type: 'skeleton-3'
+                        }
+                    }) %>
+                </div>
+            </div>
+        </article>
+        <article class="components _triggerMenus">
+            <h1>Trigger Menus</h1>
+            <div class="flex gap-4">
+                <article class="flex flex-col items-center gap-2 components _burger">
+                    <h6>Burger</h6>
+                    <%- include('externe/components/menu/Burger/Burger.ejs', {
+                        burger_component: {
+                            title: 'Accordion Summary',
+                            body: 'Accordion Body'
+                        }
+                    })%>
+                </article>
+                <article class="flex flex-col items-center gap-2 components _textTrigger">
+                    <h6>TextTrigger</h6>
+                    <%- include('externe/components/menu/TextTrigger/TextTrigger.ejs', { 
+                        texttrigger_component: {
+                            this: {
+                                parent: 'parentClass',
+                                block: 'childBlockClass',
+                                class: ['childClass'],
+                                id: ['childID'],
+                                tag: 'div',
+                                style: ['customStyle'],
+                                dataAttribute: ['customDataAttributes'], 
+                            }
+                        }
+                    }) %>
+                </article>
+            </div>
+        </article>
+        <article class="components _themeToggle">
+            <h1>Theme Toggle</h1>
+            <%- include('externe/components/menu/ThemeToggle/ThemeToggle.ejs', {
+                theme_toggle_component: {}
+            })%>
+        </article>
+        <article class="components _combobox">
+            <h1>ComboBox</h1>
+            <div>
+                <%- include('externe/components/content/ComboBox/ComboBox.ejs', {
+                    combobox_component: {
+                        prestyled: 'all',
+                        label: 'Выберите город',
+                        placeholder: 'Начните вводить',
+                        icons: {
+                            input_dispose: {
+                                this: {
+                                    tag: 'button'
+                                },
+                                path: '/externe/temporary/icons/sprite.svg#angle-down-solid-full'
+                            },
+                            input_close: {
+                                this: {
+                                    tag: 'button'
+                                },
+                                path: '/externe/temporary/icons/sprite.svg#xmark-solid-full'
+                            },
+                            p: {
+                                this: {
+                                    tag: 'button'
+                                },
+                                path: '/externe/temporary/icons/sprite.svg#plus-solid-full'
+                            }
+                        },
+                        data: [
+                            { flag: 'de', city: 'Deutschland' },
+                            { flag: 'fr', city: 'France' },
+                            { flag: 'es', city: 'España' }
+                        ]
+                    }
+                }) %>
+            </div>
+            <div class="!mt-5">
+                <%- include('externe/components/content/ComboBox/ComboBox.ejs', {
+                    combobox_component: {
+                        label: 'Выберите город',
+                        placeholder: 'Начните вводить',
+                        icons: {
+                            input_dispose: '../icons/sprite.svg#angle-down-solid-full',
+                            input_close: '../icons/sprite.svg#xmark-solid-full',
+                            p: '../icons/sprite.svg#plus-solid-full'
+                        },
+                        data: [
+                            { flag: 'de', city: 'Deutschland' },
+                            { flag: 'fr', city: 'France' },
+                            { flag: 'es', city: 'España' }
+                        ]
+                    }
+                }) %>
+            </div>
+        </article>
+        <article class="components _carousel">
+            <h1>Carousel Need Fix</h1>
+            <%- include('externe/components/media/Carousel/Carousel.ejs', {
+                carousel_component: {
+                    list: [
+                        {
+                            img: {
+                                src: 'https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg',
+                                alt: 'image here',
+                                width: '230px',
+                                height: '230px'
+                            }
+                        },
+                        {
+                            img: {
+                                src: 'https://archive.smashing.media/assets/344dbf88-fdf9-42bb-adb4-46f01eedd629/68dd54ca-60cf-4ef7-898b-26d7cbe48ec7/10-dithering-opt.jpg',
+                                alt: 'image here',
+                                width: '230px',
+                                height: '230px'
+                            }
+                        },
+                    ]
+                }
+            }) %>
+        </article>
+        <article class="components _image">
+            <h1>Image</h1>
+            <%- include('externe/components/media/Image/Image.ejs', {
+                image_component: {
+                    this: {
+                        style: 'display: flex; justify-content: space-around;'
+                    },
+                    img: {
+                        src: 'https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg',
+                        alt: 'image here',
+                        width: '230px',
+                        height: '230px'
+                    }
+                }
+            }) %>
+        </article>
+        <article class="components _stars">
+            <h1>Stars</h1>
+            <%- include('externe/components/content/Stars/Stars.ejs', { 
+                stars_component: {
+                    stars: 5,
+                    icon_component: {
+                        wrapper: {
+                            class: 'stars__link',
+                            tag: 'a',
+                            dataAttribute: 'href=#'
+                        },
+                        name: 'ph_star',
+                        path: '/externe/temporary/icons/sprite.svg'
+                    }
+                }
+            }) %>
+        </article>
+        <article class="components _counter">
+            <h1>Counter</h1>
+            <%- include('externe/components/content/Counter/Counter.ejs', { 
+                counter_component: {
+                    this: {
+                        dataAttribute: [
+                            'data-fsc-counter-mode=decrement'
+                        ]
+                    },
+                    value: {
+                        start: '999.999',
+                        end: '-5.555'
+                    }
+                }
+            }) %>
+            <%- include('externe/components/content/Counter/Counter.ejs', { 
+                counter_component: {
+                    value: {
+                        start: '0',
+                        end: '999.999'
+                    }
+                }
+            }) %>
+        </article>
+        <article data-fsc-dynamic data-fsc-dynamic-target="article._image" data-fsc-dynamic-media-query="max-width: 769px" class="script _dynamic">
+            <h1>Dynamic max-width: 769px</h1>
+            <%- include('externe/components/media/Image/Image.ejs', {
+                image_component: {
+                    this: {
+                        style: 'display: flex; justify-content: space-around;',
+                    },
+                    img: {
+                        src: 'https://shorthand.com/the-craft/raster-images/assets/5kVrMqC0wp/sh-unsplash_5qt09yibrok-4096x2731.jpeg',
+                        alt: 'image here',
+                        width: '30px',
+                        height: '30px'
+                    }
+                }
+            }) %>
+        </article>
+    </div>
+    <script type="module" src="../temporary/html/externeComponents.ts"></script>
+    <script type="module" src="/src/ts/main.ts"></script>
+</body>
+</html>

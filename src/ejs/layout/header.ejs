@@ -1,0 +1,61 @@
+<% 
+	var pages = []
+%>
+<header class="header">
+    <div class="header__container container">
+        <div class="header__body">
+           <%- include('externe/components/menu/Logo/Logo.ejs', {
+                logo_component: {
+                    this: {
+                        parent: 'header'
+                    },
+                    homePage: header_component.homePage,
+                    // icon_component: {
+                    //     this: {
+                    //         class: 'header__logo'
+                    //     },
+                    //     fullpath: "/media/image/logo.svg"
+                    // },
+                    image_component: {
+                        this: {
+                            class: 'header__logo'
+                        },
+                        img: {
+                            src: '/media/image/logo.svg',
+                            alt: 'website-logo'
+                        }
+                    }
+                }
+           })%>
+            <%- include('src/ejs/components/headerMenu.ejs', {
+                header_menu_component: {
+                    list: pages,
+                    activePage: header_component.activePage ?? ''
+                }
+            }) %>
+            <%- include('externe/components/menu/Burger/Burger.ejs', {
+                burger_component: {
+                    this: {
+                        parent: 'header'
+                    }
+                }
+            })%>
+            <%- include('externe/components/menu/TextTrigger/TextTrigger.ejs', { 
+                texttrigger_component: {
+                    this: {
+                        parent: 'parentClass',
+                        block: 'childBlockClass',
+                        class: ['childClass'],
+                        id: ['childID'],
+                        tag: 'div',
+                        style: ['customStyle'],
+                        dataAttribute: ['customDataAttributes'], 
+                    }
+                }
+            }) %>
+            <%- include('externe/components/menu/ThemeToggle/ThemeToggle.ejs', {
+                theme_toggle_component: {}
+            })%>
+        </div>
+    </div>
+</header>

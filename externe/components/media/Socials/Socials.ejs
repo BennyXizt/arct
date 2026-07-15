@@ -1,0 +1,63 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/media/Socials/Socials.ejs', { 
+//	socials_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		wrapper: {
+//			parent: 'wrapperParentClass',
+//			block: 'wrapperChildBlockClass',
+//			class: ['wrapperChildClass'],
+//			id: ['wrapperChildID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//}) %>
+%>
+<%
+	if(typeof socials_component === 'undefined' || !socials_component) {
+		return
+	}
+
+	socials_component.this = {
+		...socials_component.this,
+		tag: 'ul'
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...socials_component.this, componentName: 'socials'})
+	var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...socials_component.wrapper, componentName: 'socials'})
+
+	var isWrapper = typeof socials_component.wrapper === 'object' && socials_component.wrapper
+
+	var socials = [
+        {
+            
+        }
+	]
+%>
+
+<% if(isWrapper) { %>
+	<<%=wrapperThisTag%> <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
+<% } %>
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	<% for(var social of socials) { %>
+		<li class="<%=blockClass%>__item">
+			<%- include('src/ejs/components/button.ejs', {
+				button_component: social.button_component
+			}) %>
+		</li>
+	<% } %>
+</<%=thisTag%>>
+<% if(isWrapper) { %>
+	</<%=wrapperThisTag%>>
+<% } %>

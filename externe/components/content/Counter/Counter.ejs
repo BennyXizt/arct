@@ -1,0 +1,46 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/Counter/Counter.ejs', { 
+//	counter_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			tag: 'article',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//      value: '150'
+//	}
+//	}) %>
+%>
+<%
+	if(typeof counter_component === 'undefined' || !counter_component) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...counter_component.this, componentName: 'counter'})
+
+	if(
+		(typeof counter_component.value !== 'undefined' && counter_component.value) &&
+		(typeof counter_component.value.end !== 'undefined' && counter_component.value.end)
+	) {
+		thisDataAttributes += ` data-fsc-counter data-fsc-counter-finalvalue=${counter_component.value.end}`
+	}
+
+	var startValue = 0
+	if(
+		(typeof counter_component.value !== 'undefined' && counter_component.value) &&
+		(typeof counter_component.value.start !== 'undefined' && counter_component.value.start)
+	) {
+		startValue = counter_component.value.start
+	}
+
+%>
+
+<<%=thisTag%> class='<%=thisClass%>' <%-thisStyles%>>
+	<span <%-thisDataAttributes%>>
+		<%=startValue%>
+	</span>
+</<%=thisTag%>>

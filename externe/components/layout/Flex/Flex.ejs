@@ -1,0 +1,26 @@
+<% 
+// Пример вызова в шаблоне (EJS):
+//
+// include('externe/components/layout/Flex/Flex.ejs', {
+// 	content: page_includes // 
+// })
+// 
+// Необходимые данные - [Массив элементов]:
+//    page_includes = []
+// 
+//    for (var page_component of pages) {
+// 	    page_includes.push(include('link', {
+// 		  component: {}
+// 	    }))
+//    }
+%>
+<%
+	blockClass = 'flex'
+	
+%>
+
+<article class='layout__<%=blockClass%> <%=blockClass%>'>
+	<% for (var element of content) { %>
+		<%- element %>
+	<% } %>
+</article>

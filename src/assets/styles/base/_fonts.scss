@@ -1,0 +1,19 @@
+@use "sass:map";
+
+@each $font-name, $weights in map.get($FONTFAMILIES, fonts) {
+  @each $weight, $file-name in $weights {
+    @font-face {
+      font-family: $font-name;
+      src: url("#{map.get($FONTFAMILIES, path)}#{$file-name}.ttf") format("truetype");
+      font-display: swap;
+
+      @if $weight == italic {
+        font-weight: 400;
+        font-style: italic;
+      } @else {
+        font-weight: $weight;
+        font-style: normal;
+      }
+    }
+  }
+}

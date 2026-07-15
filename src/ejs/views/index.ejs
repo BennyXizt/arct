@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+    <% if(typeof head_component.lang !== 'undefined' && head_component.lang) { %>
+        <html lang="<%= head_component.lang %>">
+    <% } else { %>
+        <html lang="en">
+    <% } %>
+<head>
+    <%- include('src/ejs/layout/head.ejs') %>
+</head>
+<body>
+    <%- include('externe/components/content/DummyAside/DummyAside.ejs') %>
+    <div class="root">
+        <%- include('src/ejs/layout/header.ejs', {
+            header_component: {
+                homePage: true,
+                // activePage: ''
+            }
+        })%>
+        <main class="layout layout--main"></main>
+        <%- include('src/ejs/layout/footer.ejs') %>
+    </div>
+    <script type="module" src="/src/ts/main.ts"></script>
+</body>
+</html>

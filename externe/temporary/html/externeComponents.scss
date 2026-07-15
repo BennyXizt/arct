@@ -1,0 +1,26 @@
+@import 
+    '../../../src/assets/styles/abstracts/variables',
+    '../../../src/assets/styles/abstracts/mixins',
+    '../../../src/assets/styles/abstracts/functions',
+    '../../../src/assets/styles/abstracts/placeholders';
+
+@import 
+    '../../../src/assets/styles/base/reset',
+    '../../../src/assets/styles/base/fonts',
+    '../../../src/assets/styles/base/typography',
+    '../../../src/assets/styles/base/base';
+
+
+@import
+    '../../../externe/components/content/Marquee/Marquee',
+    '../../../externe/components/media/Carousel/Carousel',
+    '../../../externe/components/content/Loader/Loader',
+    '../../../externe/components/content/Stars/Stars',
+    '../../components/content/Accordion/Accordion',
+    '../../components/content/ComboBox/ComboBox';
+
+.components {
+    h1 {
+        text-align: center;
+    }
+}

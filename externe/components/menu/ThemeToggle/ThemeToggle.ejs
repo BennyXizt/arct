@@ -1,0 +1,29 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/ThemeToggle/ThemeToggle.ejs', { 
+//	theme_toggle_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//	}) %>
+%>
+<%
+	if(typeof theme_toggle_component === 'undefined' || !theme_toggle_component) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...theme_toggle_component.this, componentName: 'theme-toggle'})
+    thisTag = 'button'
+%>
+
+<<%=thisTag%> data-fsc-themetoggle <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	Toggle
+</<%=thisTag%>>

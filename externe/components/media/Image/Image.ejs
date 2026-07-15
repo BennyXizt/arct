@@ -1,0 +1,135 @@
+<%
+// Компонент <Image>: адаптивное изображение с поддержкой современных форматов
+// Используетcz для выбора формата изображения в зависимости от поддержки браузером
+// 1. <source type="image/webp"> — если браузер поддерживает WebP, загрузит webp-версию
+// 2. <source type="image/jpeg"> — fallback, если WebP не поддерживается
+// 3. <img> — обязательный элемент (fallback по умолчанию), с srcset и sizes для адаптивной загрузки
+// Атрибуты width/height помогают избежать сдвига контента (layout shift)
+// loading="lazy" — отложенная загрузка, улучшает производительность
+// decoding="async" — не блокирует отрисовку страницы
+//
+// Пример использования компонента:
+//   <\%- include('externe/components/media/Image/Image.ejs', {
+//         image_component: {
+//            this: {
+//                 parent: 'parentClass',
+//                 block: 'childBlockClass',
+//                 class: ['childClass'],
+//                 id: ['childID'],
+//                 tag: 'div',
+//                 style: ['customStyle'],
+//                 dataAttribute: ['customDataAttributes'], 
+//             },
+//             wrapper: {
+//                 parent: 'wrapperParentClass',
+//                 block: 'wrapperChildBlockClass',
+//                 class: ['wrapperChildClass'],
+//                 id: ['wrapperChildID'],
+//                 tag: 'div',
+//                 style: ['customStyle'],
+//                 dataAttribute: ['customDataAttributes'], 
+//             },
+//             img: {
+//                src: 'src',
+//                alt: 'alt',
+//                width: 600,
+//                height: 400,
+//                loading: 'lazy',
+//                decoding: 'async',
+//                srcset: ['srcset'],
+//             },
+//             images: [
+//                { type: 'image/webp', sizes: '100vw', srcset: ['srcset'] },
+//             ]
+//         }
+//   }) %>
+%>
+
+<% 
+    if(typeof image_component === 'undefined' || !image_component) {
+        return
+    }
+
+    var {thisClass, blockClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...image_component.this, componentName: 'image'})
+    var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...image_component.wrapper, componentName: 'figure'})
+
+	var isWrapper = typeof image_component.wrapper === 'object' && image_component.wrapper
+
+    var displayType = undefined
+    var image = undefined
+    if(
+        (typeof image_component.img !== 'undefined' && image_component.img) &&
+        (typeof image_component.images !== 'undefined' && image_component.images)       
+    ) {
+        displayType = 'picture'
+        image = image_component.img
+    }
+    else if (
+        !(typeof image_component.img !== 'undefined' && image_component.img) &&
+         (typeof image_component.images !== 'undefined' && image_component.images)
+    ) {
+        displayType = 'picture'
+        image = image_component.images[0]
+    }
+    else if(
+        (typeof image_component.img !== 'undefined' && image_component.img) &&
+        !(typeof image_component.images !== 'undefined' && image_component.images)
+    ) {
+        image = image_component.img
+        displayType = 'image'
+    }
+
+%>
+
+<% if(isWrapper) { %>
+	<figure <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
+<% } %>
+        <% if(displayType === 'picture') { %>
+            <picture>
+                <% for(const source of image_component.images) { %>
+                    <!-- <%= source.type %> -->
+                    <source 
+                        <% if (source.srcset) { 
+                            let srcset = ''
+
+                            if(typeof source.srcset === 'string') {
+                                srcset = source.srcset
+                            } else if(typeof source.srcset === 'object') {
+                                srcset = source.srcset.join(', ')
+                            }
+                        %> 
+                            srcset="<%= srcset %>" 
+                        <% } %>
+                        <% if (source.type) { %> type="<%= source.type %>" <% } %>
+                        <% if (source.sizes) { %> sizes="<%= source.sizes %>" <% } else { %>  sizes="100vw" <% } %>
+                    >
+                <% } %>
+        <% } %>
+
+            <img <%=thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>
+                src="<%= image.src %>"
+                <% if (image.alt) { %> alt="<%= image.alt %>" <% } %>
+                <% if (image.width) { %> width="<%= image.width %>" <% } %>
+                <% if (image.height) { %> height="<%= image.height %>" <% } %>
+                <% if (image.loading) { %> loading="<%= image.loading %>" <% } %>
+                <% if (image.decoding) { %> decoding="<%= image.decoding %>" <% } %>
+                <% if (image.srcset) { 
+                    let srcset = ''
+
+                    if(typeof image.srcset === 'string') {
+                        srcset = image.srcset
+                    } else if(typeof image.srcset === 'object') {
+                        srcset = image.srcset.join(', ')
+                    }
+                %> 
+                    srcset="<%= srcset %>" 
+                <% } %>
+                <% if (image.sizes) { %> sizes="<%= image.sizes %>" <% } %>
+            >
+
+        <% if(displayType === 'picture') { %>
+         </picture>
+        <% } %>
+<% if(isWrapper) { %>
+	</figure>
+<% } %>

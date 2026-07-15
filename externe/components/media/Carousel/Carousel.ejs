@@ -1,0 +1,63 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('src/ejs/components/carousel.ejs', { 
+//	carousel_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		list: [
+//			image_component: {},
+//		]
+//	}
+//}) %>
+%>
+<%
+	if(
+		(typeof carousel_component === 'undefined' || !carousel_component) || 
+		(typeof carousel_component.list === 'undefined' && !carousel_component.list)
+	) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...carousel_component.this, componentName: 'carousel'})
+	
+	thisTag = 'article'
+%>
+
+
+<<%=thisTag%> data-fsc-carousel <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	<ul class="<%=blockClass%>__list" data-fsc-carousel-list>
+		<% for (var image_component of carousel_component.list) { %>
+			<li class="<%=blockClass%>__element" data-fsc-carousel-item>
+				
+				<%- include('externe/components/media/Image/Image.ejs', {
+					image_component: image_component
+				}) %>
+			
+			</li>
+		<% } %>
+	</ul>
+	
+	<div class="<%=blockClass%>__controls">
+		<button data-fsc-carousel-button-left>Left</button>
+		<button data-fsc-carousel-button-right>Right</button>
+	</div>
+	<ul class="<%=blockClass%>__dots" data-fsc-carousel-dots>
+		<% for (var i = 0; i < carousel_component.list.length; i++) { %>
+			<li class="<%=blockClass%>__dot" data-fsc-carousel-dot>
+				<%= i + 1 %>
+			</li>
+		<% } %>
+	</ul>
+	<div class="<%=blockClass%>__counter">
+		<span data-fsc-carousel-timer></span>
+		<span data-fsc-carousel-counter></span>
+	</div>
+</<%=thisTag%>>

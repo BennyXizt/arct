@@ -1,0 +1,78 @@
+
+@function list-max($list) {
+    @if meta.type-of($list) != 'list' {
+        @warn 'FUNCTION list-max($list): The argument is NOT a list';
+        @return undefined;
+    }
+
+    $max: list.nth($list, 1);
+
+    @if meta.type-of($max) != 'number' {
+        @warn 'FUNCTION list-max($list): The value ' + $min + ' is NOT a number';
+        @return undefined;
+    }
+
+    $unit: math.unit($max);
+
+    @for $i from 1 through list.length($list) {
+        $value: list.nth($list, $i);
+
+        @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+            @warn 'FUNCTION list-max($list): either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+            @return undefined;
+        }
+
+        @if($value > $max) {
+            $max: $value;
+        }
+    }
+
+    @return $max;
+}
+@function list-min($list) {
+    @if meta.type-of($list) != 'list' {
+        @warn 'FUNCTION list-min($list): The argument is NOT a list';
+        @return undefined;
+    }
+
+    $min: list.nth($list, 1);
+
+    @if meta.type-of($min) != 'number' {
+        @warn 'FUNCTION list-min($list): The value ' + $min + ' is NOT a number';
+        @return undefined;
+    }
+
+    $unit: math.unit($min);
+
+    @for $i from 1 through list.length($list) {
+        $value: list.nth($list, $i);
+
+        @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+            @warn 'FUNCTION list-min($list): either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+            @return undefined;
+        }
+
+        @if($value < $min) {
+            $min: $value;
+        }
+    }
+
+    @return $min;
+}
+@function getTheme($theme, $value) {
+    @return map.get(map.get($THEME, $theme), $value);
+}
+
+@function getThemeTag($target) {
+    @if not map.get($SETTINGS, theme) {
+        @return null;
+    }
+
+    @each $key, $value in map.get($THEME, default) {
+        @if $key == $target {
+            @return #{'var(#{$THEMEPREFIX}#{$key})'};
+        }
+    }
+
+    @return null;
+}

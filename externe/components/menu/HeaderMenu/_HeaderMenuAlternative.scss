@@ -1,0 +1,79 @@
+@use 'sass:map';
+@use 'sass:math';
+
+@mixin activeMenu {
+    background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+    color: if(map.get($SETTINGS, theme), getThemeTag(secondary-text-color), map.get($COLORS, default));
+}
+
+.menu {
+    &__list {
+        display: flex;
+        flex-flow: column wrap;
+        justify-content: space-between;
+        @include rem(row-gap, 10px);
+    }
+
+    &__link {
+        flex: 1;
+    }
+
+    @include media(tablet, max) {
+        $padding_x: map.get($BASE, container_padding_x);
+
+        position: fixed;
+        opacity: 0;
+        visibility: hidden;
+        bottom: 100%;
+        left: 0;
+        width: 100dvw;
+        height: 80dvh;
+
+        @include rem((
+            padding-left: 12px,
+            padding-right: 12px,
+            padding-bottom: 12px
+        ));
+
+        &__body {
+            height: 100%;
+            overflow-y: auto;
+            background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+            @include transition(background-color);
+        }
+
+        &__item {
+            background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+            @include transition(background-color);
+
+            @media (hover: hover) and (pointer: fine) {
+                &:hover {
+                    @include activeMenu;
+                }
+            }
+
+            &.active {
+                @include activeMenu;
+            }
+        }
+
+        &__link {
+            display: flex;
+        }
+
+        &.active {
+            opacity: 1;
+            visibility: visible;
+            bottom: 0;
+            z-index: map.get($ZINDEXES, highest);
+        }
+    }
+    @include media(tablet) {
+        &__list {
+            flex-flow: row wrap;
+        }
+        &__item {
+            position: relative;
+        }
+    }
+}

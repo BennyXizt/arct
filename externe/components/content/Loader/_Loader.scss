@@ -1,0 +1,442 @@
+@use 'sass:map';
+@use 'sass:math';
+
+.loader {
+    &--default {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+        $backgroundColor: #d3d3d3;
+
+        border-radius: 50%;
+        animation: loader-default-rotate map.get($ANIMATIONSPEEDS, max) linear infinite;
+        @include transition(border-color);
+        
+        @include fluid((
+            border: (16px 8px) solid $backgroundColor,
+            border-top: (16px 8px) solid $mainColor,
+            width: 80px 40px,
+            height: 80px 40px
+        ));
+
+        @keyframes loader-default-rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    }
+    &--custom-1 {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        color: $mainColor;
+        text-indent: -9999em;
+        overflow: hidden;
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        position: relative;
+        transform: translateZ(0);
+        animation: 
+            loader-custom-1-spin map.get($ANIMATIONSPEEDS, max) infinite ease,
+            loader-custom-1-rotate map.get($ANIMATIONSPEEDS, max) infinite ease;
+
+        @include transition(color);
+
+        @include fluid(font-size, 40px 20px);
+
+        @keyframes loader-custom-1-spin {
+            0% {
+                box-shadow: 0 -0.83em 0 -0.4em,
+                0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+                0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em, 
+                0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 
+                0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em, 
+                -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, 
+                -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+                -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, 
+                -0.749em -0.34em 0 -0.477em;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+                -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, 
+                -0.82em -0.09em 0 -0.477em;
+            }
+            100% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 
+                0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+        }
+
+        @keyframes loader-custom-1-rotate {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+    }
+    &--custom-2 {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        color: $mainColor;
+        text-indent: -9999em;
+        overflow: hidden;
+        width: 12em;
+        height: 12em;
+        border-radius: 50%;
+        position: relative;
+        transform: translateZ(0);
+        animation: 
+            loader-custom-1-spin map.get($ANIMATIONSPEEDS, max) infinite ease,
+            loader-custom-1-rotate map.get($ANIMATIONSPEEDS, max) infinite ease;
+
+        @include rem(font-size, 3px);
+        @include transition(color);
+
+        @keyframes loader-custom-1-spin {
+            0% {
+                box-shadow: 0 -0.83em 0 -0.4em,
+                0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em,
+                0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            5%,
+            95% {
+                box-shadow: 0 -0.83em 0 -0.4em, 
+                0 -0.83em 0 -0.42em, 0 -0.83em 0 -0.44em, 
+                0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+            10%,
+            59% {
+                box-shadow: 0 -0.83em 0 -0.4em, 
+                -0.087em -0.825em 0 -0.42em, -0.173em -0.812em 0 -0.44em, 
+                -0.256em -0.789em 0 -0.46em, -0.297em -0.775em 0 -0.477em;
+            }
+            20% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.338em -0.758em 0 -0.42em,
+                -0.555em -0.617em 0 -0.44em, -0.671em -0.488em 0 -0.46em, 
+                -0.749em -0.34em 0 -0.477em;
+            }
+            38% {
+                box-shadow: 0 -0.83em 0 -0.4em, -0.377em -0.74em 0 -0.42em,
+                -0.645em -0.522em 0 -0.44em, -0.775em -0.297em 0 -0.46em, 
+                -0.82em -0.09em 0 -0.477em;
+            }
+            100% {
+                box-shadow: 0 -0.83em 0 -0.4em, 0 -0.83em 0 -0.42em, 
+                0 -0.83em 0 -0.44em, 0 -0.83em 0 -0.46em, 0 -0.83em 0 -0.477em;
+            }
+        }
+
+        @keyframes loader-custom-1-rotate {
+            0% { transform: rotate(0deg) }
+            100% { transform: rotate(360deg) }
+        }
+    }
+    &--custom-3 {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        border-radius: 50%;
+        display: inline-block;
+        border-top: 3px solid $mainColor;
+        border-right: 3px solid transparent;
+        animation: loader-custom-3-rotation map.get($ANIMATIONSPEEDS, max) linear infinite;
+       
+        @include transition(border-color);
+
+        @include fluid((
+            width: 80px 40px,
+            height: 80px 40px
+        ));
+
+        @keyframes loader-custom-3-rotation {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        } 
+    }
+    &--custom-4 {
+        width: 1em;
+        height: 1em;
+        border-radius: 50%;
+        position: relative;
+        text-indent: -9999em;
+        animation: loader-custom-4-spin map.get($ANIMATIONSPEEDS, max) infinite ease;
+        transform: translateZ(0);
+        transition: box-shadow map.get($ANIMATIONSPEEDS, short) ease-in-out;
+
+        $mainColor: red;
+        $backgroundColor: rgba(141, 24, 24, .3);
+        $accentColor: rgba(255, 0, 0, 0.5);
+        $accentSecondColor: rgba(255, 0, 0, 0.7);
+
+        @include fluid(font-size, 10px 5px);
+
+        @keyframes loader-custom-4-spin {
+            0%, 100% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $mainColor,
+                    1.8em -1.8em 0 0em $backgroundColor, 
+                    2.5em 0em 0 0em $backgroundColor, 
+                    1.75em 1.75em 0 0em $backgroundColor, 
+                    0em 2.5em 0 0em $backgroundColor, 
+                    -1.8em 1.8em 0 0em $backgroundColor, 
+                    -2.6em 0em 0 0em $accentColor, 
+                    -1.8em -1.8em 0 0em $accentSecondColor;
+            }
+            12.5% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $accentSecondColor, 
+                    1.8em -1.8em 0 0em $mainColor, 
+                    2.5em 0em 0 0em $backgroundColor, 
+                    1.75em 1.75em 0 0em $backgroundColor, 
+                    0em 2.5em 0 0em $backgroundColor, 
+                    -1.8em 1.8em 0 0em $backgroundColor, 
+                    -2.6em 0em 0 0em $backgroundColor, 
+                    -1.8em -1.8em 0 0em $accentColor;
+            }
+            25% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $accentColor, 
+                    1.8em -1.8em 0 0em $accentSecondColor, 
+                    2.5em 0em 0 0em $mainColor, 
+                    1.75em 1.75em 0 0em $backgroundColor, 
+                    0em 2.5em 0 0em $backgroundColor, 
+                    -1.8em 1.8em 0 0em $backgroundColor, 
+                    -2.6em 0em 0 0em $backgroundColor, 
+                    -1.8em -1.8em 0 0em $backgroundColor;
+            }
+            37.5% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $backgroundColor, 
+                    1.8em -1.8em 0 0em $accentColor, 
+                    2.5em 0em 0 0em $accentSecondColor, 
+                    1.75em 1.75em 0 0em $mainColor, 
+                    0em 2.5em 0 0em $backgroundColor, 
+                    -1.8em 1.8em 0 0em $backgroundColor, 
+                    -2.6em 0em 0 0em $backgroundColor, 
+                    -1.8em -1.8em 0 0em $backgroundColor;
+            }
+            50% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $backgroundColor, 
+                    1.8em -1.8em 0 0em $backgroundColor, 
+                    2.5em 0em 0 0em $accentColor, 
+                    1.75em 1.75em 0 0em $accentSecondColor, 
+                    0em 2.5em 0 0em $mainColor, 
+                    -1.8em 1.8em 0 0em $backgroundColor, 
+                    -2.6em 0em 0 0em $backgroundColor, 
+                    -1.8em -1.8em 0 0em $backgroundColor;
+            }
+            62.5% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $backgroundColor, 
+                    1.8em -1.8em 0 0em $backgroundColor, 
+                    2.5em 0em 0 0em $backgroundColor, 
+                    1.75em 1.75em 0 0em $accentColor, 
+                    0em 2.5em 0 0em $accentSecondColor, 
+                    -1.8em 1.8em 0 0em $mainColor, 
+                    -2.6em 0em 0 0em $backgroundColor, 
+                    -1.8em -1.8em 0 0em $backgroundColor;
+            }
+            75% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $backgroundColor, 
+                    1.8em -1.8em 0 0em $backgroundColor, 
+                    2.5em 0em 0 0em $backgroundColor, 
+                    1.75em 1.75em 0 0em $backgroundColor, 
+                    0em 2.5em 0 0em $accentColor, 
+                    -1.8em 1.8em 0 0em $accentSecondColor, 
+                    -2.6em 0em 0 0em $mainColor, 
+                    -1.8em -1.8em 0 0em $backgroundColor;
+            }
+            87.5% {
+                box-shadow: 
+                    0em -2.6em 0em 0em $backgroundColor, 
+                    1.8em -1.8em 0 0em $backgroundColor, 
+                    2.5em 0em 0 0em $backgroundColor, 
+                    1.75em 1.75em 0 0em $backgroundColor, 
+                    0em 2.5em 0 0em $backgroundColor, 
+                    -1.8em 1.8em 0 0em $accentColor, 
+                    -2.6em 0em 0 0em $accentSecondColor, 
+                    -1.8em -1.8em 0 0em $mainColor;
+            }
+        }
+    }
+    &--custom-5 {
+        $firstBoxShaddow: 16px;
+        $secondBoxShaddow: -16px;
+
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+        $backgroundColor: rgba(159, 78, 78, 0.133);
+
+        border-radius: 50%;
+        background-color: $mainColor;
+        box-shadow: 
+            $firstBoxShaddow 0 $mainColor, 
+            $secondBoxShaddow 0 $mainColor;
+        position: relative;
+        animation: loader-custom-5-flash map.get($ANIMATIONSPEEDS, max) ease-out infinite alternate;
+
+        @include fluid((
+            width: 16px 8px,
+            height: 16px 8px
+        ));
+
+        @keyframes loader-custom-5-flash {
+            0% {
+                background-color: $backgroundColor;
+                box-shadow: $firstBoxShaddow 0 $backgroundColor, $secondBoxShaddow 0 $mainColor;
+            }
+            50% {
+                background-color: $mainColor;
+                box-shadow: $firstBoxShaddow 0 $backgroundColor, $secondBoxShaddow 0 $backgroundColor;
+            }
+            100% {
+                background-color: $backgroundColor;
+                box-shadow: $firstBoxShaddow 0 $mainColor, $secondBoxShaddow 0 $backgroundColor;
+            }
+        }
+    }
+    &--skeleton {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+        $backgroundColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        width: 360px;
+        height: 100px;
+        display: block;
+        background-image: 
+            linear-gradient(100deg, transparent, $mainColor 50%, transparent 80%),
+            radial-gradient(circle 50px at 50px 50px, $backgroundColor 99%, transparent 0), 
+            linear-gradient($backgroundColor 20px, transparent 0), 
+            linear-gradient($backgroundColor 20px, transparent 0), linear-gradient($backgroundColor 20px, transparent 0);
+        background-repeat: no-repeat;
+        background-size: 
+            75px 100px, 
+            100px 100px, 
+            125px 20px, 
+            260px 20px, 
+            260px 20px;
+        background-position: 
+            -50% 0, 0 0, 120px 0, 
+            120px 40px, 
+            120px 80px, 
+            120px 120px;
+        
+        animation: loader-skeleton map.get($ANIMATIONSPEEDS, max) linear infinite;
+
+        @keyframes loader-skeleton {
+            0% {
+                background-position: 0% 0, 0 0, 120px 0, 120px 40px, 120px 80px, 120px 120px;
+            }
+            100% {
+                background-position: 100% 0, 0 0, 120px 0, 120px 40px, 120px 80px, 120px 120px;
+            }
+        }
+    }
+    &--skeleton-2 {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+        $backgroundColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        width: 360px;
+        height: 100px;
+        display: block;
+        background-image: linear-gradient(100deg, transparent, $mainColor 50%, transparent 80%), linear-gradient($backgroundColor 100px, transparent 0), linear-gradient($backgroundColor 20px, transparent 0), linear-gradient($backgroundColor 20px, transparent 0), linear-gradient($backgroundColor 20px, transparent 0);
+        background-repeat: no-repeat;
+        background-size: 75px 100px, 100px 100px, 125px 20px, 260px 20px, 260px 20px;
+        background-position: -50% 0, 0 0, 120px 0, 120px 40px, 120px 80px, 120px 120px;
+        
+        animation: loader-skeleton-2 map.get($ANIMATIONSPEEDS, max) linear infinite;
+
+        @keyframes loader-skeleton-2 {
+            0% {
+                background-position: 0% 0, 0 0, 120px 0, 120px 40px, 120px 80px, 120px 120px;
+            }
+            100% {
+                background-position: 100% 0, 0 0, 120px 0, 120px 40px, 120px 80px, 120px 120px;
+            }
+        }
+    }
+    &--skeleton-3 {
+        $mainColor: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background));
+        $accentColor: gray;
+        $backgroundColor: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+        $width: 300px;
+        $height: 210px;
+        $padding-x: 30px;
+        $padding-y: 20px;
+
+        $h1: 10px;
+        $h2: 50px;
+        $h3: 50px;
+        $h4: 50px;
+
+        $space: 10px;
+
+        $p1: 0px;
+        $p2: $p1 + $h1 + $space;
+        $p3: $p2 + $h2 + $space;
+        $p4: $p3 + $h3 + $space;
+
+        $wCarret: 75px;
+        $hCarret: $p4 + $h4 - $p1;
+        $startCarret: -$width - $padding-x;
+        $endCarret: $width - $padding-x;
+
+        display: block;
+        width: $width;
+        height: $height;
+        padding: math.div($padding-y, 2) math.div($padding-x, 2);
+        margin: auto;
+        position: relative;
+        background: $backgroundColor;
+        
+        &::after {
+            content: '';
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(90deg, transparent, $mainColor 50%, transparent 100%),
+                linear-gradient($accentColor $h1, transparent 0),
+                linear-gradient($accentColor $h2, transparent 0),
+                linear-gradient($accentColor $h3, transparent 0),
+                linear-gradient($accentColor $h4, transparent 0),
+                ;
+            background-repeat: no-repeat;
+            background-size: 
+                $wCarret $hCarret, 
+                100% $h1, 
+                100% $h2, 
+                100% $h3,
+                100% $h4;
+            background-position: 
+                $startCarret $p1, 
+                center $p1, 
+                center $p2, 
+                center $p3,
+                center $p4;
+            
+            animation: loader-skeleton-3 1s linear infinite;
+        }
+
+        @keyframes loader-skeleton-3 {
+            to {
+                background-position: 
+                    $endCarret $p1, 
+                    center $p1, 
+                    center $p2, 
+                    center $p3,
+                    center $p4;
+            }
+        }
+    }
+}
+

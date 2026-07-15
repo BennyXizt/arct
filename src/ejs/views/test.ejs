@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<% if(typeof head_component.lang !== 'undefined' && head_component.lang) { %>
+   <html lang="<%= head_component.lang %>">
+<% } else { %>
+   <html lang="en">
+<% } %>
+<head>
+    <%- include('src/ejs/layout/head.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+</head>
+<body>
+    <%- include('externe/components/content/DummyAside/DummyAside.ejs') %>
+    <section class="heading">
+        <div class="outer container">
+            <div class="inner">
+                <h4 class="text-center">Heading</h4>
+                <h1>Heading H1</h1>
+                <h2>Heading H2</h2>
+                <h3>Heading H3</h3>
+                <h4>Heading H4</h4>
+                <h5>Heading H5</h5>
+                <h6>Heading H6</h6>
+            </div>
+        </div>
+    </section>
+    <section class="paragraph !mt-5">
+        <div class="outer container">
+            <div class="inner">
+                <h4 class="text-center">Text / Paragraph</h4>
+                <div class="flex gap-2 flex-wrap">
+                    <div>
+                        <h6>Default</h6>
+                        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Enim nesciunt nisi molestias unde porro omnis voluptas ad reprehenderit, deleniti inventore, modi obcaecati perspiciatis numquam!</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+	<section class='button_componen !mt-5'>
+        <div class="outer container">
+            <div class="inner">
+                <h6 class="text-center">BUTTON Component</h6>
+                <div class="flex items-center gap-x-2">
+                    <%- include('src/ejs/components/button.ejs', {
+                        button_component: {
+                            label: 'Button'
+                        }
+                    })%>
+                </div>
+            </div>
+        </div>
+	</section>
+	<script type="module" src="../temporary/html/test.ts"></script>
+    <script type="module" src="../../../src/ts/main.ts"></script>
+</body>
+</html>

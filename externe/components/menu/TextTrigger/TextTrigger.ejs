@@ -1,0 +1,32 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/menu/TextTrigger/TextTrigger.ejs', { 
+//	texttrigger_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		}
+//	}
+//	}) %>
+%>
+<%
+	if(typeof texttrigger_component === 'undefined' || !texttrigger_component) {
+		return
+	}
+
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...texttrigger_component, componentName: 'text-trigger'})
+	thisTag = 'button'
+
+    thisDataAttributes += ' data-fsc-texttrigger'
+%>
+
+<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+	<span class="<%=`${blockClass}__active`%>">Menu</span>
+	<span class="<%=`${blockClass}__disabled`%>">Close</span>
+</<%=thisTag%>>

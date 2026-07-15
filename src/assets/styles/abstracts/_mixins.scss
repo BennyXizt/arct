@@ -1,0 +1,168 @@
+@use "sass:map";
+@use "sass:meta";
+@use "sass:math";
+@use "sass:list";
+
+@import './default/mixins';
+
+@mixin line-height($lh, $fsz) {
+    $original: calc($lh / $fsz);
+
+    line-height: calc(round($original * 100) / 100);
+}
+
+/// REM responsive mixin.
+///
+/// Generates a adaptive values based on provided arguments.
+/// Can be used for responsive typography, spacing, widths, etc.
+///
+/// @param {String|Map}   $arg1  - $arg1 Property or properties map
+/// @param {List|null|_}  $arg2  - optional $arg2 Responsive values
+/// @param {Number|null}  $arg3  - optional $arg3 Default px
+@mixin rem($arg1, $arg2: null, $arg3: null) {
+    @if meta.type-of($arg1) == 'map' and ($arg2 == null and $arg3 == null) or ($arg2 == '_' and $arg3 != null) {
+        @each $prop, $args in $arg1 {
+            @include rem($prop, $args, $arg3);
+        }
+    }
+
+    @if meta.type-of($arg1) == 'string' and meta.type-of($arg2) == 'list' {
+        $list: ();
+        $isImportant: false;
+
+        @for $i from 1 through list.length($arg2) {
+            $value: list.nth($arg2, $i);
+
+            @if meta.type-of($value) == 'number' {
+                $list: list.append($list, if($arg3, pxAdaptive($value, $arg3), pxAdaptive($value)));
+            } @else if meta.type-of($value) == 'string' and $value == '!important' {
+                $isImportant: true;
+            } @else {
+                $list: list.append($list, $value);
+            }
+        }
+
+        #{$arg1}: if($isImportant, $list!important, $list);
+
+    } @else if meta.type-of($arg1) == 'string' and meta.type-of($arg2) == 'number' {
+        #{$arg1}: if($arg3, pxAdaptive($arg2, $arg3), pxAdaptive($arg2));
+    }
+}
+
+/// Fluid responsive mixin.
+///
+/// Generates a fluid values based on provided arguments.
+/// Can be used for responsive typography, spacing, widths, etc.
+///
+/// @param {String|Map}   $arg1  - $arg1 Property or properties map
+/// @param {List|null|_}  $arg2  - optional $arg2 Responsive values
+/// @param {Number|null}  $arg3  - optional $arg3 Default px
+@mixin fluid($arg1, $arg2: null, $arg3: null) {
+    @if meta.type-of($arg1) == 'map' and ($arg2 == null and $arg3 == null) or ($arg2 == '_' and $arg3 != null) {
+        @each $prop, $args in $arg1 {
+            @include fluid($prop, $args, $arg3);
+        }
+    }
+
+    @else if meta.type-of($arg1) == 'string' and meta.type-of($arg2) == 'list' {
+        $prop: null;
+        $args: null;
+        $list: ();
+        $mins: ();
+        $maxs: ();
+        $isImportant: false;
+        $isConverted: false;
+
+        $min: null;
+        $max: null;
+        @for $i from 1 through list.length($arg2) {
+            $value: list.nth($arg2, $i);
+
+            @if meta.type-of($value) == 'list' {
+                $list: list.append($list, fluid($value, _, _, $arg3));
+                $mins: list.append($mins, if($arg3, pxAdaptive(list-min($value), $arg3), pxAdaptive(list-min($value))));
+                $maxs: list.append($maxs, if($arg3, pxAdaptive(list-max($value), $arg3), pxAdaptive(list-max($value))));
+                $isConverted: true;
+            } @else if meta.type-of($value) == 'string' and $value == '!important' {
+                $isImportant: true;
+            } @else {
+                $list: list.append($list, $value);
+                $maxs: list.append($maxs, $value);
+                $mins: list.append($mins, $value);
+            }
+        }
+
+        @if not $isConverted and list.length($list) == 2 {
+            $el1: list.nth($list, 1);
+            $el2: list.nth($list, 2);
+
+            @if meta.type-of($el1) == 'number' and meta.type-of($el2) == 'number' {
+                $mins: if($arg3, pxAdaptive(list-min($list), $arg3), pxAdaptive(list-min($list)));
+                $maxs: if($arg3, pxAdaptive(list-max($list), $arg3), pxAdaptive(list-max($list)));
+                $list: fluid($list, _, _, $arg3);
+            }
+        }
+
+        #{$arg1}: if($isImportant, $mins!important, $mins);
+        #{$arg1}: if($isImportant, $list!important, $list);
+
+        @supports not (#{$arg1}: clamp(1px, 1vw, 1px)) {
+            @include media(desktop) {
+                #{$arg1}: if($isImportant, $maxs!important, $maxs);
+            }
+        }
+    }
+}
+
+/// Media query mixin for responsive design.
+///
+/// @param {String} $breakpoint - Key of the breakpoint in `$CONTAINER` map
+/// @param {String} $type - Media query type:
+///   - `min` (default mobile first)
+///   - `max` (desktop version)
+///   - `double` (range between breakpoints)
+@mixin media($breakpoint, $type: min) {
+    @if $type != double {
+        $size: map.get(map.get($CONTAINER, $breakpoint), media);
+
+        @if $size {
+            @media (#{$type}-width: #{$size}) {
+                @content;
+            }
+        }
+        @else {
+            @warn "FUNCTION media($breakpoint, $type): Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+        }
+    }
+    @else {
+        $list: map.keys($CONTAINER);
+        $currIndex: list.index($list, $breakpoint);
+
+        @if $currIndex < list.length($list) {
+            $currSize: map.get(map.get($CONTAINER, $breakpoint), media);
+            $nextBreakpoint: list.nth($list, $currIndex + 1);
+            $nextSize: map.get(map.get($CONTAINER, $nextBreakpoint), media);
+
+            @if $currSize and $nextSize {
+                @media (min-width: $currSize) and (max-width: $nextSize) {
+                    @content;
+                }
+            }
+            @else {
+                @warn "FUNCTION media($breakpoint, $type): Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+            }
+        }
+        @else {
+            $currSize: map.get(map.get($CONTAINER, $breakpoint), media);
+
+            @if $currSize {
+                @media (min-width: $currSize) {
+                    @content;
+                }
+            }
+            @else {
+                @warn "FUNCTION media($breakpoint, $type): Не задана ширина для брейкпоинта #{$breakpoint} в $MEDIA.";
+            }
+        }
+    }
+}

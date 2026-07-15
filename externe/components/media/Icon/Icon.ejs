@@ -1,0 +1,66 @@
+<%
+// Пример вызова в шаблоне (EJS):
+//
+// <\%- include('externe/components/media/Icon/Icon.ejs', { 
+//	icon_component: {
+//		this: {
+//			parent: 'parentClass',
+//			block: 'childBlockClass',
+//			class: ['childClass'],
+//			id: ['childID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		wrapper: {
+//			parent: 'wrapperParentClass',
+//			block: 'wrapperChildBlockClass',
+//			class: ['wrapperChildClass'],
+//			id: ['wrapperChildID'],
+//			tag: 'div',
+//			style: ['customStyle'],
+//			dataAttribute: ['customDataAttributes'], 
+//		},
+//		name: 'iconName',
+//		path: 'iconDirectory',
+//		fullpath: 'iconFullPath',
+//	}
+//	}) %>
+%>
+<%
+	if(typeof icon_component === 'undefined' || !icon_component)  {
+		return
+	}
+
+	icon_component.this = {
+		...icon_component.this,
+		tag: 'svg'
+	}
+	
+	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...icon_component.this, componentName: 'icon'})
+	var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...icon_component.wrapper, componentName: 'wrapper'})
+
+	var isWrapper = typeof icon_component.wrapper === 'object' && icon_component.wrapper 
+
+	var iconPath = undefined
+	if(typeof icon_component.fullpath !== 'undefined' && icon_component.fullpath) {
+		iconPath = icon_component.fullpath
+	} else if(typeof icon_component.path !== 'undefined' && icon_component.path) {
+		iconPath = `${icon_component.path}#${icon_component.name}`
+	} else {
+		iconPath = `/media/icons/sprite.svg#${icon_component.name}`
+	}
+
+%>
+
+<% if(isWrapper) { %>
+	<<%=wrapperThisTag%> <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
+<% } %>
+
+	<svg <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
+		<use href="<%=iconPath%>" xlink:href="<%=iconPath%>"></use>   
+	</svg>
+
+<% if(isWrapper) { %>
+	</<%=wrapperThisTag%>>
+<% } %>
