@@ -103,14 +103,19 @@
             }
         }
 
-        #{$arg1}: if($isImportant, $mins!important, $mins);
-        #{$arg1}: if($isImportant, $list!important, $list);
+        @if map.get($SETTINGS, fluid) {
+            #{$arg1}: if($isImportant, $mins!important, $mins);
+            #{$arg1}: if($isImportant, $list!important, $list);
 
-        @supports not (#{$arg1}: clamp(1px, 1vw, 1px)) {
-            @include media(desktop) {
-                #{$arg1}: if($isImportant, $maxs!important, $maxs);
+            @supports not (#{$arg1}: clamp(1px, 1vw, 1px)) {
+                @include media(desktop) {
+                    #{$arg1}: if($isImportant, $maxs!important, $maxs);
+                }
             }
+        } @else {
+            #{$arg1}: if($isImportant, $maxs!important, $maxs);
         }
+
     }
 }
 

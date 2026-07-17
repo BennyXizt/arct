@@ -29,23 +29,33 @@
  *     'instant' — мгновенная прокрутка
  */
 
-import { ScrollBehavior, ScrollLogicalPosition } from "./types/plugin.type"
+import { ScrollBehavior, ScrollLogicalPosition } from "./types/plugin.type.js"
 
 export const scrollClickArray = [scrollClick, '[data-fsc-scroll]']
 
-function scrollClick(element: HTMLElement) {
+function scrollClick(target: HTMLElement, event: Event) {
+    const destinationSelector = target.getAttribute('data-fsc-scroll-to') || target.getAttribute('href') || 'main'
+
+    if(destinationSelector === '#') {
+        console.warn('[SCROLL]: Destination cannot be a', destinationSelector)
+        return
+    } 
+
     const
-        destinationSelector = element.getAttribute('data-fsc-scroll-to') || 'main',
         destination = document.querySelector<HTMLElement>(destinationSelector),
-        behaviourAttr = element.getAttribute('data-fsc-scroll-behaviour'),
-        blockAttr = element.getAttribute('data-fsc-scroll-block'),
-        offsetAttr = element.getAttribute('data-fsc-scroll-offset')
+        behaviourAttr = target.getAttribute('data-fsc-scroll-behaviour'),
+        blockAttr = target.getAttribute('data-fsc-scroll-block'),
+        offsetAttr = target.getAttribute('data-fsc-scroll-offset')
 
     if (!destination) {
         console.warn('[SCROLL]: Destination not found', destinationSelector)
         return
     }
 
+    if(target.tagName && destinationSelector.startsWith('#')) {
+        event.preventDefault()
+    }
+    
     // Определяем поведение прокрутки
     const behavior: ScrollBehavior =
         behaviourAttr === 'auto' ||

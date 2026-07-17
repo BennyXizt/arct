@@ -1,5 +1,23 @@
 @use 'sass:map';
 
 .header {
-    position: relative;
+    position: fixed;
+    width: 100%;
+
+    @include fluid(top, 67px 0px);
+
+    &__body,
+    &__container {
+        display: flex;
+        align-items: center;
+    }
+
+    &__body {
+        flex: 1;
+    }
+
+    &__container {
+        @include fluid(column-gap, 96px 20px);
+    }
+    
 }

@@ -1,0 +1,158 @@
+@use 'sass:map';
+
+@mixin menuLink {
+    position: relative;
+    color: map.get($COLORS, default);
+
+    &::after {
+        content: "";
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        width: 0;
+        height: 0.5px;
+        transition: map.get($ANIMATIONSPEEDS, base) ease-in-out;
+        transition-property: width, left, background-color;           
+        background-color: getThemeTag(primary--text-color);
+    }
+
+    &--active {
+        color: color-mix(in srgb, getThemeTag(primary--text-color), white 80%);
+
+        &::after {
+            left: 0;
+            width: 100%;
+            color: color-mix(in srgb, getThemeTag(primary--text-color), white 80%);
+        }
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            color: color-mix(in srgb, getThemeTag(primary--text-color), white 80%);
+
+            &::after {
+                left: 0;
+                width: 100%;
+                color: color-mix(in srgb, getThemeTag(primary--text-color), white 80%);
+            }
+        }
+    }
+}
+
+@mixin menuSubmenu {
+    &__trigger {
+        svg {
+            transform: rotate(180deg);
+        }
+    }
+    &__list {
+        overflow: unset;
+        height: max-content;
+        transform: translateY(10px);
+    }
+}
+
+.menu {
+    --animation-speed: 0s;
+    flex: 1;
+
+    &__list {
+        display: flex;
+        flex-flow: column wrap;
+        align-items: flex-end;
+    }
+    &__link {
+        @include menuLink;
+    }
+
+    @include media(tablet, max) {
+        &__body {
+            position: absolute;
+            top: 100%;
+            right: 0;
+            z-index: map.get($ZINDEXES, highest);
+            transform: translate3d(100dvw,0,0);
+            transition: transform var(--animation-speed) ease-in-out;
+            will-change: transform;
+            overflow-y: auto;
+        }
+
+        &.active {
+            .menu__body {
+                transform: translate3d(0,0,0);
+            }
+        }
+
+        &.is-animating {
+            --animation-speed: .6s;
+        }
+    }
+
+    @include media(tablet) {
+        &__list {
+            flex-direction: row;
+            align-items: unset;
+        }
+    }
+} 
+
+.menu .submenu-menu {
+    $speed: .4s;
+
+    &__list {
+        overflow: hidden;
+        height: 0px;
+        transform: translateY(-20px);
+        transition: $speed ease-in-out;
+        transition-property: transform;
+        display: flex;
+        flex-flow: column nowrap;
+        position: relative;
+
+        @include media(tablet) {
+            &:before {
+                content: '';
+                position: absolute;
+                left: 0;
+                width: 100%;
+                @include rem((
+                    top: -20px,
+                    height: 20px
+                ))
+            }
+        }
+    }
+    &__link {
+        @include menuLink;
+    }
+    &__trigger {
+        display: flex;
+    }
+    &__wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    &__icon {
+        transition: $speed ease-in-out;
+        transition-property: transform;
+
+        @include rem((
+            width: 8px,
+            height: 6px
+        ));
+    }
+
+    &.active {
+        > .submenu-menu {
+            @include menuSubmenu;
+        }
+    }
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            > .submenu-menu {
+                @include menuSubmenu;
+            }
+        }
+    }
+}

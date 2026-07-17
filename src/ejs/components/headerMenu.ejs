@@ -1,11 +1,23 @@
 <%
 // Пример вызова в шаблоне (EJS):
 //
+// Использование:
+// 
+// activePage: string
+// list: [
+//   href?: string
+//   anchor: string
+//   dataAttribute: string | string[]
+//   submenus: [list]
+// ]
+//
+//
+//
 // <\%- include('src/ejs/components/headerMenu.ejs', {
 //     header_menu_component: {
 //         activePage: 'activePage',
 //         list: [
-//             {'href': './index.html', 'anchor': 'HomePage'},
+//             {'href': './index.html', 'anchor': 'HomePage', dataAttribute: ['customDataAttributes']},
 //             {'anchor': 'Pages', 'submenus': [
 //                 {'href': '#', 'anchor': 'Page1'},
 //                 {'href': '#', 'anchor': 'Page2', 'submenus': [
@@ -45,7 +57,13 @@
                     linkClass = hasSubmenu ? `${blockClass}__link ${blockClass}__link--submenu ${activeLinkPageClass}` : `${blockClass}__link ${activeLinkPageClass}`,
                     spanClass = depth === 0 ? `${submenuClass}__trigger ${submenuClass}__trigger--first` : `${submenuClass}__trigger`,
                     iconClass = hasSubmenu ? submenuClass : blockClass,
-                    wrapperIconClass = `${iconClass}__wrapper`
+                    wrapperIconClass = `${iconClass}__wrapper`,
+                    linkDataAttribute = item.dataAttribute ? 
+                        (typeof item.dataAttribute === 'string' ?
+                            item.dataAttribute :
+                            item.dataAttribute.join(' ')
+                        )  :
+                        ''
             
                 str += `\<li class="${liClass}" ${liData}>`
                 
@@ -55,7 +73,7 @@
                     }
                     
                     str += item.href ? 
-                        `\<a href="${item.href}" class="${linkClass}">${item.anchor}\</a>` :
+                        `\<a href="${item.href}" ${linkDataAttribute} class="${linkClass}">${item.anchor}\</a>` :
                         item.anchor
                     
                     if(hasSubmenu) {
@@ -70,6 +88,7 @@
                         //         name: 'iconName'
                         //     }
                         // })
+
                         // span end
                         str += '\</span>'
                         

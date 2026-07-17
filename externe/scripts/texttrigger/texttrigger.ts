@@ -1,20 +1,27 @@
 
 export const texttriggerClickArray = [texttriggerClick, '[data-fsc-texttrigger]']
 
-function texttriggerClick(text: HTMLElement) {
-    const 
-        header = text.closest('header'),
-        menu = header?.querySelector('.menu'),
-        body = text.closest('body')
+function texttriggerClick(target: HTMLElement) {
+    const header = target.closest('header')
+
+    if(!header) return
+
+    const
+        menu = header.querySelector('.menu'),
+        body = target.closest('body')
+
+    if(!menu || !body) return
   
-    if(!text.classList.contains('active')) {        
-        text.classList.add('active')
-        menu?.classList.add('active')
-        body?.classList.add('active')
+    if(!target.classList.contains('active')) {              
+        target.classList.add('active')
+        menu.classList.add('active')
+        body.classList.add('active')
     }        
     else {
-        text.classList.remove('active')
-        menu?.classList.remove('active')
-        body?.classList.remove('active')
+        target.classList.remove('active')
+        menu.classList.remove('active')
+        body.classList.remove('active')
     }
+
+    menu.classList.add('is-animating')
 }

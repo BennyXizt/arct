@@ -3,32 +3,36 @@ let handler: ((this: HTMLElement, event: AnimationEvent) => void) | undefined = 
 
 export const burgerClickArray = [burgerClick, '[data-fsc-burger]']
 
-function burgerClick(burger: HTMLElement) {
-   if(isActive || !burger)
-      return
+function burgerClick(target: HTMLElement) {
+    if(isActive || !target) return
 
-   const 
-        header = burger.closest('header'),
-        menu = header?.querySelector('.menu'),
-        body = burger.closest('body')
+    const header = target.closest('header')
+
+    if(!header) return
+
+    const
+        menu = header.querySelector('.menu'),
+        body = target.closest('body')
+
+    if(!menu || !body) return
 
    isActive = true
   
-    if(!burger.classList.contains('active')) {  
+    if(!target.classList.contains('active')) {  
         handler = function(this: HTMLElement, event:AnimationEvent) {
             handleTransition.call(this, event, (menu as HTMLElement))
         }          
-        burger.addEventListener('animationend', handler)
-        burger.classList.add('active')
-        menu?.classList.add('is-animating')
-        menu?.classList.add('active')
-        body?.classList.add('active')
+        target.addEventListener('animationend', handler)
+        target.classList.add('active')
+        menu.classList.add('is-animating')
+        menu.classList.add('active')
+        body.classList.add('active')
     }        
     else {
-        burger.classList.add('reverse')
-        burger.classList.remove('active')
-        menu?.classList.remove('active')
-        body?.classList.remove('active')
+        target.classList.add('reverse')
+        target.classList.remove('active')
+        menu.classList.remove('active')
+        body.classList.remove('active')
     }
 }
 
@@ -37,7 +41,7 @@ function handleTransition(this: HTMLElement, {animationName}: {animationName: st
     else if(animationName.startsWith('burger-reverse-opacity-middle'))  {
         this.removeEventListener('animationend', handler!)
         this.classList.remove('active', 'reverse')
-        menu?.classList.remove('is-animating')
+        menu.classList.remove('is-animating')
         isActive = false
     }             
 }

@@ -1,36 +1,53 @@
 <% 
 	var pages = [
-		
-		{'href': './', 'anchor': 'Home'},
-		{'href': './about', 'anchor': 'About'},
+		{
+            'href': '#home',
+            'anchor': 'Home',
+            'dataAttribute': ['data-fsc-scroll']
+        },
+		{
+            'href': '#about',
+            'anchor': 'About',
+            'dataAttribute': ['data-fsc-scroll']
+        },
+		{
+            'href': '#services',
+            'anchor': 'Services',
+            'dataAttribute': ['data-fsc-scroll']
+        },
+		{
+            'href': '#portfolio',
+            'anchor': 'Portfolio',
+            'dataAttribute': ['data-fsc-scroll']
+        },
+		{
+            'href': '#contact',
+            'anchor': 'Contact',
+            'dataAttribute': ['data-fsc-scroll']
+        },
 	]
 %>
 <header class="header">
     <div class="header__container container">
-        <div class="header__body">
-           <%- include('externe/components/menu/Logo/Logo.ejs', {
-                logo_component: {
+        <%- include('externe/components/menu/Logo/Logo.ejs', {
+            logo_component: {
+                this: {
+                    parent: 'header'
+                },
+                wrapper: {
+                    parent: 'header'
+                },
+                homePage: header_component.homePage,
+                icon_component: {
                     this: {
-                        parent: 'header'
+                        parent: 'logo'
                     },
-                    homePage: header_component.homePage,
-                    // icon_component: {
-                    //     this: {
-                    //         class: 'header__logo'
-                    //     },
-                    //     fullpath: "/media/image/logo.svg"
-                    // },
-                    image_component: {
-                        this: {
-                            class: 'header__logo'
-                        },
-                        img: {
-                            src: '/media/image/logo.svg',
-                            alt: 'website-logo'
-                        }
-                    }
-                }
-           })%>
+                    name: "logo"
+                },
+                label: 'arct'
+            }
+        })%>
+        <div class="header__body">
             <%- include('src/ejs/components/headerMenu.ejs', {
                 header_menu_component: {
                     list: pages,

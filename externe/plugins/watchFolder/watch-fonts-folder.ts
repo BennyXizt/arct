@@ -1,18 +1,18 @@
 import type { Plugin, ViteDevServer } from 'vite'
 import { fileURLToPath } from 'url'
-import { resolve, dirname, basename } from 'path'
+import { resolve, relative, dirname, basename } from 'path'
 import fs from 'fs'
 import type { FontsConvertToFile, FontsFolderInterface, FontsTypes} from './types/plugin.interface.js'
 import { FontsFolderTranslation } from './i18n/index.js'
 
-export function ViteWatchFontsFolderPlugin({relativePath, outputDestination, language}: FontsFolderInterface): Plugin {
+export function ViteWatchFontsFolderPlugin({absolutePath, outputDestination, language}: FontsFolderInterface): Plugin {
     return {
         name: 'watch-fonts-folder-plugin',
         configureServer(server: ViteDevServer) {
             const 
                 __filename = fileURLToPath(import.meta.url),
                 __dirname = dirname(__filename),
-                watchDir = resolve(__dirname, relativePath),
+                watchDir = resolve(__dirname, absolutePath),
                 destinationFile = resolve(__dirname, outputDestination),
                 translation = new FontsFolderTranslation({pluginName: 'watchFontsFolderPlugin', language})
 
@@ -112,7 +112,7 @@ export function ViteWatchFontsFolderPlugin({relativePath, outputDestination, lan
                     
                     setTimeout(() => {
                         try {
-                            convertFontsToFile({ filePath, fonts, relativePath, translation, destinationFile})
+                            convertFontsToFile({ filePath, fonts, absolutePath, translation, destinationFile})
                         } catch(err) {
                             translation.errorReadingTheFile((err as Error))
                         }
@@ -126,19 +126,15 @@ export function ViteWatchFontsFolderPlugin({relativePath, outputDestination, lan
 }
 
 
-function convertFontsToFile({ filePath, fonts, relativePath, translation, destinationFile}: FontsConvertToFile) {
+function convertFontsToFile({ filePath, fonts, absolutePath, translation, destinationFile}: FontsConvertToFile) {
     const   
         fileArray = basename(filePath).match(/^([^-]+)-([^.]+)\.(.+)$/)?.slice(1),
         baseName = fileArray?.[0],
-        finalFonts = fileArray ? fonts[fileArray[1].toLowerCase() as keyof typeof fonts] : undefined,                                
-        fontSrc = `${relativePath}/${basename(filePath)}`,
+        finalFonts = fileArray ? fonts[fileArray[1].toLowerCase() as keyof typeof fonts] : undefined,   
+        projectRoot = process.cwd(),
+        file = `${absolutePath}/${basename(filePath)}`,         
+        fontSrc = `/${relative(projectRoot, file)}`,
         format = fileArray?.[2] === 'ttf' ? 'truetype' : fileArray?.[2]
-
-    console.log(fontSrc);
-    
-
-    return
-                            
 
     if(!baseName || !finalFonts || !format || !fontSrc) {
         if(fileArray)

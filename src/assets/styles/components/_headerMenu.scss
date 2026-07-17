@@ -1,3 +1,18 @@
 
 @import '../../../../externe/components/menu/HeaderMenu/HeaderMenu';
-// @import '../../../../externe/components/menu/HeaderMenu/HeaderMenuAlternative';
+
+.menu {
+    &__list {
+        justify-content: space-between;
+
+        @include fluid((
+            column-gap: 43px 20px,
+        ));
+
+        @include rem(row-gap, 20px);
+    }
+
+    &__body {
+        background-color: getThemeTag(primary-background-color);
+    }
+}

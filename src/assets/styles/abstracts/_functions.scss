@@ -47,6 +47,7 @@
     $min: null;
     $max: null;
     $restriction: null;
+    $preferred: null;
 
     @if meta.type-of($arg1) == 'list' {
         @for $i from 1 through list.length($arg1) {
@@ -96,30 +97,72 @@
     }
 
     @if $min > $max {
+        @if not map.get($SETTINGS, fluid) {
+            @return $min;
+        }
+
         $temp: $min;
         $min: min($min, $max);
         $max: max($temp, $max);
 
-        $modificator: 0.01 * $restriction;
-        $preffered: math.div($max, $modificator) + vw;
-        $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
-        $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+        @if not map.get($BASE, min_width) {
+            $modificator: 0.01 * $restriction;
+            $preferred: math.div($max, $modificator) + vw;
+            $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+            $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+        } @else {
+            $min-width: map.get($BASE, min_width);
+            $range: $max - $min;
+            $width-range: $restriction - $min-width;
 
-        @return clamp($min, $preffered, $max);
+            $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+            $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+            $min-width: pxAdaptive($min-width);
+            $range: pxAdaptive($range);
+            $width-range: pxAdaptive($width-range);
+
+            $preferred: calc(
+                $min + $range * ((100vw - $min-width) / $width-range)
+            );
+        }
+
+        @return clamp($min, $preferred, $max);
     }
     @else {
+        @if not map.get($SETTINGS, fluid) {
+            @return $max;
+        }
+
         $temp: $min;
         $min: max($min, $max);
         $max: min($temp, $max);
 
-        $range: $max - $min;
-        $mod: math.abs(math.div($range, $restriction));
+        @if not map.get($BASE, min_width) {
+            $range: $max - $min;
+            $mod: math.abs(math.div($range, $restriction));
 
-        $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
-        $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
-        $restriction: pxAdaptive($restriction);
-        $mod: pxAdaptive($mod);
-        $preferred: calc(#{$max} + (($restriction - 100vw) * #{$mod}));
+            $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+            $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+            $restriction: pxAdaptive($restriction);
+            $mod: pxAdaptive($mod);
+
+            $preferred: calc(#{$max} + (($restriction - 100vw) * #{$mod}));
+        } @else {
+            $min-width: map.get($BASE, min_width);
+
+            $range: $min - $max;
+            $width-range: $restriction - $min-width;
+
+            $min: if($arg4, pxAdaptive($min, $arg4), pxAdaptive($min));
+            $max: if($arg4, pxAdaptive($max, $arg4), pxAdaptive($max));
+            $restriction: pxAdaptive($restriction);
+            $range: pxAdaptive($range);
+            $width-range: pxAdaptive($width-range);
+
+            $preferred: calc(
+                #{$max} + ((#{$restriction} - 100vw) * (#{$range} / #{$width-range}))
+            );
+        }
 
         @return clamp($max, $preferred, $min);
     }

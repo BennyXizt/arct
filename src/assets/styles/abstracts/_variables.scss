@@ -6,12 +6,14 @@
 $SETTINGS: (  
     // pixels perfect
     pixels_only: true,
+    // fluid
+    fluid: true,
     // Тип адаптива контейнера
     // 1 = без брейкпоинтов
     // 2 = Boostrap сетка
     responsive_type: 1,
-    // Поддержка цветовой палитры и переключения color scheme сайта
-    theme: false
+    // Поддержка css переменных
+    theme: true
 );
 
 $CONTAINER: $DEFAULT_CONTAINER;
@@ -24,16 +26,18 @@ $BASE: (
     font_size: 16px,
     font_weight: 400,
     line_height: 1,
-    // font_family: ('FontFamilyName', sans-serif),
-    main_color: rgb(0, 0, 0),
+    font_family: ('Rubic', sans-serif),
+    main_color: #5b5b5b,
     background_color: #ffffff,
     container_padding_x: (15px * 2),
     min_width: 320px,
-    max_width: 1920px
+    max_width: 1780px
 );
 
 $COLORS: (
     default: map.get($BASE, main_color),
+    dark: #201f1f,
+    brown: #91795c,
     background: map.get($BASE, background_color),
 );
 
@@ -48,17 +52,15 @@ $THEMEPREFIX: '--';
 $THEME: (
     default: (
         primary-text-color: map.get($COLORS, default),
+        secondary-text-color: map.get($COLORS, dark),
+        accent-text-color: map.get($COLORS, brown),
         primary-background-color: map.get($COLORS, background),
-    ),
-    dark: (
-        primary-text-color: white,
-        primary-background-color: black,
-    ),
+    )
 );
 
 $BURGER: (
-    color_primary: #{"var(#{$THEMEPREFIX}primary-text-color)"},
-    color_active: color-mix(in srgb, #{"var(#{$THEMEPREFIX}primary-text-color)"}, white 80%),
+    color_primary: if(map.get($SETTINGS, theme), #{"var(#{$THEMEPREFIX}primary-text-color)"}, map.get($COLORS, default)),
+    color_active: color-mix(in srgb, if(map.get($SETTINGS, theme), #{"var(#{$THEMEPREFIX}primary-text-color)"}, map.get($COLORS, default)), white 80%),
     origin_top: 6px,
     origin_bottom: 6px,
     width: 32px,
@@ -87,7 +89,8 @@ $FONTFAMILIES: (
 );
 
 $FONTS: (
-    
+    primary: map.get($BASE, font_family),
+    secondary: ('Prata', 'serif')
 );
 
 // Custom

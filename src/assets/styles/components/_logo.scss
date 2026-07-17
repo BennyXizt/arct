@@ -1,0 +1,30 @@
+@use 'sass:map';
+
+.logo {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    @include rem(gap, 5px);
+
+    &__icon {
+        transform: translate(-5px);
+        color: getThemeTag(accent-text-color);
+
+        @include transition(color);
+        @include rem((
+            width: 33px,
+            height: 29px
+        ))
+    }
+
+    &__label {
+        @extend %textMeta;
+
+        text-transform: uppercase;
+        color: getThemeTag(accent-text-color);
+
+        @include transition(color);
+    }
+}

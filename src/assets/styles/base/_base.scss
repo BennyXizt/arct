@@ -25,6 +25,32 @@ input {
   }
 }
 
+a,
+button {
+  position: relative;
+
+  &::after {
+    content: '';
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    width: 0;
+    height: .5px;
+    background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));
+
+    @include transition(width, left);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      &::after {
+        width: 100%;
+        left: 0;
+      }
+    }
+  }
+}
+
 body {
   &.active {
     overflow: hidden;
@@ -40,6 +66,10 @@ body {
         top: 0;
         left: 0;
         z-index: map.get($ZINDEXES, highest);
+    }
+
+    .header {
+      z-index: map.get($ZINDEXES, highest);
     }
   }
 }
