@@ -20,6 +20,6 @@ export const settings: Settings = {
         convertVideoFunction: convertVideo.toMP4scale480.function
     },
     excludedSVG: [
-        
+        'logo'
     ]
 }
