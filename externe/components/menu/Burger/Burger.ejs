@@ -1,7 +1,7 @@
 <%
 // Пример вызова в шаблоне (EJS):
 //
-// <\%- include('externe/components/Burger/Burger.ejs', { 
+// <\%- include('externe/components/menu/Burger/Burger.ejs', { 
 //	burger_component: {
 //		this: {
 //			parent: 'parentClass',
@@ -16,6 +16,11 @@
 <% 
     if(typeof burger_component === 'undefined' || !burger_component) {
         return
+    }
+
+    burger_component.this = {
+        ...burger_component.this,
+        tag: burger_component.this.tag ?? 'button'
     }
        
     var {thisClass, blockClass, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...burger_component.this, componentName: 'burger'})
