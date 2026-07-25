@@ -29,7 +29,7 @@ export default defineConfig({
             return 'assets/media/[name][extname]'
           }
           if (/\.(css)$/i.test(name)) {
-            return 'assets/styles/[name][extname]'
+            return 'assets/styles/css/[name][extname]'
           }
 
           return 'assets/[name][extname]'
