@@ -1,5 +1,33 @@
 @use 'sass:map';
 
 .button {
+    @extend %textDefault;
 
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    text-transform: uppercase;
+    color: getThemeTag(secondary-text-color);
+    border: 1px solid map.get($COLORS, border_default);
+
+    @include fluid((
+        padding: (20px 5px) (35px 10px),
+        gap: 7px 5px
+    ));
+    @include transition(color, background-color, transform);
+
+    svg {
+        @include rem((
+            width: 18px,
+            height: 36px
+        ));
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: getThemeTag(secondary-text-color);
+            color: getThemeTag(primary-background-color);
+            transform: scale(.9);
+        }
+    }
 }

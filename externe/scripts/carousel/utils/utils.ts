@@ -1,4 +1,4 @@
-import { CarouselElementInterface } from "../types/plugin.interface";
+import { CarouselElementInterface } from "../types/plugin.interface.js";
 
 export function animate(carousel: CarouselElementInterface) {
     if (!carousel.visible) {
@@ -48,8 +48,8 @@ export function step(carousel: CarouselElementInterface) {
             carousel.index = carousel.length - 1
         }
     } else if(carousel.direction == 'step') {
-        carousel.position = -carousel.offset * carousel.step
-        carousel.index = carousel.step
+        carousel.position = -carousel.offset * carousel.step!
+        carousel.index = carousel.step!
         
         carousel.step = undefined
     }
@@ -58,16 +58,21 @@ export function step(carousel: CarouselElementInterface) {
 
     toggleDotActive(carousel)
     renderCounter(carousel)
+    toggleButtonDisabled(carousel)
 
     carousel.carouselList.style.transform = `translate3d(${carousel.position}px, 0, 0)`
-    
 }
 
-export function toggleDotActive(carousel) {
+export function toggleDotActive(carousel: CarouselElementInterface) {
     const 
         slides = carousel.carouselList.children,
-        slide = Array.from(slides)[carousel.index],
-        dots = carousel.carousel.querySelector('[data-fsc-carousel-dots]').children,
+        slide = Array.from(slides)[carousel.index] as HTMLElement,
+        dotsHTML = carousel.carousel.querySelector('[data-fsc-carousel-dots]')
+
+    if(!dotsHTML) return
+        
+    const
+        dots = dotsHTML.children,
         dot = Array.from(dots)[carousel.index]
 
     for (var item of [...slides, ...dots]) {
@@ -76,9 +81,35 @@ export function toggleDotActive(carousel) {
 
     slide.classList.toggle('active')
     dot.classList.toggle('active')
+
+    carousel.carouselList.style.height = `${slide.offsetHeight}px`
 }
 
-export function renderCounter(carousel) {
+export function toggleButtonDisabled(carousel: CarouselElementInterface) {
+    if(!carousel.isDisabledAllowed) return
+
+    if(carousel.index === 0 && carousel.length === 1) {
+        carousel.buttonLeft?.setAttribute('disabled', '')
+        carousel.buttonRight?.setAttribute('disabled', '')
+    } else if(carousel.index === 0 && carousel.buttonLeft) {
+        carousel.buttonLeft.setAttribute('disabled', '')
+
+        if(carousel.buttonRight && carousel.buttonRight.hasAttribute('disabled'))
+            carousel.buttonRight.removeAttribute('disabled')
+    } else if(carousel.index === carousel.length - 1 && carousel.buttonRight) {
+        carousel.buttonRight.setAttribute('disabled', '')
+
+        if(carousel.buttonLeft && carousel.buttonLeft.hasAttribute('disabled'))
+            carousel.buttonLeft.removeAttribute('disabled')
+    } else {
+        if(carousel.buttonLeft && carousel.buttonLeft.hasAttribute('disabled'))
+            carousel.buttonLeft.removeAttribute('disabled')
+        if(carousel.buttonRight && carousel.buttonRight.hasAttribute('disabled'))
+            carousel.buttonRight.removeAttribute('disabled')
+    }
+}
+
+export function renderCounter(carousel: CarouselElementInterface) {
     const
         element = carousel.carousel.querySelector('[data-fsc-carousel-counter]')
    
@@ -90,23 +121,23 @@ export function renderCounter(carousel) {
     element.innerHTML = `${carousel.index + 1} / ${slides.length}`
 }
 
-function renderTimer(carousel) {
+function renderTimer(carousel: CarouselElementInterface) {
     const
         element = carousel.carousel.querySelector('[data-fsc-carousel-timer]')
    
     if(!element) return
 
-    element.innerHTML = carousel.timerSeconds
+    element.innerHTML = carousel.timerSeconds!.toString()
 }
 
-export function calculateCarouselProps(carouselList) {
+export function calculateCarouselProps(carouselList: HTMLElement) {
     const
         childrens = carouselList.querySelectorAll('[data-fsc-carousel-item]')
 
     const
-        length = childrens.length,
-        offset = childrens[0].getBoundingClientRect().width,
-        dimention = offset * length
+        length: number = childrens.length,
+        offset: number = childrens[0].getBoundingClientRect().width,
+        dimention: number = offset * length
 
     return { length, offset, dimention }
 }

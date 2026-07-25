@@ -6,12 +6,15 @@
  * 
 */
 
-// export { emptyAutoload, emptyOnSubmit, emptyOnResize } from './utils/events.js'
+// export { emptyAutoload, emptyOnSubmit } from './utils/events.js'
 
 // const intersectionOptions: IntersectionObserverInit = {rootMargin: '50px 0px 50px 0px',}
 
-// export const emptyObserverArray = [emptyObserver, '[data-fsc-empty]', intersectionOptions]
-// export const emptyOnKeyUpArray = [emptyOnKeyUp, '[data-fsc-empty] input']
-// export const emptyClickArray = [emptyItemClick, '[data-fsc-empty-item]']
-// export const emptyHoverArray = [emptyHovered, '[data-fsc-empty]']
-// export const emptyUnhoverArray = [emptyUnhovered, '[data-fsc-empty]']
+// export const emptyObserverArray                 = [emptyObserver, '[data-fsc-empty]', intersectionOptions]
+// export const emptyOnKeyUpArray                  = [emptyOnKeyUp, '[data-fsc-empty]']
+// export const emptyClickArray                    = [emptyItemClick, '[data-fsc-empty]']
+// export const emptyHoverArray                    = [emptyHovered, '[data-fsc-empty]']
+// export const emptyUnhoverArray                  = [emptyUnhovered, '[data-fsc-empty]']
+// export const emptyOnResizeArray                 = [emptyOnResize, '[data-fsc-empty]']
+// export const emptyDragEventPointerMoveArray     = [emptyDragEventPointerMove, '[data-fsc-empty]']
+// export const emptyDragEventPointerUpArray       = [emptyDragEventPointerUp, '[data-fsc-empty]']

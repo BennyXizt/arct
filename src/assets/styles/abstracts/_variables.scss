@@ -19,11 +19,16 @@ $SETTINGS: (
 $CONTAINER: $DEFAULT_CONTAINER;
 $HEADERS_CLAMP_WIDTH: $DEFAULT_HEADERS_CLAMP_WIDTH;
 
-$P: $DEFAULT_P;
-$HEADERS: $DEFAULT_HEADERS;
+$P: (
+    font_size_original: 16px,
+    font_size_adaptive: 14px,   
+    line_height: 2.2,
+    letter_spacing: 2%,
+);
 
 $BASE: (
-    font_size: 16px,
+    font_size_original: map.get($P, font_size_original),
+    font_size_adaptive: map.get($P, font_size_adaptive),
     font_weight: 400,
     line_height: 1,
     font_family: ('Rubic', sans-serif),
@@ -38,7 +43,12 @@ $COLORS: (
     default: map.get($BASE, main_color),
     dark: #201f1f,
     brown: #91795c,
+    gray: #818181,
+    gray_lite: #cfcfcf,
+    
     background: map.get($BASE, background_color),
+
+    border_default: #b8b8b8,
 );
 
 $ANIMATIONSPEEDS: (
@@ -54,7 +64,14 @@ $THEME: (
         primary-text-color: map.get($COLORS, default),
         secondary-text-color: map.get($COLORS, dark),
         accent-text-color: map.get($COLORS, brown),
+
+        body-text-color: map.get($COLORS, gray),
+
         primary-background-color: map.get($COLORS, background),
+    ),
+    dark: (
+        secondary-text-color: map.get($COLORS, default),
+        primary-background-color: map.get($COLORS, dark),
     )
 );
 
@@ -76,7 +93,8 @@ $ZINDEXES: (
     high: 4,
     normal: 3,
     low: 2,
-    lowest: 1
+    lowest: 1,
+    background: -1
 );
 
 $FONTFAMILIES: (
@@ -95,3 +113,55 @@ $FONTS: (
 
 // Custom
 // Here
+
+$HEADERS: (
+    h1: (
+        font_size_original: 90px,
+        font_size_adaptive: 30px,
+        line_height: 1.1,
+        font_family: map.get($FONTS, secondary),
+    ),
+    h2: (
+        font_size_original: 49px,
+        font_size_adaptive: 28px,
+        line_height: 1.29,
+        font_family: map.get($FONTS, secondary),
+        // letter_spacing: 3px,
+    ),
+    h3: (
+        font_size_original: 32px,
+        font_size_adaptive: 24px,
+        // line_height: 40px,
+        // font_weight: 600,
+        // font_family: sans-serif,
+        // font_style: regular,
+        // letter_spacing: 3px,
+   ),
+   h4: (
+        font_size_original: 24px,
+        font_size_adaptive: 18px,
+        // line_height: 32px,
+        // font_weight: 600,
+        // font_family: sans-serif,
+        // font_style: regular,
+        // letter_spacing: 3px,
+   ),
+   h5: (
+        font_size_original: 20px,
+        font_size_adaptive: 18px,
+        // line_height: 28px,
+        // font_weight: 500,
+        // font_family: sans-serif,
+        // font_style: regular,
+        // letter_spacing: 3px,
+   ),
+   h6: (
+        font_size_original: 16px,
+        font_size_adaptive: 14px,
+        // line_height: 24px,
+        // font_weight: 500,
+        // font_family: sans-serif,
+        // font_style: regular,
+        // letter_spacing: 3px,
+   ),
+);

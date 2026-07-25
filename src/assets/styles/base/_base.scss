@@ -2,8 +2,13 @@
 @use "sass:math";
 
 :root {
+  @if map.get($BASE, font_size_original) and not map.get($BASE, font_size_adaptive) {
+    font-size: map.get($BASE, font_size_original);
+  } @else {
+    @include fluid(font-size, map.get($BASE, font_size_original) map.get($BASE, font_size_adaptive));
+  }
+  
   line-height:      map.get($BASE, line_height);
-  font-size:        map.get($BASE, font_size);
   font-family:      map.get($BASE, font_family);
   font-weight:      map.get($BASE, font_weight);
   color:            if(map.get($SETTINGS, theme), getThemeTag(primary-text-color), map.get($COLORS, default));

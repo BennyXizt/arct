@@ -3,6 +3,7 @@
 .header {
     position: fixed;
     width: 100%;
+    z-index: map.get($ZINDEXES, highest);
 
     @include fluid(top, 67px 0px);
 

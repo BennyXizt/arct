@@ -1,0 +1,91 @@
+<%
+	blockClass = 'hero'
+
+	var carouselElements = 
+		[
+			{
+				id: 'slider1',
+				content: {
+					title: 'Invest in your Future, Invest with us',
+					text: [
+						`It is a multi-venue performing arts centre at Sydney Harbour located in Sydney, New South Wales, Australia. It is one of the 20th century's most famous and distinctive buildings.`,
+					],
+					button_component: {
+						this: {
+							parent: 'carousel'
+						},
+						label: 'View Project',
+						link: '#',
+						icon_component: {
+							name: 'arrow'
+						}
+					},
+				}
+			}
+		].map((e, i) => {
+			return {
+				content: e.content,
+				image_component: {
+					this: {
+						parent: 'carousel'
+					},
+					wrapper: {
+						parent: 'carousel'
+					},
+					img: {
+						src: `media/image/slider/${e.id}-lg.jpg`,
+						alt: e.id,
+						width: 1273,
+						height: 938,
+						loading: 'lazy',
+						srcset: [
+							`media/image/slider/${e.id}-sm.jpg 480w`,
+							`media/image/slider/${e.id}-md.jpg 800w`,
+							`media/image/slider/${e.id}-lg.jpg 1200w`,
+							`media/image/slider/${e.id}-xl.jpg 1600w`,
+							`media/image/slider/${e.id}-2xl.jpg 2400w`
+						],
+						sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+					},
+					images: [
+						{  
+							type: 'image/avif', 
+							srcset: [
+								`media/image/slider/${e.id}-sm.avif 480w`,
+								`media/image/slider/${e.id}-md.avif 800w`,
+								`media/image/slider/${e.id}-lg.avif 1200w`,
+								`media/image/slider/${e.id}-xl.avif 1600w`,
+								`media/image/slider/${e.id}-2xl.avif 2400w`
+							],
+							sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+						},
+						{  
+							type: 'image/webp', 
+							srcset: [
+								`media/image/slider/${e.id}-sm.webp 480w`,
+								`media/image/slider/${e.id}-md.webp 800w`,
+								`media/image/slider/${e.id}-lg.webp 1200w`,
+								`media/image/slider/${e.id}-xl.webp 1600w`,
+								`media/image/slider/${e.id}-2xl.webp 2400w`
+							],
+							sizes: '(min-width: 767.98px) 66.31vw, 100vw'
+						},
+					]
+				}
+				
+			}
+		})
+%>
+
+<%- include('externe/components/media/Carousel/Carousel.ejs', {
+		carousel_component: {
+			this: {
+				parent: 'hero',
+				dataAttribute: [
+					'data-fsc-carousel-interval=77777777',
+					'data-fsc-carousel-allow-disabled',
+				]
+			},
+			list: carouselElements
+		}
+	}) %>

@@ -38,6 +38,13 @@
 		dataAttribute:  button_component.link ? `href=${button_component.link}` : button_component.this && button_component.this.dataAttribute ? button_component.this.dataAttribute : '',
 	}
 
+	if(button_component.icon_component) {
+		button_component.icon_component.this = {
+			...button_component.icon_component.this,
+			parent: button_component.icon_component.this && button_component.icon_component.this.parent ? button_component.icon_component.this.parent : 'button'
+		}
+	}
+
 	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...button_component.this, componentName: 'button'})
 	var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...button_component.wrapper, componentName: 'button'})
 
@@ -52,7 +59,7 @@
 		<%= button_component.label %>
 	<% } %>
 	<% if(typeof button_component.icon_component !== 'undefined' && button_component.icon_component) { %>
-		<%- include('externe/components/Icon/Icon.ejs', {
+		<%- include('externe/components/media/Icon/Icon.ejs', {
 			icon_component: button_component.icon_component
 		}) %>
 	<% } %>

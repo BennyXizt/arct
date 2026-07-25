@@ -2,10 +2,8 @@
 import '@/assets/styles/main.scss'
 // @ts-ignore
 import { autoloader } from '~/scripts/autoloader/autoloader'
-// @ts-ignore
-import { ClickedModule } from './types/plugin.type'
-// @ts-ignore
-import { IntersectionObserverElements } from './types/plugin.interface'
+import { ClickedModule, ResizedModule } from './types/plugin.type.js'
+import { IntersectionObserverElements } from './types/plugin.interface.js'
 
 // window.addEventListener('pointerdown', function(event) {
 //     const target = event.target
@@ -57,8 +55,11 @@ document.fonts.ready.then(async() => {
 
     const
         onResizeModules = Array.from(loadedModules)
-            .filter(([k, e]) => typeof e[`${k}OnResize`] === 'function')
-            .map(e => [e[0], e[1][`${e[0]}OnResize`]])
+            .flatMap(([_, e]) =>
+                Object.entries(e)
+                    .filter(([key]) => key.endsWith('OnResizeArray'))
+                    .map(([, value]) => value as ResizedModule)
+            )
 
     const
         onKeyUpModules = Array.from(loadedModules)
@@ -86,7 +87,23 @@ document.fonts.ready.then(async() => {
                     .filter(([key]) => key.endsWith('UnhoverArray'))
                     .map(([, value]) => value)
             )
-    
+
+    const
+        onPointerMoveModules = Array.from(loadedModules)
+            .flatMap(([_, e]) =>
+                Object.entries(e)
+                    .filter(([key]) => key.endsWith('PointerMoveArray'))
+                    .map(([, value]) => value)
+            )
+
+    const
+        onPointerUpModules = Array.from(loadedModules)
+            .flatMap(([_, e]) =>
+                Object.entries(e)
+                    .filter(([key]) => key.endsWith('PointerUpArray'))
+                    .map(([, value]) => value)
+            )
+            
     // Click Event
     window.addEventListener('pointerdown', function(event) {
         const target = event.target
@@ -137,39 +154,20 @@ document.fonts.ready.then(async() => {
     })
 
     // Resize Event
-    let 
-        resizeOptimization: number | undefined = undefined,
-        lastResizeWidth = window.innerWidth,
-        lastResizeHeight = window.innerHeight
+    const resizeFunctions = new WeakMap()
 
-    window.addEventListener('resize', function(event) {
-        if(resizeOptimization)
-            cancelAnimationFrame(resizeOptimization)
-
-        resizeOptimization = requestAnimationFrame(() => {
-            const 
-                resizeWidth = window.innerWidth,
-                resizeHeight = window.innerHeight
-
-            const 
-                isWidthResized = resizeWidth !== lastResizeWidth,
-                isHeightResized = resizeHeight !== lastResizeHeight
-
-            let differenceWidth: number, differenceHeight: number
-
-            if(isWidthResized) differenceWidth = resizeWidth - lastResizeWidth
-            if(isHeightResized) differenceHeight = resizeHeight - lastResizeHeight
-            
-            if (isWidthResized || isHeightResized) {
-                onResizeModules.forEach(e => {
-                    e[1]({ event, isWidthResized, isHeightResized, differenceWidth, differenceHeight})    
-                })
-            }
-            
-            lastResizeWidth = resizeWidth
-            lastResizeHeight = resizeHeight
-        })
+    const resizeObserver = new ResizeObserver((entries) => {
+       for (const entry of entries) {
+            resizeFunctions.get(entry.target)?.(entry)
+        }
     })
+
+    for (const [func, query] of Object.values(onResizeModules)) {
+        document.querySelectorAll(query).forEach((el) => {
+            resizeFunctions.set(el, func)
+            resizeObserver.observe(el)
+        })
+    }
     
     // KeuUp Event
     onKeyUpModules.forEach(e => {
@@ -210,9 +208,46 @@ document.fonts.ready.then(async() => {
         }))
     })
 
-    if (process.env.NODE_ENV === 'development') {
-        console.log(`Mode: ${process.env.NODE_ENV}`)
+    // PointerMove Event
+    onPointerMoveModules.forEach(e => {
+        if(!Array.isArray(e)) return
         
-        console.log(`Активные модули: ${[...loadedModules.keys()]}`)
+        const [func, query] = e
+
+        const HTMLElements = document.querySelectorAll<HTMLElement>(query)
+
+        HTMLElements.forEach(el => el.addEventListener('pointermove', function(event: PointerEvent) {
+            func(event)
+        }))
+    })
+
+    // PointerUp Event
+    onPointerUpModules.forEach(e => {
+        if(!Array.isArray(e)) return
+        
+        const [func, query] = e
+
+        const HTMLElements = document.querySelectorAll<HTMLElement>(query)
+
+        HTMLElements.forEach(el => el.addEventListener('pointerup', function(event: PointerEvent) {
+            func(event)
+        }))
+    })
+
+    if (process.env.NODE_ENV === 'development') {
+        const 
+            activeModules = [...loadedModules.keys()]
+                .filter(e => e != 'dummyaside'),
+            eventListeners = [...loadedModules.values()]
+                .flatMap(e => Object.keys(e))
+                .filter(e => !e.startsWith('dummyaside'))
+            
+        console.log('-- Статистика Сайта --');
+        
+        console.log(`Активные модули: ${activeModules}`)
+        
+        console.log(eventListeners);
+
+        console.log('-- Статистика Сайта --');
     }
 })

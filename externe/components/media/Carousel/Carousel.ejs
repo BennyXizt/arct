@@ -1,7 +1,7 @@
 <%
 // Пример вызова в шаблоне (EJS):
 //
-// <\%- include('src/ejs/components/carousel.ejs', { 
+// <\%- include('externe/components/media/Carousel/Carousel.ejs', { 
 //	carousel_component: {
 //		this: {
 //			parent: 'parentClass',
@@ -13,7 +13,7 @@
 //			dataAttribute: ['customDataAttributes'], 
 //		},
 //		list: [
-//			image_component: {},
+//			{image_component: {}, content: {}}
 //		]
 //	}
 //}) %>
@@ -33,31 +33,78 @@
 
 
 <<%=thisTag%> data-fsc-carousel <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
-	<ul class="<%=blockClass%>__list" data-fsc-carousel-list>
-		<% for (var image_component of carousel_component.list) { %>
-			<li class="<%=blockClass%>__element" data-fsc-carousel-item>
+
+		<ul class="<%=blockClass%>__list" data-fsc-carousel-list>
+			<% for (var carousel of carousel_component.list) { %>
+				<li class="<%=blockClass%>__element" data-fsc-carousel-item>
+
+					<% if(carousel.content) { content = carousel.content %>
+						<div class="<%=blockClass%>__container container">
+							<h1 class="<%=blockClass%>__title">
+								<%= content.title%>
+							</h1>
+
+							<div class="<%=blockClass%>__body">
+								<div class="<%=blockClass%>__text">
+									<% for (var text of content.text) { %>
+										<p><%=text%></p>
+									<% } %>
+								</div>
+
+								<%- include('src/ejs/components/button.ejs', {
+									button_component: content.button_component
+								}) %>
+							</div>
+
+						</div>
+					<% } %>
+					
+					<%- include('externe/components/media/Image/Image.ejs', {
+						image_component: carousel.image_component
+					}) %>
+
+					
 				
-				<%- include('externe/components/media/Image/Image.ejs', {
-					image_component: image_component
-				}) %>
-			
-			</li>
-		<% } %>
-	</ul>
-	
-	<div class="<%=blockClass%>__controls">
-		<button data-fsc-carousel-button-left>Left</button>
-		<button data-fsc-carousel-button-right>Right</button>
-	</div>
-	<ul class="<%=blockClass%>__dots" data-fsc-carousel-dots>
-		<% for (var i = 0; i < carousel_component.list.length; i++) { %>
-			<li class="<%=blockClass%>__dot" data-fsc-carousel-dot>
-				<%= i + 1 %>
-			</li>
-		<% } %>
-	</ul>
-	<div class="<%=blockClass%>__counter">
-		<span data-fsc-carousel-timer></span>
-		<span data-fsc-carousel-counter></span>
-	</div>
+				</li>
+			<% } %>
+		</ul>
+		
+		<% subBlockClass = 'controls-carousel' %> 
+		<div class="<%=blockClass%>__controls <%=subBlockClass%>">
+			<div class="<%=subBlockClass%>__wrapper">
+				<button class="<%=subBlockClass%>__control" data-fsc-carousel-button-left>
+					<%- include('externe/components/media/Icon/Icon.ejs', {
+						icon_component: {
+							name: 'slider-arrow'
+						}
+					}) %>
+				</button>
+				<button class="<%=subBlockClass%>__control" data-fsc-carousel-button-right>
+					<%- include('externe/components/media/Icon/Icon.ejs', {
+						icon_component: {
+							name: 'slider-arrow'
+						}
+					}) %>
+				</button>
+			</div>
+		</div>
+
+		<% subBlockClass = 'dots-carousel' %> 
+		<div class="<%=blockClass%>__dots <%=subBlockClass%>">
+			<ul class="<%=subBlockClass%>__list" data-fsc-carousel-dots>
+				<% for (var i = 0; i < carousel_component.list.length; i++) { %>
+					<li class="<%=subBlockClass%>__element" data-fsc-carousel-dot>
+						<button class="<%=subBlockClass%>__button">
+							<span class="<%=subBlockClass%>__dot"></span>
+						</button>
+					</li>
+				<% } %>
+			</ul>
+		</div>
+		
+		<div class="<%=blockClass%>__counter">
+			<span data-fsc-carousel-timer></span>
+			<span data-fsc-carousel-counter></span>
+		</div>
+		
 </<%=thisTag%>>

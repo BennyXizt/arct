@@ -11,8 +11,4 @@
 
         @include rem(row-gap, 20px);
     }
-
-    &__body {
-        background-color: getThemeTag(primary-background-color);
-    }
 }

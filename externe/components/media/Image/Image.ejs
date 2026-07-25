@@ -1,13 +1,22 @@
 <%
 // Компонент <Image>: адаптивное изображение с поддержкой современных форматов
+//  
 // Используетcz для выбора формата изображения в зависимости от поддержки браузером
 // 1. <source type="image/webp"> — если браузер поддерживает WebP, загрузит webp-версию
 // 2. <source type="image/jpeg"> — fallback, если WebP не поддерживается
 // 3. <img> — обязательный элемент (fallback по умолчанию), с srcset и sizes для адаптивной загрузки
+// 
 // Атрибуты width/height помогают избежать сдвига контента (layout shift)
 // loading="lazy" — отложенная загрузка, улучшает производительность
 // decoding="async" — не блокирует отрисовку страницы
-//
+// srcset: [
+//     `media/image/slider/${e}-sm.jpg 480w`,
+//     `media/image/slider/${e}-md.jpg 800w`,
+//     `media/image/slider/${e}-lg.jpg 1200w`,
+//     `media/image/slider/${e}-xl.jpg 1600w`,
+//     `media/image/slider/${e}-2xl.jpg 2400w`
+// ]
+// 
 // Пример использования компонента:
 //   <\%- include('externe/components/media/Image/Image.ejs', {
 //         image_component: {
@@ -87,8 +96,9 @@
         <% if(displayType === 'picture') { %>
             <picture>
                 <% for(const source of image_component.images) { %>
-                    <!-- <%= source.type %> -->
+                    <% if (source.media?.label) { %> <!-- <%= `${source.media.label} ${source.type}` %> --> <% } else { %> <!-- <%= source.type %> -->  <% } %>
                     <source 
+                        <% if (source.media?.media) { %> media="<%= source.media.media %>" <% } %>
                         <% if (source.srcset) { 
                             let srcset = ''
 
@@ -107,13 +117,13 @@
         <% } %>
 
             <img <%=thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>
-                src="<%= image.src %>"
-                <% if (image.alt) { %> alt="<%= image.alt %>" <% } %>
-                <% if (image.width) { %> width="<%= image.width %>" <% } %>
-                <% if (image.height) { %> height="<%= image.height %>" <% } %>
-                <% if (image.loading) { %> loading="<%= image.loading %>" <% } %>
-                <% if (image.decoding) { %> decoding="<%= image.decoding %>" <% } %>
-                <% if (image.srcset) { 
+                src="<%= image?.src %>"
+                <% if (image?.alt) { %> alt="<%= image.alt %>" <% } %>
+                <% if (image?.width) { %> width="<%= image.width %>" <% } %>
+                <% if (image?.height) { %> height="<%= image.height %>" <% } %>
+                <% if (image?.loading) { %> loading="<%= image.loading %>" <% } %>
+                <% if (image?.decoding) { %> decoding="<%= image.decoding %>" <% } %>
+                <% if (image?.srcset) { 
                     let srcset = ''
 
                     if(typeof image.srcset === 'string') {
@@ -123,8 +133,9 @@
                     }
                 %> 
                     srcset="<%= srcset %>" 
+
+                    <% if (image?.sizes) { %> sizes="<%= image.sizes %>" <% } else { %>  sizes="100vw" <% } %>
                 <% } %>
-                <% if (image.sizes) { %> sizes="<%= image.sizes %>" <% } %>
             >
 
         <% if(displayType === 'picture') { %>

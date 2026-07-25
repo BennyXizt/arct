@@ -1,0 +1,262 @@
+
+@use 'sass:map';
+@use 'sass:math';
+
+@import '../../../../externe/components/media/Carousel/Carousel';
+
+[data-fsc-carousel] {
+    position: relative;
+    overflow: unset;
+    transition: transform .1s ease-in-out;
+
+    .carousel {
+        &__list {
+            transition: transform 1.5s ease-in-out, height .5s ease-in-out;
+        }
+
+        &__element {
+            position: relative;
+
+            img {
+                position: sticky;
+                top: 0;
+                height: 100dvh;
+            }
+        }
+
+        &__figure {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        &__container {
+            display: flex;
+            flex-flow: column;
+            justify-content: center;
+            align-items: flex-start;
+            height: 100dvh;
+            min-height: max-content;
+
+            @include fluid((
+                gap: 72px 16px,
+                padding-top: (228px 50px),
+                padding-bottom: (123px 50px)
+            ));
+        }
+
+        &__title {
+            color: getThemeTag(secondary-text-color);
+            text-transform: capitalize;
+
+            @include transition(color);
+        }
+
+        &__body {
+            background-color: getThemeTag(primary-background-color);
+            display: flex;
+            flex-direction: column;
+
+            @include rem(gap, 10px);
+            @include transition(background-color);
+            @include fluid((
+                padding-top: 45px 10px,
+                padding-bottom: 45px 10px,
+                padding-left: 40px 10px,
+                padding-right: 70px 10px,
+            ));
+        }
+
+        &__text {
+            @extend %textBody;
+
+            color: getThemeTag(body-text-color);
+
+            p {
+                &:not(:last-child) {   
+                    @include rem(margin-bottom, 15px);
+                }
+            }
+        }
+
+        &__button {
+            flex-shrink: 0;
+            justify-content: center;
+        }
+
+        &__counter {
+            position: absolute;
+            display: flex;
+            flex-flow: row wrap;
+            align-items: center;
+            justify-content: space-between;
+
+            @include fluid((
+                left: 98px 10px,
+                right: 98px 10px,
+                top: 162px 70px,
+                gap: 16px 8px
+            ));
+        }
+
+        @include media(tablet) {
+            &__figure {
+                width: 66.31%;
+            }
+            &__container {
+                max-width: calc(61.928% + 30px);
+            }
+            &__title {
+                @include rem(max-width, 600px);
+            }
+            &__body {
+                flex-direction: row;
+                align-items: flex-start;
+                justify-content: center;
+            }
+            &__button {
+                position: sticky;
+                justify-content: unset;
+
+                @include rem(top, 120px);
+            }
+        }
+
+        @include media(tablet, max) {
+            &__body {
+                overflow-y: auto;
+
+                @include rem(max-height, 420px);
+            }
+        }
+    }
+
+    .dots-carousel {
+        position: absolute;
+        left: 50%;
+        transform: translate(-50%, 0);
+
+        @include rem(bottom, 20px);
+
+        &__list {
+            display: flex;
+
+            @include rem(gap, 2px);
+        }
+
+        &__element {
+            counter-increment: item;
+
+            &.active {
+                .dots-carousel {
+                    &__dot {
+                        color: map.get($COLORS, brown);
+                    }
+                }
+            }
+        }
+
+        &__dot {
+            @extend %textSliderDots;
+            color: map.get($COLORS, gray_lite);
+
+            &::before {
+                content: counter(item, decimal-leading-zero);
+            }
+        }
+
+        &__button {
+            @include rem(padding, 8px);
+        }
+
+        @include media(tablet) {
+            transform: unset;
+            left: unset;
+            top: 0;
+            height: 100%;
+
+            @include fluid(left, 98px 10px);
+
+            &__list {
+                flex-direction: column;
+                position: sticky;
+                top: 50%;
+                transform: translate(0, -50%);
+            }
+        }
+    }
+
+    .controls-carousel {
+        position: absolute;
+
+        @include rem((
+            bottom: 20px,
+            left: 20px,
+            right: 20px
+        ));
+
+        &__wrapper {
+            display: flex;
+            justify-content: space-between;
+
+            @include fluid((
+                gap: 16px 8px
+            ));
+        }
+
+        &__control {
+            background-color: getThemeTag(primary-background-color);
+            border: 1px solid currentColor;
+            border-radius: 100%;
+            display: inline-flex;
+            justify-content: center;
+            align-items: center;
+            aspect-ratio: 1;
+
+            @include fluid((
+                width: 60px 45px,
+            ));
+            @include transition(background-color);
+
+            svg {
+                @include fluid((
+                    width: 15px 12px,
+                    height: 50px 20px
+                ));
+            }
+
+            &[data-fsc-carousel-button-left] {
+                svg {
+                    transform: rotate(180deg);
+                }
+            }
+
+            &[disabled] {
+                color: map.get($COLORS, gray_lite);
+            }
+        }
+
+        @include media(tablet) {
+            top: 0;
+            right: unset;
+            height: 100%;
+            display: flex;
+            align-items: flex-end;
+
+            @include fluid(left, 98px 10px);
+
+            &__wrapper {
+                position: sticky;
+                flex-direction: column;
+
+                @include fluid((
+                    left: 98px 10px,
+                    bottom: 162px 20px,
+                ));
+            }
+        }
+    }
+}
