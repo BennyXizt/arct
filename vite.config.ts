@@ -14,7 +14,7 @@ export default defineConfig({
         main: 'index.html',
       },
       output: {
-         // JS
+        // JS
         entryFileNames: 'assets/js/[name].js',
         chunkFileNames: 'assets/js/[name]-[hash].js',
 
