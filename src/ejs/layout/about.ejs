@@ -1,0 +1,58 @@
+<%
+	blockClass = 'about'
+
+	about_component = {
+		title: 'about me',
+		text: {
+			bigtext: 'Viverra senectus lorem ipsum dolor sit adui ultricies dolor. Varius nibh velit pellentesque sapi viverra euen, sapien non senectus odio neque dignissim.',
+			p: [
+				`Lorem ipsum dolor sit amet, consectetur adipiscing elit. Et mauris sed faucibus amet lobortis netus vehicula pretium. Rhoncus laoreet feugiat orci rutrum risus gravida ultricies lacinia faucibus. Mauris ut id scelerisque quis hac luctus nunc. Quis at maecenas velit non. Sit amet, consectetur adipiscing elit. Et mauris sed faucibus amet lobortis netus vehicula pretium. Rhoncus laoreet feugiat orci rutrum risus gravida ultricies lacinia faucibus. Mauris ut id scelerisque quis hac luctus nunc. Quis at maecenas velit non. Lorem ipsum dolor sit amet, consectetur adipiscing elit.`,
+				`Et mauris sed faucibus amet lobortis netus vehicula pretium. Rhoncus laoreet feugiat orci rutrum risus gravida ultricies lacinia faucibus. Mauris ut id scelerisque quis hac luctus nunc. Quis at maecenas velit non.`
+			]
+		},
+		button_component: {
+			this: {
+				parent: 'about'
+			},
+			label: 'View my works',
+			link: '#',
+			icon_component: {
+				name: 'arrow'
+			}
+		},
+	}
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>' id="about">
+	<div class='<%=blockClass%>__container container'>
+		<div class="<%=blockClass%>__container-inner container-inner">
+			<%- include('src/ejs/components/title.ejs', {
+				title_component: {
+					this: {
+						parent: blockClass,
+						tag: 'h2'
+					},
+					title: 'about me',
+					// subititle: ''
+				}
+			})%>
+			<div class="<%=blockClass%>__content">
+				<div class="<%=blockClass%>__bigtext">
+					<%= about_component.text.bigtext %>
+				</div>
+				<div class="<%=blockClass%>__text">
+					<% for(var text of about_component.text.p) { %>
+						<p>
+							<%= text %>
+						</p>
+					<% } %>
+				</div>
+				
+
+				<%- include('src/ejs/components/button.ejs', {
+					button_component: about_component.button_component
+				}) %>
+			</div>
+		</div>
+	</div>
+</section>

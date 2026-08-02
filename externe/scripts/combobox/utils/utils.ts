@@ -1,7 +1,6 @@
-// @ts-ignore
-import { SearchType } from '../types/plugin.enum'
-// @ts-ignore
-import type { FilterList } from '../types/plugin.interface'
+
+import { SearchType } from '../types/plugin.enum.js'
+import type { FilterList } from '../types/plugin.interface.js'
 import { HTMLCombobox } from '../types/plugin.interface.js'
 
 export function actionFilterList( { ul, input, searchType, originalList }: FilterList) {    

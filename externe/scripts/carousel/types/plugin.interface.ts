@@ -17,6 +17,7 @@ export interface CarouselElementInterface {
     animationID: number | undefined
 
     // drag
+    isDraggableAllowed: boolean
     isDragging: boolean
     draggingStartX: number | undefined
     draggingMoveX: number | undefined
@@ -28,7 +29,7 @@ export interface CarouselElementInterface {
     timerSeconds: number | undefined
 
     // disabled
+    isDisabledAllowed: boolean
     buttonLeft: HTMLElement | null
     buttonRight: HTMLElement | null
-    isDisabledAllowed: boolean
 }

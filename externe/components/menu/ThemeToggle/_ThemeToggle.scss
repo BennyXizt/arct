@@ -1,0 +1,45 @@
+
+[data-fsc-themetoggle] {
+    $color1: #F4F0E5;
+    $color2: #161813;
+
+    position: relative;
+    cursor: pointer;
+    background-color: $color1;
+
+    @include transition(background-color);
+    
+    @include rem((
+        width: 30px,
+        height: 20px,
+        border-radius: 10px
+    ));
+
+    &::before {
+        content: '';
+        border-radius: 100%;
+        background-color: $color2;
+        @include transition(background-color, left);
+
+        @include rem((
+            width: 8px,
+            height: 8px,
+            left: 6px
+        ));
+        
+        position: absolute;
+        top: 50%;
+        transform: translate(0, -50%);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            background-color: $color2;
+
+            &::before {
+                left: calc(100% - 8px - 6px);
+                background-color: $color1;
+            }
+        }
+    }
+}

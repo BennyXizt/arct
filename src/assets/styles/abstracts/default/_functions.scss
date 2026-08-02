@@ -1,64 +1,14 @@
 
-@function list-max($list) {
-    @if meta.type-of($list) != 'list' {
-        @warn 'FUNCTION list-max($list): The argument is NOT a list';
+@function getMedia($breakpoint, $type: min) {
+    @if $type == min or $type == max {
+        $size: map.get(map.get($CONTAINER, $breakpoint), media);
+
+        @return $size;
+    } @else {
         @return undefined;
     }
-
-    $max: list.nth($list, 1);
-
-    @if meta.type-of($max) != 'number' {
-        @warn 'FUNCTION list-max($list): The value ' + $min + ' is NOT a number';
-        @return undefined;
-    }
-
-    $unit: math.unit($max);
-
-    @for $i from 1 through list.length($list) {
-        $value: list.nth($list, $i);
-
-        @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
-            @warn 'FUNCTION list-max($list): either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
-            @return undefined;
-        }
-
-        @if($value > $max) {
-            $max: $value;
-        }
-    }
-
-    @return $max;
 }
-@function list-min($list) {
-    @if meta.type-of($list) != 'list' {
-        @warn 'FUNCTION list-min($list): The argument is NOT a list';
-        @return undefined;
-    }
 
-    $min: list.nth($list, 1);
-
-    @if meta.type-of($min) != 'number' {
-        @warn 'FUNCTION list-min($list): The value ' + $min + ' is NOT a number';
-        @return undefined;
-    }
-
-    $unit: math.unit($min);
-
-    @for $i from 1 through list.length($list) {
-        $value: list.nth($list, $i);
-
-        @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
-            @warn 'FUNCTION list-min($list): either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
-            @return undefined;
-        }
-
-        @if($value < $min) {
-            $min: $value;
-        }
-    }
-
-    @return $min;
-}
 @function getTheme($theme, $value) {
     @return map.get(map.get($THEME, $theme), $value);
 }
@@ -75,4 +25,374 @@
     }
 
     @return null;
+}
+
+/// @return {Number|List} - Returns a Maximum Number or List of Numbers
+@function list-max($list) {
+    $stringError: 'FUNCTION list-max(($list): ';
+
+    @if meta.type-of($list) != 'list' {
+        @warn  $stringError + 'The argument is NOT a list';
+        @return undefined;
+    }
+
+    $el1: list.nth($list, 1);
+    $max: null;
+
+    @if meta.type-of($el1) == 'number' {
+        $unit: math.unit($el1);
+        $max: $el1;
+
+        @for $i from 1 through list.length($list) {
+            $value: list.nth($list, $i);
+
+            @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+                @warn $stringError + 'either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+                @return undefined;
+            }
+
+            @if($value > $max) {
+                $max: $value;
+            }
+        }
+
+        $max: if(math.is-unitless($max), $max * 1px, $max);
+        @return $max;
+    } @else if meta.type-of($el1) == 'list' { 
+        $maxs: ();
+
+        @for $i from 1 through list.length($list) {
+            $sublist: list.nth($list, $i);
+
+            $max: list.nth($sublist, 1);
+            $unit: math.unit($max);
+            
+            @for $j from 1 through list.length($sublist) {
+                $value: list.nth($sublist, $j);
+
+                @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+                    @warn $stringError + 'either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+                    @return undefined;
+                }
+
+                @if($value > $max) {
+                    $max: $value;
+                }
+            }
+
+            $max: if(math.is-unitless($max), $max * 1px, $max);
+            $maxs: list.append($maxs, $max);
+        }
+
+        @return $maxs;
+    }
+}
+
+/// @return {Number|List} - Returns a Minimum Number or List of Numbers
+@function list-min($list) {
+    $stringError: 'FUNCTION list-min(($list): ';
+
+    @if meta.type-of($list) != 'list' {
+        @warn $stringError + 'The argument is NOT a list';
+        @return undefined;
+    }
+
+    $el1: list.nth($list, 1);
+    $min: null;
+
+    @if meta.type-of($el1) == 'number' {
+        $unit: math.unit($el1);
+        $min: $el1;
+
+        @for $i from 1 through list.length($list) {
+            $value: list.nth($list, $i);
+
+            @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+                @warn $stringError + 'either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+                @return undefined;
+            }
+
+            @if($value < $min) {
+                $min: $value;
+            }
+        }
+
+        $min: if(math.is-unitless($min), $min * 1px, $min);
+        @return $min;
+    } @else if meta.type-of($el1) == 'list' { 
+        $mins: ();
+
+        @for $i from 1 through list.length($list) {
+            $sublist: list.nth($list, $i);
+
+            $min: list.nth($sublist, 1);
+            $unit: math.unit($min);
+            
+            @for $j from 1 through list.length($sublist) {
+                $value: list.nth($sublist, $j);
+
+                @if meta.type-of($value) != 'number' or math.unit($value) != $unit  {
+                    @warn $stringError + 'either value ' + $value + ' is NOT a number or value`s unit is NOT ' + $unit;
+                    @return undefined;
+                }
+
+                @if($value < $min) {
+                    $min: $value;
+                }
+            }
+
+            $min: if(math.is-unitless($min), $min * 1px, $min);
+            $mins: list.append($mins, $min);
+        }
+
+        @return $mins;
+    }
+}
+
+/// Fluid sizing function for responsive values.
+///
+/// Generates a fluid value based on provided arguments.
+/// Can be used for responsive typography, spacing, widths, etc.
+///
+/// @param {Number|List}   $arg1 - Base value           (usually min/max size or single list)
+/// @param {Number|null|_} $arg2 - Second value         (optional, max/min value or _ if $arg1 = list of lists)
+/// @param {Number|null|_} $arg3 - Start Restriction    (optional, start breakpoint (default: $HEADERS_CLAMP_WIDTH) / start viewport width)
+/// @param {Number|null|_} $arg4 - Base Font Size       (optional, font size (default: 16px) used for pxAdaptive() conversion)
+/// @param {Number|null|_} $arg5 - End Restriction      (optional, end breakpoint (default: $BASE, min_width) / end viewport width )
+///
+/// @return {String|List} - Returns a fluid CSS value using clamp() and calc()
+@function fluid($arg1, $arg2: null, $arg3: null, $arg4: null, $arg5: null) {
+    $stringError: 'FUNCTION fluid($arg1, $arg2, $arg3, $arg4, $arg5): ';
+
+    $startRestriction: null;
+    $baseFontSize: null;
+    $endRestriction: null;
+
+    $mins: ();
+    $maxs: ();
+
+    $preferred: null;
+
+    // define raw variables
+    @if meta.type-of($arg1) == 'list' {
+        @for $i from 1 through list.length($arg1) {
+            $value: list.nth($arg1, $i);
+
+            @if meta.type-of($value) == 'number' or $value == '_' {
+                @if meta.type-of($value) == 'number' and math.unit($value) != 'px' and not math.is-unitless($value)  {
+                    @warn $stringError + 'The number (' + $value + ') is NOT in px';
+                    @return undefined;
+                }
+
+                @if $i == 1 {
+                    @if meta.type-of($value) != 'number' {
+                        @warn $stringError + 'First argument (' + $value + ') is not a number!';
+                        @return unfefined;
+                    }
+
+                    $min: if(math.is-unitless($value), $value * 1px, $value);
+                    $mins: list.append($mins, $min);
+                } @if $i == 2 {
+                    @if meta.type-of($value) != 'number' {
+                        @warn $stringError + 'Second argument (' + $value + ') is not a number!';
+                        @return unfefined;
+                    }
+
+                    $max: if(math.is-unitless($value), $value * 1px, $value);
+                    $maxs: list.append($maxs, $max);
+                } @if $i == 3 or $arg3 {
+                    $value: if($arg3, $arg3, $value);
+
+                    $startRestriction: if($value != '_', $value, null);
+                } @if $i == 4 or $arg4 {
+                    $value: if($arg4, $arg4, $value);
+
+                    $baseFontSize: if($value != '_', $value, null);
+                } @if $i == 5 or $arg5 {
+                    $value: if($arg5, $arg5, $value);
+
+                    $endRestriction: if($value != '_', $value, null);
+                }
+            } @else if meta.type-of($value) == 'list' {
+                $el1: list.nth($value, 1);
+                $el2: list.nth($value, 2);
+
+                @if meta.type-of($el1) != 'number' {
+                    @warn $stringError + 'First argument (' + $el1 + ') OF sublist (' + $value + ') is not a number!';
+                    @return unfefined;
+                }
+
+                @if meta.type-of($el2) != 'number' {
+                    @warn $stringError + 'Second argument (' + $el2 + ') OF sublist (' + $value + ') is not a number!';
+                    @return unfefined;
+                }
+
+                $min: if(math.is-unitless($el1), $el1 * 1px, $el1);
+                $max: if(math.is-unitless($el2), $el2 * 1px, $el2);
+
+                $mins: list.append($mins, $min);
+                $maxs: list.append($maxs, $max);
+            }
+        }
+    } @else {
+        @if meta.type-of($arg1) != 'number' {
+            @warn $stringError + 'First argument (' + $arg1 + ') is not a number!';
+            @return unfefined;
+        } @else if not $arg2 {
+            @warn $stringError + 'Second argument is empty!';
+            @return unfefined;
+        } @else if meta.type-of($arg2) != 'number' {
+            @warn $stringError + 'Second argument (' + $arg2 + ') is not a number!';
+            @return unfefined;
+        }
+
+        $min: if(math.is-unitless($arg1), $arg1 * 1px, $arg1);
+        $max: if(math.is-unitless($arg2), $arg2 * 1px, $arg2);
+
+        @if math.unit($min) != 'px' or math.unit($max) != 'px' {
+            @warn $stringError + 'The numbers (' + $min + ', ' + $max + ') is NOT in px';
+            @return undefined;
+        }
+
+        $mins: list.append($mins, $min);
+        $maxs: list.append($maxs, $max);
+
+        @if $arg3 {
+            @if meta.type-of($arg3) != 'number' and $arg3 != '_' {
+                @warn $stringError + 'The value (' + $arg3 + ') is NOT a number';
+                @return undefined;
+            }
+            @if meta.type-of($arg3) == 'number' and math.unit($arg3) != 'px' and not math.is-unitless($arg3)  {
+                @warn $stringError + 'The number (' + $arg3 + ') is NOT in px';
+                @return undefined;
+            }
+
+            $startRestriction: if($arg3 != '_', $arg3, null);
+        }
+
+        @if $arg4 {
+            @if meta.type-of($arg4) != 'number' and $arg4 != '_' {
+                @warn $stringError + 'The value (' + $arg4 + ') is NOT a number';
+                @return undefined;
+            }
+            @if meta.type-of($arg4) == 'number' and math.unit($arg4) != 'px' and not math.is-unitless($arg4)  {
+                @warn $stringError + 'The number (' + $arg4 + ') is NOT in px';
+                @return undefined;
+            }
+
+            $baseFontSize: if($arg4 != '_', $arg4, null);
+        }
+
+        @if $arg5 {
+            @if meta.type-of($arg5) != 'number' and $arg5 != '_' {
+                @warn $stringError + 'The value (' + $arg5 + ') is NOT a number';
+                @return undefined;
+            }
+            @if meta.type-of($arg5) == 'number' and math.unit($arg5) != 'px' and not math.is-unitless($arg5)  {
+                @warn $stringError + 'The number (' + $arg5 + ') is NOT in px';
+                @return undefined;
+            }
+
+            $endRestriction: if($arg5 != '_', $arg5, null);
+        }
+    }
+
+    // filter variables
+    @if $startRestriction or $arg3 and $arg3 != '_' {
+        $startRestriction: if($arg3, $arg3, $startRestriction);
+
+        $startRestriction: if(math.is-unitless($startRestriction), $startRestriction * 1px, $startRestriction);
+    } @else {
+        $startRestriction: $HEADERS_CLAMP_WIDTH;
+    } 
+
+    @if $baseFontSize or $arg4 and $arg4 != '_' {
+        $baseFontSize: if($arg4, $arg4, $baseFontSize);
+
+        $baseFontSize: if(math.is-unitless($baseFontSize), $baseFontSize * 1px, $baseFontSize);
+    } @else {
+        $baseFontSize: if(map.get($BASE, font_size_original), map.get($BASE, font_size_original), 16px);
+    }  
+
+    @if $endRestriction or $arg5 and $arg5 != '_' {
+        $endRestriction: if($arg5, $arg5, $endRestriction);
+
+        $endRestriction: if(math.is-unitless($endRestriction), $endRestriction * 1px, $endRestriction);
+    } @else {
+        $endRestriction: if(map.get($BASE, min_width), map.get($BASE, min_width), null);
+    }  
+
+    $returnList: ();
+
+    // core
+    @for $i from 1 through list.length($mins) {
+        $min: list.nth($mins, $i);
+        $max: list.nth($maxs, $i);
+
+        @if $min > $max {
+            @if not map.get($SETTINGS, fluid) {
+                @return $min;
+            }
+
+            $temp: $min;
+            $min: min($min, $max);
+            $max: max($temp, $max);
+
+            @if not $endRestriction {
+                $modificator: 0.01 * $startRestriction;
+                $preferred: math.div($max, $modificator) + vw;
+                $min: pxAdaptive($min, $baseFontSize);
+                $max: pxAdaptive($max, $baseFontSize);
+            } @else {
+                $range: $max - $min;
+                $width-range: $startRestriction - $endRestriction;
+
+                $min: pxAdaptive($min, $baseFontSize);
+                $max: pxAdaptive($max, $baseFontSize);
+                $range: pxAdaptive($range);
+                $width-range: pxAdaptive($width-range);
+
+                $preferred: calc(
+                    $min + $range * ((100vw - pxAdaptive($endRestriction)) / $width-range)
+                );
+            }
+
+            $returnList: list.append($returnList, clamp($min, $preferred, $max));
+        } @else {
+            @if not map.get($SETTINGS, fluid) {
+                @return $max;
+            }
+
+            $temp: $min;
+            $min: max($min, $max);
+            $max: min($temp, $max);
+
+            @if not $endRestriction {
+                $range: $max - $min;
+                $mod: math.abs(math.div($range, $startRestriction));
+
+                $min: pxAdaptive($min, $baseFontSize);
+                $max: pxAdaptive($max, $baseFontSize);
+                $mod: pxAdaptive($mod);
+
+                $preferred: calc(#{$max} + ((pxAdaptive($startRestriction) - 100vw) * #{$mod}));
+            } @else {
+                $range: $min - $max;
+                $width-range: $startRestriction - $endRestriction;
+
+                $min: pxAdaptive($min, $baseFontSize);
+                $max: pxAdaptive($max, $baseFontSize);
+                $range: pxAdaptive($range);
+                $width-range: pxAdaptive($width-range);
+
+                $preferred: calc(
+                    #{$max} + ((#{pxAdaptive($startRestriction)} - 100vw) * (#{$range} / #{$width-range}))
+                );
+            }
+
+            $returnList: list.append($returnList, clamp($max, $preferred, $min));
+        }
+    }
+
+    @return $returnList;
 }

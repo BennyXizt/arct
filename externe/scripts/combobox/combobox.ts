@@ -24,13 +24,13 @@
  * - data-fsc-combobox-p-icon (svg)
  */
 
-import { comboboxItemClick, comboboxInputClick, comboboxCloseClick, comboboxBlankClick, comboboxOnKeyUp, comboboxHovered, comboboxUnhovered } from './utils/events.js'
+import { comboboxItemPointerClick, comboboxInputPointerClick, comboboxClosePointerClick, comboboxBlankPointerClick, comboboxOnKeyUp, comboboxHovered, comboboxUnhovered } from './utils/events.js'
 export { comboboxAutoload } from './utils/events.js'
 
 export const comboboxOnKeyUpArray = [comboboxOnKeyUp, '[data-fsc-combobox] input']
-export const comboboxInputClickArray = [comboboxInputClick, '[data-fsc-combobox] input']
-export const comboboxBlankClickArray = [comboboxBlankClick, '[data-fsc-combobox-blank]']
-export const comboboxCloseClickArray = [comboboxCloseClick, '[data-fsc-combobox-input-icon-close]']
-export const comboboxItemClickArray = [comboboxItemClick, '[data-fsc-combobox-item]']
+export const comboboxInputPointerClickArray = [comboboxInputPointerClick, '[data-fsc-combobox] input']
+export const comboboxBlankPointerClickArray = [comboboxBlankPointerClick, '[data-fsc-combobox-blank]']
+export const comboboxClosePointerClickArray = [comboboxClosePointerClick, '[data-fsc-combobox-input-icon-close]']
+export const comboboxItemPointerClickArray = [comboboxItemPointerClick, '[data-fsc-combobox-item]']
 export const comboboxHoverArray = [comboboxHovered, '[data-fsc-combobox]']
 export const comboboxUnhoverArray = [comboboxUnhovered, '[data-fsc-combobox]']

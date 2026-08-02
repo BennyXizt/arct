@@ -24,7 +24,7 @@ export function accordionAutoload() {
     }
 }
 
-export function accordionClick(target: HTMLElement, _: Event) {
+export function accordionPointerClick(target: HTMLElement, _: PointerEvent) {
     const 
         HTMLAccordion = target.closest('[data-fsc-accordion]') as HTMLElement,
         HTMLElement = HTMLElements.find(e => e.accordion === HTMLAccordion)

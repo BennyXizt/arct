@@ -3,6 +3,9 @@
  * Компонент ОПИСАНИЕ.
  *
  * Поддерживаемые атрибуты `data-fsc-empty-*`:
+ * - data-fsc-empty                    — инициализирует элемент
+ * - data-fsc-empty-empty - 
+ *   - default (ОПИСАНИЕ)
  * 
 */
 
@@ -12,9 +15,11 @@
 
 // export const emptyObserverArray                 = [emptyObserver, '[data-fsc-empty]', intersectionOptions]
 // export const emptyOnKeyUpArray                  = [emptyOnKeyUp, '[data-fsc-empty]']
+// export const emptyPointerClickArray             = [emptyItemPointerClick, '[data-fsc-empty]']
 // export const emptyClickArray                    = [emptyItemClick, '[data-fsc-empty]']
 // export const emptyHoverArray                    = [emptyHovered, '[data-fsc-empty]']
 // export const emptyUnhoverArray                  = [emptyUnhovered, '[data-fsc-empty]']
 // export const emptyOnResizeArray                 = [emptyOnResize, '[data-fsc-empty]']
 // export const emptyDragEventPointerMoveArray     = [emptyDragEventPointerMove, '[data-fsc-empty]']
 // export const emptyDragEventPointerUpArray       = [emptyDragEventPointerUp, '[data-fsc-empty]']
+// export const emptyScrollArray                   = [emptyScroll, window]

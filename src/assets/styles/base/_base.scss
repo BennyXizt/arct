@@ -123,5 +123,27 @@ body {
         }
       }
     }
-   
+
+    &-inner {
+      display: flex;
+      flex-flow: row wrap;
+      align-items: flex-start;
+
+      @include fluid((
+          gap: 50px 10px,
+          padding-left: (185px 15px) (arg5 getMedia(tablet)),
+          padding-right: (185px 15px) (arg5 getMedia(tablet)),
+      ));
+    }
+}
+
+.layout {
+  & > * {
+    &:not(:first-child) {
+      @include fluid((
+        margin-top: (240 120) (arg5 getMedia(tablet)),
+        margin-bottom: (260 120) (arg5 getMedia(tablet)),
+      ));
+    }
+  }
 }

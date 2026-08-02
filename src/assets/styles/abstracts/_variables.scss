@@ -42,6 +42,7 @@ $BASE: (
 $COLORS: (
     default: map.get($BASE, main_color),
     dark: #201f1f,
+    preDark: #363535,
     brown: #91795c,
     gray: #818181,
     gray_lite: #cfcfcf,

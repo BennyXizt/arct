@@ -17,6 +17,7 @@ export function carouselAutoload() {
             pureDirection = carousel.getAttribute('data-fsc-carousel-direction'),
             pureInterval = carousel.getAttribute('data-fsc-carousel-interval'),
             pureIsDisabledAllowed = carousel.getAttribute('data-fsc-carousel-allow-disabled'),
+            pureIsDraggableAllowed = carousel.getAttribute('data-fsc-carousel-allow-draggable'),
             buttonLeft = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-left]'),
             buttonRight = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-right]')
 
@@ -26,9 +27,11 @@ export function carouselAutoload() {
             formattedInterval: number = pureInterval ? Number.parseInt(pureInterval) : 3000,
             formattedIsDisabledAllowed = 
                 pureIsDisabledAllowed === 'true' || pureIsDisabledAllowed === ''
+                    ? true : false,
+            formattedIsDraggableAllowed = 
+                pureIsDraggableAllowed === 'true' || pureIsDraggableAllowed === ''
                     ? true : false
                     
-
         const { dimention, offset, length } = calculateCarouselProps(carouselList)
 
         const carouselElement = 
@@ -50,6 +53,7 @@ export function carouselAutoload() {
                 animationID: undefined,
 
                 // drag
+                isDraggableAllowed: formattedIsDraggableAllowed, 
                 isDragging: false,
                 draggingStartX: undefined,
                 draggingMoveXPlusPointer: undefined,
@@ -62,9 +66,9 @@ export function carouselAutoload() {
                 timerSeconds: undefined, 
 
                 // disabled
+                isDisabledAllowed: formattedIsDisabledAllowed, 
                 buttonLeft, 
                 buttonRight, 
-                isDisabledAllowed: formattedIsDisabledAllowed, 
             }
 
         carouselElements.push(carouselElement)
@@ -88,7 +92,7 @@ export function carouselObserver(entry: IntersectionObserverEntry, _: Intersecti
     }
 }
 
-export function carouselLeftClick(element: HTMLElement) {
+export function carouselLeftPointerClick(element: HTMLElement) {
     if(element.hasAttribute('disabled')) return
 
     const root = element.closest('[data-fsc-carousel]')
@@ -104,7 +108,7 @@ export function carouselLeftClick(element: HTMLElement) {
     step(carousel)
 }
 
-export function carouselRightClick(element: HTMLElement) {
+export function carouselRightPointerClick(element: HTMLElement) {
     if(element.hasAttribute('disabled')) return
 
     const root = element.closest('[data-fsc-carousel]')
@@ -120,7 +124,7 @@ export function carouselRightClick(element: HTMLElement) {
     step(carousel)
 }
 
-export function carouselDotClick(element: HTMLElement) {
+export function carouselDotPointerClick(element: HTMLElement) {
     const root = element.closest('[data-fsc-carousel]')
 
     if(!root) return
@@ -151,14 +155,14 @@ export function carouselOnResize(observer: ResizeObserverEntry) {
     step(carousel)
 }
 
-export function carouselDragEventClick(element: HTMLElement, event: PointerEvent) {
+export function carouselDragEventPointerClick(element: HTMLElement, event: PointerEvent) {
     const root = element.closest('[data-fsc-carousel]') 
 
     if(!root) return
 
     const carousel = carouselElements.find(e => e.carousel === root)
 
-    if(!carousel) return
+    if(!carousel || !carousel.isDraggableAllowed) return
 
     carousel.isDragging = true
     carousel.draggingStartX = event.clientX
@@ -173,7 +177,7 @@ export function carouselDragEventPointerMove(event: PointerEvent) {
 
     const carousel = carouselElements.find(e => e.carousel === root)
 
-    if (!carousel || !carousel.isDragging || carousel.draggingStartX === undefined) return
+    if (!carousel || !carousel.isDraggableAllowed || !carousel.isDragging || carousel.draggingStartX === undefined) return
 
     carousel.draggingMoveX = event.clientX - carousel.draggingStartX
 
@@ -197,7 +201,7 @@ export function carouselDragEventPointerUp(event: PointerEvent) {
 
     const carousel = carouselElements.find(e => e.carousel === root)
 
-    if (!carousel || !carousel.isDragging) return
+    if (!carousel || !carousel.isDraggableAllowed || !carousel.isDragging) return
 
     if (carousel.draggingIsMoved && carousel.draggingMoveX) {
         carousel.carouselList.classList.remove('dragging')

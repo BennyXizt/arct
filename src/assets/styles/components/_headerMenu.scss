@@ -3,7 +3,6 @@
 
 .menu {
     &__list {
-        justify-content: space-between;
 
         @include fluid((
             column-gap: 43px 20px,

@@ -18,9 +18,27 @@
         })%>
         <main class="layout layout--main">
 			<%- include('src/ejs/layout/hero.ejs')%>
+			<%- include('src/ejs/layout/about.ejs')%>
+			<%- include('src/ejs/layout/portfolio.ejs')%>
 		</main>
+        <%- include('src/ejs/components/button', {
+            button_component: {
+                this: {
+                    block: 'button button__scroll-top',
+                    dataAttribute: [
+                        'data-fsc-scrollto',
+                        'data-fsc-scroll',
+                        'data-fsc-scroll-trigger=both',
+                        'data-fsc-scroll-timer',
+                    ]
+                },
+                icon_component: {
+                    name: 'slider-arrow'
+                }
+            }
+        }) %>
         <%- include('src/ejs/layout/footer.ejs') %>
     </div>
-    <script type="module" src="/src/ts/main.ts"></script>
+    <script type="module" src="/src/ts/index.ts"></script>
 </body>
 </html>

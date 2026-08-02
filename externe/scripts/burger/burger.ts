@@ -1,9 +1,9 @@
 let isActive = false
 let handler: ((this: HTMLElement, event: AnimationEvent) => void) | undefined = undefined
 
-export const burgerClickArray = [burgerClick, '[data-fsc-burger]']
+export const burgerPointerClickArray = [burgerPointerClick, '[data-fsc-burger]']
 
-function burgerClick(target: HTMLElement) {
+function burgerPointerClick(target: HTMLElement) {
     if(isActive || !target) return
 
     const header = target.closest('header')

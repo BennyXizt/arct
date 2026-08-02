@@ -1,7 +1,7 @@
 
-export const texttriggerClickArray = [texttriggerClick, '[data-fsc-texttrigger]']
+export const texttriggerPointerClickArray = [texttriggerPointerClick, '[data-fsc-texttrigger]']
 
-function texttriggerClick(target: HTMLElement) {
+function texttriggerPointerClick(target: HTMLElement) {
     const header = target.closest('header')
 
     if(!header) return

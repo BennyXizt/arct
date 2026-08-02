@@ -23,11 +23,58 @@
         ));
     }
 
+    &__scroll-top {
+        padding: unset;
+
+        opacity: 0;
+        visibility: hidden;
+        justify-content: center;
+        position: fixed;
+        border-radius: 100%;
+        transform: rotate(-90deg);
+
+        @include fluid((
+            width: 60px 45px,
+            height: 60px 45px
+        ));
+
+        @include rem((
+            bottom: 30px,
+            right: 30px
+        ));
+
+        @include transition(color, background-color, transform, opacity, visibility);
+
+        svg {
+            @include fluid((
+                width: 15px 10px,
+                height: 50px 15px
+            ));
+        }
+
+        &.scrolled {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        &.scrolling {
+            transform: rotate(-90deg) translate3d(10px, 0, 0);
+            opacity: 0;
+            visibility: hidden;
+        }
+    }
+
     @media (hover: hover) and (pointer: fine) {
         &:hover {
             background-color: getThemeTag(secondary-text-color);
             color: getThemeTag(primary-background-color);
             transform: scale(.9);
+        }
+
+        &__scroll-top {
+            &:hover {
+                transform: rotate(-90deg) scale(.9);
+            }
         }
     }
 }

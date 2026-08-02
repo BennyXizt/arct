@@ -22,6 +22,6 @@
 
 export { accordionAutoload } from './utils/events.js'
 
-import { accordionClick } from "./utils/events.js";
+import { accordionPointerClick } from "./utils/events.js";
 
-export const accordionClickArray = [accordionClick, '[data-fsc-accordion-touch]']
+export const accordionPointerClickArray = [accordionPointerClick, '[data-fsc-accordion-touch]']

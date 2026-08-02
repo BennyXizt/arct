@@ -1,6 +1,6 @@
 
-// @ts-ignore
-import { SearchType } from "./plugin.enum"
+
+import { SearchType } from "./plugin.enum.js"
 
 export interface ComboBoxSettings {
     event: Event,

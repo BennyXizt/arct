@@ -1,6 +1,6 @@
-import { type themeAttributes, isThemeAttribute } from "./types/plugin.type"
+import { type themeAttributes, isThemeAttribute } from "./types/plugin.type.js"
 
-export const themetoggleClickArray = [themetoggleClick, '[data-fsc-themetoggle]']
+export const themetogglePointerClickArray = [themetogglePointerClick, '[data-fsc-themetoggle]']
 
 
 export function themetoggleAutoload() {
@@ -17,7 +17,7 @@ export function themetoggleAutoload() {
 }
 
 
-function themetoggleClick(element: HTMLElement) {
+function themetogglePointerClick(element: HTMLElement) {
     const
         root: HTMLElement = document.querySelector('html')!,
         attr = root.getAttribute('data-theme')

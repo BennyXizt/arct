@@ -1,0 +1,20 @@
+<%
+	blockClass = 'portfolio'
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>'>
+	<div class='<%=blockClass%>__container container'>
+		<div class="<%=blockClass%>__container-inner container-inner">
+			<%- include('src/ejs/components/title.ejs', {
+				title_component: {
+					this: {
+						parent: blockClass,
+						tag: 'h2'
+					},
+					title: 'My portfolio',
+					// subititle: ''
+				}
+			})%>
+		</div>
+	</div>
+</section>

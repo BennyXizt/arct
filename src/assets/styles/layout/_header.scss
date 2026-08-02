@@ -4,8 +4,10 @@
     position: fixed;
     width: 100%;
     z-index: map.get($ZINDEXES, highest);
+    transform: translate3d(0, fluid(67px 0px), 0);
+    will-change: transform;
 
-    @include fluid(top, 67px 0px);
+    @include transition(transform, background-color);
 
     &__body,
     &__container {
@@ -15,10 +17,37 @@
 
     &__body {
         flex: 1;
+
+        @include rem(gap, 15px);
     }
 
     &__container {
         @include fluid(column-gap, 96px 20px);
+    }
+
+    &.scrolling,
+    &.scrolled {
+        background-color: getThemeTag(primary-background-color);
+
+        @supports (background-color: color-mix(in srgb, getThemeTag(primary-background-color) 80%, transparent)) {
+            background-color: color-mix(in srgb, getThemeTag(primary-background-color) 80%, transparent);
+        }
+        @supports (backdrop-filter: initial) {
+            backdrop-filter: saturate(180%) blur(20px);
+        }
+    }
+
+    &.scrolling {
+        transform: translate3d(0, -100%, 0);  
+    }
+    &.scrolled {
+        transform: translate3d(0, 0, 0);
+    }
+
+    @include media(tablet) {
+        .burger {
+            display: none;
+        }
     }
     
 }

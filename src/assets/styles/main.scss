@@ -14,11 +14,13 @@
 @import
   './layout/header',
   './layout/footer',
-	'./layout/hero';
+	'./layout/hero',
+	'./layout/about',
+	'./layout/portfolio';
 // internal layout END
 
 @import
-  '../../../externe/components/menu/TextTrigger/TextTrigger',
+  '../../../externe/components/menu/ThemeToggle/ThemeToggle',
   '../../../externe/components/menu/Burger/Burger';
 
 // internal components START
@@ -26,7 +28,8 @@
   './components/logo',
   './components/carousel',
   './components/headerMenu',
-  './components/button';
+  './components/button',
+	'./components/title';
 // internal components END
 
 // internal pages START

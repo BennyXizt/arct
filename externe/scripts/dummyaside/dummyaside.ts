@@ -52,23 +52,28 @@ export function dummyasideAutoload() {
     resultPages.forEach(e =>{
         ulPages.innerHTML += 
         `
-            <li>
-                <a href='${e.link}'>${e.name[0].toUpperCase() + e.name.slice(1)}</a>
+            <li class="dummy__element">
+                <a class="dummy__link" href='${e.link}' tabindex="-1">${e.name[0].toUpperCase() + e.name.slice(1)}</a>
             </li>
         `
     })
     resultRestFiles.forEach(e =>{
         ulRestFiles.innerHTML += 
         `
-            <li>
-                <a href='${e.link}'>${e.name[0].toUpperCase() + e.name.slice(1)}</a>
+            <li class="dummy__element">
+                <a class="dummy__link" href='${e.link}' tabindex="-1">${e.name[0].toUpperCase() + e.name.slice(1)}</a>
             </li>
         `
     })
 
-    divPages.innerHTML = '<h6>Pages</h6>'
+    divPages.classList.add('dummy__navigation')
+    divPages.innerHTML = '<h6 class="dummy__title">Pages</h6>'
+    ulPages.classList.add('dummy__list')
     divPages.append(ulPages)
-    divRestFiles.innerHTML = '<h6>Rest Files</h6>'
+
+    divRestFiles.classList.add('dummy__navigation')
+    divRestFiles.innerHTML = '<h6 class="dummy__title">Rest Files</h6>'
+    ulRestFiles.classList.add('dummy__list')
     divRestFiles.append(ulRestFiles)
     
     document.querySelector('[data-fsc-dummyaside]')?.append(divPages)

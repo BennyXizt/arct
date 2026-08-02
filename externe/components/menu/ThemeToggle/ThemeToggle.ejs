@@ -22,8 +22,11 @@
 
 	var {blockClass, thisClass, thisID, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...theme_toggle_component.this, componentName: 'theme-toggle'})
     thisTag = 'button'
+
+	// text = 'Toggle'
+	text = ''
 %>
 
 <<%=thisTag%> data-fsc-themetoggle <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
-	Toggle
+	<%= text %>
 </<%=thisTag%>>

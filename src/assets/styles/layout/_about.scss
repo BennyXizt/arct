@@ -1,0 +1,42 @@
+@use 'sass:map';
+
+.about {
+    &__title {
+        @include rem(flex, 1 1 205px);
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+
+        @include fluid(row-gap, 36px 10px);
+
+        @include rem(flex, 1 1 400px);
+    }
+
+    &__bigtext {
+        color: map.get($COLORS, preDark);
+        line-height: 1.7;
+
+        @include fluid(font-size, 30px 18px);
+    }
+
+    &__text {
+        display: flex;
+        flex-direction: column;
+
+        @include fluid(row-gap, 23px 10px);
+    }
+
+    @include media(tablet) {
+        &__title {
+            position: sticky;
+            
+            @include rem(top, 120px);
+        }
+
+        &__button {
+            align-self: start;
+        }
+    }
+}
