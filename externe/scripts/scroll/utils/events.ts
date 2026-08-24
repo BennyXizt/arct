@@ -1,6 +1,6 @@
 import { ScrollElementInterface } from "../types/plugin.interface.js";
 import { isScrollTrigger, isScrollType } from "../types/plugin.type.js";
-import { autoToggleScrollVisibility } from "./utils.js"
+import { toggleScrollVisibility } from "./utils.js"
 
 const ScrollElements: ScrollElementInterface[] = []
 
@@ -56,7 +56,7 @@ export function scrollEventScroll(_: Event) {
             
             switch (scroll.type) {
                 default: {
-                    autoToggleScrollVisibility(scroll, delta)
+                    toggleScrollVisibility(scroll, delta)
 
                     break
                 }

@@ -16,7 +16,7 @@ export function animate(carousel: CarouselElementInterface) {
 
     const seconds = Math.max(0, Math.ceil(remaining / 1000))
 
-   if(remaining <= 0) {
+    if(remaining <= 0) {
         step(carousel)
 
         carousel.timerNext = now + carousel.timerInterval

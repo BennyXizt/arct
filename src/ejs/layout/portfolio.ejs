@@ -1,20 +1,166 @@
 <%
 	blockClass = 'portfolio'
+
+	filters = [
+		{
+			name: 'all',
+			filter: 'all'
+		},
+		{
+			name: 'houses',
+			filter: 'houses'
+		},
+		{
+			name: 'buildings',
+			filter: 'buildings'
+		},
+		{
+			name: 'hotels',
+			filter: 'hotels'
+		},
+		{
+			name: 'interior',
+			filter: 'interiour'
+		},
+		{
+			name: 'living rooms',
+			filter: 'living_rooms'
+		},
+	]
+
+	gallery = [
+		{
+			id: 'gallery1',
+			filter: 'houses'
+		},
+		{
+			id: 'gallery2',
+			filter: 'living_rooms'
+		},
+		{
+			id: 'gallery3',
+			filter: 'houses'
+		},
+		{
+			id: 'gallery4',
+			filter: 'interiour'
+		},
+		{
+			id: 'gallery5',
+			filter: 'houses'
+		},
+		{
+			id: 'gallery6',
+			filter: 'houses'
+		},
+		{
+			id: 'gallery7',
+			filter: 'houses'
+		},
+		{
+			id: 'gallery8',
+			filter: 'hotels'
+		},
+		{
+			id: 'gallery9',
+			filter: 'hotels'
+		},
+		{
+			id: 'gallery10',
+			filter: 'buildings'
+		},
+	].map(e => {
+		return {
+			filter: e.filter,
+			image_component: {
+				wrapper: {
+					parent: blockClass
+				},
+				this: {
+					parent: blockClass
+				},
+				img: {
+					src: `media/image/gallery/${e.id}.jpg`,
+					alt: e.id,
+					srcset: [
+						`media/image/gallery/${e.id}-sm.jpg 480w`,
+						`media/image/gallery/${e.id}-md.jpg 800w`,
+						`media/image/gallery/${e.id}-lg.jpg 1200w`,
+						`media/image/gallery/${e.id}-xl.jpg 1600w`,
+						`media/image/gallery/${e.id}-2xl.jpg 2400w`
+					],
+					sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+				},
+				images: [
+					{  
+						type: 'image/avif', 
+						srcset: [
+							`media/image/gallery/${e.id}-sm.avif 480w`,
+							`media/image/gallery/${e.id}-md.avif 800w`,
+							`media/image/gallery/${e.id}-lg.avif 1200w`,
+							`media/image/gallery/${e.id}-xl.avif 1600w`,
+							`media/image/gallery/${e.id}-2xl.avif 2400w`
+						],
+						sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+					},
+					{  
+						type: 'image/webp', 
+						srcset: [
+							`media/image/gallery/${e.id}-sm.webp 480w`,
+							`media/image/gallery/${e.id}-md.webp 800w`,
+							`media/image/gallery/${e.id}-lg.webp 1200w`,
+							`media/image/gallery/${e.id}-xl.webp 1600w`,
+							`media/image/gallery/${e.id}-2xl.webp 2400w`
+						],
+						sizes: '(min-width: 767.98px) 66.31vw, 100vw'
+					},
+				]
+			}
+		}
+	})
 %>
 
 <section class='layout__<%=blockClass%> <%=blockClass%>'>
 	<div class='<%=blockClass%>__container container'>
-		<div class="<%=blockClass%>__container-inner container-inner">
+		<div class="<%=blockClass%>__container-inner container-inner"> 
 			<%- include('src/ejs/components/title.ejs', {
 				title_component: {
+					wrapper: {
+						block: `${blockClass}__body`
+					},
 					this: {
 						parent: blockClass,
-						tag: 'h2'
 					},
-					title: 'My portfolio',
-					// subititle: ''
+					title: {
+						tag: 'h2',
+						label: 'My portfolio'
+					},
+					subtitle: [
+						`Viverra senectus dui ultricies dolor varius nibh velit sapien, sapien pellentesque ue dignissim.`,
+					]
 				}
 			})%>
+			<ul class="<%=blockClass%>__filter">
+				<% filters.forEach((element, index) => { %>
+					<li class="<%=blockClass%>__item">
+						<button data-filter="<%=element.filter%>" class="<%=blockClass%>__button <%if(index === 0) { %> active <% } %>">
+							<%= element.name %>
+						</button>
+					</li>
+				<% }) %>
+			</ul>
 		</div>
+		<ul class="<%=blockClass%>__gallery" data-fsc-gallery>
+			<% for(const element of gallery) { %>
+				<li data-filter-element="<%=element.filter%>" class="<%=blockClass%>__item">
+					<a href="#" class="<%=blockClass%>__link">
+						<%- include('externe/components/media/Image/Image.ejs', {
+							image_component: element.image_component
+						})%>
+					</a>
+				</li>
+			<% } %>
+		</ul>
+		
 	</div>
 </section>

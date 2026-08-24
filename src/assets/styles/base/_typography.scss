@@ -6,3 +6,10 @@
 }
 
 @include text_adaptive(p, $P);
+
+.text {
+    display: flex;
+    flex-direction: column;
+
+    @include fluid(row-gap, 23 10);
+}

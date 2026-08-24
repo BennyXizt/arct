@@ -18,7 +18,7 @@ function toggleHideNeeded(trigger: ScrollTrigger, delta: number) {
         
     }
 }
-export function autoToggleScrollVisibility(scroll: ScrollElementInterface, delta: number) {
+export function toggleScrollVisibility(scroll: ScrollElementInterface, delta: number) {
     if (scroll.timer)
         clearTimeout(scroll.timerID)
     

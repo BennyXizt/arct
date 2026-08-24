@@ -1,5 +1,98 @@
 @use 'sass:map';
 
 .portfolio {
+    &__container {
+        display: flex;
+        flex-direction: column;
 
+        @include fluid(row-gap, 144 15);
+    }
+    &__body {
+        @include rem(flex, 1 1 429px);
+    }
+    &__filter {
+        display: flex;
+        flex-flow: row wrap;
+        justify-content: center;
+        
+        @include rem((
+            row-gap: 5px,
+            flex: 1 1 250px,
+        ));
+        @include fluid(column-gap, 50px 15px);
+    }
+    &__button {
+        @extend %textDefault;
+
+        cursor: pointer;
+        color: map.get($COLORS, gray_lite_2);
+        text-transform: uppercase;
+        font-weight: 500;
+        letter-spacing: 5%;
+
+        @include transition(color);
+
+        &.active {
+            color: getThemeTag(accent-text-color);
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                color: getThemeTag(accent-text-color);
+            }
+        }
+    }
+
+    &__header {
+        &:not(:only-child) {
+            @include fluid(margin-bottom, 144 15);
+        }
+    }
+
+    &__gallery {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+
+        @include fluid(gap, 64 15);
+
+        & > * {
+            &:nth-child(10n + 1),
+            &:nth-child(10n + 8) {
+                grid-row: span 2;
+                grid-column: span 2;
+            }
+        }
+    }
+
+    &__link {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__figure {
+        width: 100%;
+        height: 100%;
+    }
+
+    &__image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center;
+    }
+
+    @include media(mobile) {
+        &__gallery {
+            grid-template-columns: repeat(4, 1fr);
+        }
+    }
+    @include media(tablet) {
+        &__filter {
+            position: sticky;
+            
+            @include rem(top, 50px);
+
+            @include fluid(padding-top, 70 30);
+        }
+    }
 }

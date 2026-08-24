@@ -33,14 +33,32 @@
 	var {isWrapper, blockClass: wrapperBlockClass, thisClass: wrapperThisClass, thisID: wrapperThisID, thisTag: wrapperThisTag, thisStyles: wrapperThisStyles, thisDataAttributes: wrapperThisDataAttributes} = externe.setupEJSComponent({...title_component.wrapper, componentName: 'title'})
 
 	var isWrapper = typeof title_component.wrapper === 'object' && title_component.wrapper
+
+
+	blockClass = title_component.this.parent
+	
 %>
 
 <% if(isWrapper) { %>
-	<<%=wrapperThisTag%> <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
+	<<%=wrapperThisTag%> <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%> title--wrapper' <%-wrapperThisID%> <%-wrapperThisStyles%>>
 <% } %>
-<<%=thisTag%> <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
-	<%=title_component.title%>
-</<%=thisTag%>>
+
+	<% if(title_component.title) { %>
+		<<%=title_component.title.tag%> class='<%=blockClass%>__title title'>
+			<%=title_component.title.label%>
+		</<%=title_component.title.tag%>>
+	<% } %>
+
+	<% if(title_component.subtitle) { %>
+		<div class="<%=blockClass%>__text text">
+			<% for(const text of title_component.subtitle) { %>
+				<p>
+					<%=text%>
+				</p>
+			<% } %>
+		</div>
+	<% } %>
+
 <% if(isWrapper) { %>
 	</<%=wrapperThisTag%>>
 <% } %>

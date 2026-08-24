@@ -21,13 +21,6 @@
         @include fluid(font-size, 30px 18px);
     }
 
-    &__text {
-        display: flex;
-        flex-direction: column;
-
-        @include fluid(row-gap, 23px 10px);
-    }
-
     @include media(tablet) {
         &__title {
             position: sticky;

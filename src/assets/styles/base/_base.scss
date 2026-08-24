@@ -128,11 +128,12 @@ body {
       display: flex;
       flex-flow: row wrap;
       align-items: flex-start;
+      justify-content: space-between;
 
       @include fluid((
           gap: 50px 10px,
-          padding-left: (185px 15px) (arg5 getMedia(tablet)),
-          padding-right: (185px 15px) (arg5 getMedia(tablet)),
+          padding-left: (166px 15px) (arg5 getMedia(tablet)),
+          padding-right: (166px 15px) (arg5 getMedia(tablet)),
       ));
     }
 }

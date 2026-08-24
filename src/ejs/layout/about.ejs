@@ -30,9 +30,11 @@
 				title_component: {
 					this: {
 						parent: blockClass,
-						tag: 'h2'
 					},
-					title: 'about me',
+					title: {
+						tag: 'h2',
+						label: 'about me'
+					},
 					// subititle: ''
 				}
 			})%>
@@ -40,7 +42,7 @@
 				<div class="<%=blockClass%>__bigtext">
 					<%= about_component.text.bigtext %>
 				</div>
-				<div class="<%=blockClass%>__text">
+				<div class="<%=blockClass%>__text text">
 					<% for(var text of about_component.text.p) { %>
 						<p>
 							<%= text %>

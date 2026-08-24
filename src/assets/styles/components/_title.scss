@@ -23,4 +23,11 @@
             height: 3px 1px
         ));
     }
+
+    &--wrapper {
+        display: flex;
+        flex-direction: column;
+
+        @include fluid(gap, 34 20);
+    }
 }
