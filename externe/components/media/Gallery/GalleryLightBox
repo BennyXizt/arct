@@ -9,4 +9,4 @@
         <div class="gallery-lightbox__images"></div>
         <button data-fsc-gallery-button-right class="gallery-lightbox__button">Right</button>
     </div>
-</div>
+</div> 
