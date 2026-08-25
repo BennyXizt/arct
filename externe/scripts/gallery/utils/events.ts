@@ -29,7 +29,7 @@ export function galleryAutoload() {
 
     const lightBox = 
     `
-        <div class="gallery-lightbox" >
+        <div class="gallery-lightbox">
             <div class="gallery-lightbox__overlay"></div>
             <div class="gallery-lightbox__top">
                 <span class="gallery-lightbox__counter"></span>
@@ -37,7 +37,8 @@ export function galleryAutoload() {
             </div>
             <div class="gallery-lightbox__content">
                 <button data-fsc-gallery-button-left class="gallery-lightbox__button">Left</button>
-                <div class="gallery-lightbox__images"></div>
+                <div class="gallery-lightbox__images">
+                   </div>
                 <button data-fsc-gallery-button-right class="gallery-lightbox__button">Right</button>
             </div>
         </div>

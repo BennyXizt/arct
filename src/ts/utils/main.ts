@@ -1,116 +1,67 @@
-// @ts-ignore
-import { autoloader } from '~/scripts/autoloader/autoloader'
-import type { EventOneParamsModule, EventTwoParamsModule, PointerEventModule, ResizeEventModule } from '../types/plugin.type.js'
-import { IntersectionObserverElements } from '../types/plugin.interface.js'
+import type { KeyUpEventModule, EventTwoParamsModule, IntersectionHandler, LoadedModule, ResizeEventModule, ResizeHandler, EventOneParamsModule, PointerEventClickModule, PointerEventModule } from '../types/plugin.type.js'
 
-export default async () => {
-    const 
-        loadedModules = new Map<string, any>()
-
-    await autoloader({loadedModules})
-
+export default (loadedModules: Map<string, LoadedModule>) => {
     const
-        autoloadedModules = Array.from(loadedModules)
-            .map(([k, e]) => e?.[`${k}Autoload`])
-            .filter(e => typeof e === 'function')
-            .forEach(func => func())
+        onClickedModules: EventTwoParamsModule[] = [],
+        onPointerClickedModules: PointerEventClickModule[] = [],
+        onIntersectionModules = new Map<string, {
+            func: IntersectionHandler
+            elementSelector: string
+            options: IntersectionObserverInit
+        }>(),
+        onSubmitModules: ((event: SubmitEvent) => void)[] = [],
+        onResizeModules: ResizeEventModule[] = [],
+        onKeyUpModules: KeyUpEventModule[] = [],
+        onHoverModules: EventTwoParamsModule[] = [],
+        onUnhoverModules: EventTwoParamsModule[] = [],
+        onPointerMoveModules: PointerEventModule[] = [],
+        onPointerUpModules: PointerEventModule[] = [],
+        onScrolledModules: EventOneParamsModule[] = []
 
-    const
-        onClickedModules: EventTwoParamsModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => !key.endsWith('PointerClickArray') && key.endsWith('ClickArray'))
-                    .map(([, value]) => value as EventTwoParamsModule)
-            )
+    for (const [moduleName, module] of loadedModules) {
+        const autoload = module[`${moduleName}Autoload`]
 
-    const
-        onPointerClickedModules: PointerEventModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('PointerClickArray'))
-                    .map(([, value]) => value as PointerEventModule)
-            )
-            
-    const
-        IntersectionElements: IntersectionObserverElements[] = [],
-        onIntersectionModules = Object.fromEntries(
-             Array.from(loadedModules)
-            .filter(([k, e]) => typeof e[`${k}ObserverArray`] === 'object')
-            .map(([k, e]) => {
-                return [
-                    k,
-                    {
-                        func: e[`${k}ObserverArray`][0],
-                        elementSelector: e[`${k}ObserverArray`][1] || `[data-fsc-${k}]`,
-                        options: e[`${k}ObserverArray`][2] || {}
-                    }
+        // Autoload
+        if (typeof autoload === 'function') {
+            autoload()
+        }
+
+        for (const [key, value] of Object.entries(module)) {
+            if (key.endsWith('ClickArray') && !key.endsWith('PointerClickArray')) {
+                onClickedModules.push(value as EventTwoParamsModule)
+            } else if(key.endsWith('PointerClickArray')) {
+                onPointerClickedModules.push(value as PointerEventClickModule)
+            } else if (key === `${moduleName}ObserverArray`) {
+                const [func, elementSelector, options] = value as [
+                    IntersectionHandler,
+                    string?,
+                    IntersectionObserverInit?
                 ]
-            })
-        )
 
-    const
-        onSubmitModules = Array.from(loadedModules)
-            .filter(([k, e]) => typeof e[`${k}OnSubmit`] === 'function')
-            .map(e => [e[0], e[1][`${e[0]}OnSubmit`]])
-
-    const
-        onResizeModules: ResizeEventModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('OnResizeArray'))
-                    .map(([, value]) => value as ResizeEventModule)
-            )
-
-    const
-        onKeyUpModules = Array.from(loadedModules)
-            .map(([k, e]) => {
-                return Object.values(e).find(el => {
-                    if(Array.isArray(el) && el[0].name === `${k}OnKeyUp`)
-                        return true
-                    
+                onIntersectionModules.set(moduleName, {
+                    func,
+                    elementSelector: elementSelector || `[data-fsc-${moduleName}]`,
+                    options: options || {}
                 })
-            })
-            .filter(e => typeof e !== 'undefined')
-
-    const
-        onHoverModules: EventTwoParamsModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('HoverArray'))
-                    .map(([, value]) => value as EventTwoParamsModule)
-            )
-
-    const
-        onUnhoverModules: EventTwoParamsModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('UnhoverArray'))
-                    .map(([, value]) => value as EventTwoParamsModule)
-            )
-
-    const
-        onPointerMoveModules = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('PointerMoveArray'))
-                    .map(([, value]) => value)
-            )
-
-    const
-        onPointerUpModules = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('PointerUpArray'))
-                    .map(([, value]) => value)
-            )
-
-    const
-        onScrolleddModules: EventOneParamsModule[] = Array.from(loadedModules)
-            .flatMap(([_, e]) =>
-                Object.entries(e)
-                    .filter(([key]) => key.endsWith('ScrollArray'))
-                    .map(([, value]) => value as EventOneParamsModule)
-            )
+            } else if (key === `${moduleName}OnSubmit`) {
+                onSubmitModules.push(value as (event: SubmitEvent) => void)
+            } else if (key.endsWith('OnResizeArray')) {
+                onResizeModules.push(value as ResizeEventModule)
+            } else if (key === `${moduleName}OnKeyUp`) {
+                onKeyUpModules.push(value as KeyUpEventModule)
+            } else if (key.endsWith('HoverArray')) {
+                onHoverModules.push(value as EventTwoParamsModule)
+            } else if (key.endsWith('UnhoverArray')) {
+                onUnhoverModules.push(value as EventTwoParamsModule)
+            } else if (key.endsWith('PointerMoveArray')) {
+                onPointerMoveModules.push(value as PointerEventModule)
+            } else if (key.endsWith('PointerUpArray')) {
+                onPointerUpModules.push(value as PointerEventModule)
+            } else if (key.endsWith('ScrollArray')) {
+                onScrolledModules.push(value as EventOneParamsModule)
+            }
+        }
+    }
         
     // Click Event
     window.addEventListener('click', function(event) {
@@ -143,51 +94,90 @@ export default async () => {
     })
 
     // Intersection Event
-    for(const element of Object.values(onIntersectionModules)) {
-        let observer: IntersectionObserver | undefined  = 
-            IntersectionElements
-                .find(e => JSON.stringify(e.options) === JSON.stringify(element.options) )
-                ?.observer
-        
-        if(!observer) {
-            observer = new IntersectionObserver((entries) => {
-                entries.forEach(entry => {
-                    const watchedModule = Array.from(entry.target.attributes)
-                        .map(a => a.name)
-                        .filter(name => /^data-fsc-[^-]+$/.test(name))
-                        .map(name => name.slice('data-fsc-'.length))[0]
-                        
-                    if(onIntersectionModules[watchedModule])
-                        onIntersectionModules[watchedModule].func(entry, observer)
-                })
+    const intersectionObservers = new Map<string, {
+        observer: IntersectionObserver
+        handlers: WeakMap<Element, IntersectionHandler[]>
+    }>()
+
+    for (const element of onIntersectionModules.values()) {
+        const key = JSON.stringify(element.options)
+
+        let observerData = intersectionObservers.get(key)
+
+        if (!observerData) {
+
+            const handlers = new WeakMap<Element, IntersectionHandler[]>()
+
+            const observer = new IntersectionObserver((entries, observer) => {
+
+                for (const entry of entries) {
+
+                    const elementHandlers = handlers.get(entry.target)
+
+                    if (!elementHandlers) continue
+
+                    for (const handler of elementHandlers) {
+                        handler(entry, observer)
+                    }
+                }
+
             }, element.options)
 
-            IntersectionElements.push({
-                options: element.options,
-                observer
-            })
+            observerData = {
+                observer,
+                handlers
+            }
+
+            intersectionObservers.set(key, observerData)
         }
 
-        document.querySelectorAll(element.elementSelector).forEach(el => observer.observe(el))
+        document
+            .querySelectorAll(element.elementSelector)
+            .forEach(el => {
+
+                const handlers =
+                    observerData!.handlers.get(el) ?? []
+
+                handlers.push(element.func)
+
+                observerData!.handlers.set(el, handlers)
+
+                observerData!.observer.observe(el)
+            })
     }
 
     // Submit Event
     window.addEventListener('submit', function(event) {
-        onSubmitModules.forEach(e => e[1](event))
+        onSubmitModules.forEach(func => func(event))
     })
 
     // Resize Event
-    const resizeFunctions = new WeakMap()
+    const resizeFunctions = new WeakMap<Element, ResizeHandler[]>()
 
-    const resizeObserver = new ResizeObserver((entries) => {
-       for (const entry of entries) {
-            resizeFunctions.get(entry.target)?.(entry)
+    const resizeObserver = new ResizeObserver((entries, observer) => {
+
+        for (const entry of entries) {
+
+            const handlers = resizeFunctions.get(entry.target)
+
+            if (!handlers) continue
+
+            for (const handler of handlers) {
+                handler(entry, observer)
+            }
         }
     })
 
-    for (const [func, query] of Object.values(onResizeModules)) {
-        document.querySelectorAll(query).forEach((el) => {
-            resizeFunctions.set(el, func)
+    for (const [func, query] of onResizeModules) {
+
+        document.querySelectorAll(query).forEach(el => {
+
+            const handlers = resizeFunctions.get(el) ?? []
+
+            handlers.push(func)
+
+            resizeFunctions.set(el, handlers)
+
             resizeObserver.observe(el)
         })
     }
@@ -263,7 +253,7 @@ export default async () => {
         funcs: Function[]
     }>()
 
-    onScrolleddModules.forEach(e => {
+    onScrolledModules.forEach(e => {
         if(!Array.isArray(e)) return
         
         const [func, query] = e
@@ -312,11 +302,6 @@ export default async () => {
             passive: true
         })
     })
-
-
-
-
-
 
     if (process.env.NODE_ENV === 'development') {
         const 

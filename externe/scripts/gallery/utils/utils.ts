@@ -53,9 +53,6 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
 
     nextFigureHTML.addEventListener('transitionend', (event) => {
         if (event.propertyName !== 'transform' || !(event.currentTarget instanceof HTMLElement)) return
-        
-        event.currentTarget.classList.remove('centered')
-        event.currentTarget.classList.add('current')
 
         gallery.image = gallery.images[gallery.index].cloneNode() as HTMLImageElement
         gallery.moveTo = undefined
@@ -66,7 +63,7 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
     requestAnimationFrame(() => {
         nextFigureHTML.classList.remove('next-right')
         nextFigureHTML.classList.remove('next-left')
-        nextFigureHTML.classList.add('centered')
+        nextFigureHTML.classList.add('current')
     })
     
     if(counterHTML)

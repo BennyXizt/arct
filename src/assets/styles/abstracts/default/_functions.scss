@@ -65,6 +65,11 @@
             $sublist: list.nth($list, $i);
 
             $max: list.nth($sublist, 1);
+
+            @if meta.type-of($max) != 'number' {
+                @return $max;
+            }
+
             $unit: math.unit($max);
             
             @for $j from 1 through list.length($sublist) {
@@ -126,6 +131,11 @@
             $sublist: list.nth($list, $i);
 
             $min: list.nth($sublist, 1);
+
+            @if meta.type-of($min) != 'number' {
+                @return $min;
+            }
+
             $unit: math.unit($min);
             
             @for $j from 1 through list.length($sublist) {
@@ -175,10 +185,39 @@
 
     // define raw variables
     @if meta.type-of($arg1) == 'list' {
+         // is inside of list a list
+        $has-list: false;
+
+        @each $item in $arg1 {
+            @if meta.type-of($item) == 'list' {
+                $has-list: true;
+            }
+        }
+
+        @if $arg2 {
+            $startRestriction: if($arg2 != '_', $arg2, null);
+        }
+        @if $arg3 {
+            $baseFontSize: if($arg3 != '_', $arg3, null);
+        } 
+        @if $arg4 {
+            $endRestriction: if($arg4 != '_', $arg4, null);
+        }
+
         @for $i from 1 through list.length($arg1) {
             $value: list.nth($arg1, $i);
 
-            @if meta.type-of($value) == 'number' or $value == '_' {
+            @if $has-list and list.length($value) == 1 {
+                @if meta.type-of($value) != 'number' {
+                    @warn $stringError + 'First argument (' + $value + ') is not a number!';
+                    @return unfefined;
+                }
+
+                $value: if(math.is-unitless($value), $value * 1px, $value);
+
+                $mins: list.append($mins, $value);
+                $maxs: list.append($maxs, $value);
+            } @else if meta.type-of($value) == 'number' or $value == '_' {
                 @if meta.type-of($value) == 'number' and math.unit($value) != 'px' and not math.is-unitless($value)  {
                     @warn $stringError + 'The number (' + $value + ') is NOT in px';
                     @return undefined;
@@ -200,15 +239,15 @@
 
                     $max: if(math.is-unitless($value), $value * 1px, $value);
                     $maxs: list.append($maxs, $max);
-                } @if $i == 3 or $arg3 {
+                } @if ($i == 3 or $arg3) and not $startRestriction {
                     $value: if($arg3, $arg3, $value);
 
                     $startRestriction: if($value != '_', $value, null);
-                } @if $i == 4 or $arg4 {
+                } @if ($i == 4 or $arg4) and not $baseFontSize {
                     $value: if($arg4, $arg4, $value);
 
                     $baseFontSize: if($value != '_', $value, null);
-                } @if $i == 5 or $arg5 {
+                } @if ($i == 5 or $arg5) and not $endRestriction {
                     $value: if($arg5, $arg5, $value);
 
                     $endRestriction: if($value != '_', $value, null);
@@ -299,7 +338,7 @@
 
     // filter variables
     @if $startRestriction or $arg3 and $arg3 != '_' {
-        $startRestriction: if($arg3, $arg3, $startRestriction);
+        $startRestriction: if($startRestriction, $startRestriction, $arg3);
 
         $startRestriction: if(math.is-unitless($startRestriction), $startRestriction * 1px, $startRestriction);
     } @else {
@@ -307,7 +346,7 @@
     } 
 
     @if $baseFontSize or $arg4 and $arg4 != '_' {
-        $baseFontSize: if($arg4, $arg4, $baseFontSize);
+        $baseFontSize: if($baseFontSize, $baseFontSize, $arg4);
 
         $baseFontSize: if(math.is-unitless($baseFontSize), $baseFontSize * 1px, $baseFontSize);
     } @else {
@@ -315,7 +354,7 @@
     }  
 
     @if $endRestriction or $arg5 and $arg5 != '_' {
-        $endRestriction: if($arg5, $arg5, $endRestriction);
+        $endRestriction: if($endRestriction, $endRestriction, $arg5);
 
         $endRestriction: if(math.is-unitless($endRestriction), $endRestriction * 1px, $endRestriction);
     } @else {
@@ -358,7 +397,7 @@
             }
 
             $returnList: list.append($returnList, clamp($min, $preferred, $max));
-        } @else {
+        } @else if $min < $max {
             @if not map.get($SETTINGS, fluid) {
                 @return $max;
             }
@@ -391,6 +430,8 @@
             }
 
             $returnList: list.append($returnList, clamp($max, $preferred, $min));
+        } @else {
+            $returnList: list.append($returnList, $min);
         }
     }
 

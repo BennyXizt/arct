@@ -74,6 +74,7 @@
         $args: null;
 
         $list: ();
+        $exceptionslist: ();
 
         $allowedProps: (arg3, arg4, arg5);
 
@@ -109,7 +110,11 @@
             } @else if meta.type-of($value) == 'string' and $value == '!important' {
                 $isImportant: true;
             } @else {
-                $list: list.append($list, $value);
+                @if meta.type-of($value) != 'number' {
+                    $exceptionslist: list.append($exceptionslist, $value);
+                } @else {
+                    $list: list.append($list, $value);
+                }
             }
         }
 
@@ -118,16 +123,16 @@
         $list: fluid($list, _, $arg3, $arg4, $arg5);
 
         @if map.get($SETTINGS, fluid) {
-            #{$arg1}: if($isImportant, $min!important, $min);
-            #{$arg1}: if($isImportant, $list!important, $list);
+            #{$arg1}: if($isImportant, list.join($min, $exceptionslist)!important, list.join($min, $exceptionslist));
+            #{$arg1}: if($isImportant, list.join($list, $exceptionslist)!important, list.join($list, $exceptionslist));
 
             @supports not (#{$arg1}: clamp(1px, 1vw, 1px)) {
                 @include media(desktop) {
-                    #{$arg1}: if($isImportant, $max!important, $max);
+                    #{$arg1}: if($isImportant, list.join($max, $exceptionslist)!important, list.join($max, $exceptionslist));
                 }
             }
         } @else {
-            #{$arg1}: if($isImportant, $max!important, $max);
+            #{$arg1}: if($isImportant, list.join($max, $exceptionslist)!important, list.join($max, $exceptionslist));
         }
 
     } @else if meta.type-of($arg1) == 'string' {
