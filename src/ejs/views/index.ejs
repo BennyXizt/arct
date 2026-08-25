@@ -1,11 +1,29 @@
+<%
+    HTMLAttributes = [
+        'data-pre-themetoggle'
+    ]
+%>
 <!DOCTYPE html>
     <% if(typeof head_component.lang !== 'undefined' && head_component.lang) { %>
-        <html lang="<%= head_component.lang %>">
+        <html lang="<%= head_component.lang %>" <%=HTMLAttributes%>>
     <% } else { %>
-        <html lang="en">
+        <html lang="en" <%=HTMLAttributes%>>
     <% } %>
 <head>
     <%- include('src/ejs/layout/head.ejs') %>
+    <script>
+        (() => {
+            const root = document.documentElement
+
+            if (!root.hasAttribute('data-pre-themetoggle')) return
+                
+            if (localStorage.getItem('data-theme') === 'dark') {
+                root.dataset.theme = 'dark'
+            }
+
+            // document.documentElement.removeAttribute('data-pre-themetoggle')
+        })()
+    </script>
 </head>
 <body>
     <%- include('externe/components/content/DummyAside/DummyAside.ejs') %>
