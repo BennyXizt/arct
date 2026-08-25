@@ -1,5 +1,6 @@
 <%
     HTMLAttributes = [
+        'data-pre-themetoggle'
     ]
 %>
 <!DOCTYPE html>
@@ -20,7 +21,7 @@
                 root.dataset.theme = 'dark'
             }
 
-            // document.documentElement.removeAttribute('data-pre-themetoggle')
+            document.documentElement.removeAttribute('data-pre-themetoggle')
         })()
     </script>
 </head>

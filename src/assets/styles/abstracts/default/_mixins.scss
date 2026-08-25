@@ -59,9 +59,9 @@
 
 @mixin initiateThemeVars {
     @if map.get($SETTINGS, theme) {
-        // &:not([data-pre-themetoggle]) {
-        //     @include transition(background-color, color);
-        // }
+        &:not([data-pre-themetoggle]) {
+            @include transition(background-color, color);
+        }
     
         @include transition(background-color, color); 
 
