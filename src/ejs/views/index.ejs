@@ -1,6 +1,6 @@
 <%
     HTMLAttributes = [
-        'data-pre-themetoggle'
+        // 'data-pre-themetoggle'
     ]
 %>
 <!DOCTYPE html>
@@ -11,6 +11,8 @@
     <% } %>
 <head>
     <%- include('src/ejs/layout/head.ejs') %>
+</head>
+<body>
     <script>
         (() => {
             const root = document.documentElement
@@ -24,8 +26,6 @@
             document.documentElement.removeAttribute('data-pre-themetoggle')
         })()
     </script>
-</head>
-<body>
     <%- include('externe/components/content/DummyAside/DummyAside.ejs') %>
     <div class="root">
         <%- include('src/ejs/layout/header.ejs', {
