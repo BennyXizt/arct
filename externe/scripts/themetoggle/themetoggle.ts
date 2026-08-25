@@ -3,7 +3,9 @@ import { type themeAttributes, isThemeAttribute } from "./types/plugin.type.js"
 export const themetogglePointerClickArray = [themetogglePointerClick, '[data-fsc-themetoggle]']
 
 
-
+export function themetoggleAutoload() {
+    document.documentElement.removeAttribute('data-pre-themetoggle')
+}
 
 
 function themetogglePointerClick(element: HTMLElement) {
