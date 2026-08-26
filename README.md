@@ -5,4 +5,4 @@ The original design **does not belong to me** and is used strictly for education
 
 ## 🔗 Live Demo
 
-👉 **[Open Website](https://BennyXizt.github.io/)**
+👉 **[Open Website](https://BennyXizt.github.io/arct/)**
