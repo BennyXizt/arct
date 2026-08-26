@@ -19,26 +19,19 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
-      - name: Setup Node.js
-        uses: actions/setup-node@v5
+      - uses: actions/setup-node@v5
         with:
           node-version: 20
           cache: npm
 
-      - name: Install dependencies
-        run: npm ci
+      - run: npm ci
+      - run: npm run build
 
-      - name: Build
-        run: npm run build
+      - uses: actions/configure-pages@v5
 
-      - name: Configure Pages
-        uses: actions/configure-pages@v5
-
-      - name: Upload Pages artifact
-        uses: actions/upload-pages-artifact@v3
+      - uses: actions/upload-pages-artifact@v4
         with:
           path: ./dist
 
@@ -51,8 +44,7 @@ jobs:
       url: ${{ steps.deployment.outputs.page_url }}
 
     steps:
-      - name: Deploy to GitHub Pages
-        id: deployment
+      - id: deployment
         uses: actions/deploy-pages@v4
 
   update-readme:
@@ -60,8 +52,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - uses: actions/checkout@v5
 
       - name: Update Live Demo URL
         env:
