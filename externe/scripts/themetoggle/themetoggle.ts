@@ -7,7 +7,6 @@ export function themetoggleAutoload() {
     document.documentElement.removeAttribute('data-pre-themetoggle')
 }
 
-
 function themetogglePointerClick(element: HTMLElement) {
     const
         root: HTMLElement = document.querySelector('html')!,
