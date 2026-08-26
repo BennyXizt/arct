@@ -1,0 +1,40 @@
+name: Configure Repository Once
+
+on:
+  workflow_dispatch:
+
+permissions:
+  actions: write
+  contents: write
+  pages: write
+
+jobs:
+  configure:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Enable GitHub Pages
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            --method POST \
+            "/repos/${{ github.repository }}/pages" \
+            -f build_type=workflow
+
+      - name: Set workflow permissions to Read and write
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh api \
+            --method PUT \
+            "/repos/${{ github.repository }}/actions/permissions/workflow" \
+            -f default_workflow_permissions=write
+
+      - name: Create DEPLOY_ENABLED
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh variable set DEPLOY_ENABLED \
+            --repo "${{ github.repository }}" \
+            --body "false"
