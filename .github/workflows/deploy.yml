@@ -15,7 +15,29 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  check-pages:
+    runs-on: ubuntu-latest
+
+    outputs:
+      enabled: ${{ steps.check.outputs.enabled }}
+
+    steps:
+      - name: Check Pages
+        id: check
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          if gh api "/repos/${{ github.repository }}/pages" > /dev/null 2>&1; then
+            echo "Pages is enabled"
+            echo "enabled=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "Pages is not enabled. Skipping deployment."
+            echo "enabled=false" >> "$GITHUB_OUTPUT"
+          fi
+
   build:
+    needs: check-pages
+    if: needs.check-pages.outputs.enabled == 'true'
     runs-on: ubuntu-latest
 
     steps:
@@ -36,7 +58,14 @@ jobs:
           path: ./dist
 
   deploy:
-    needs: build
+    needs:
+      - check-pages
+      - build
+
+    if: |
+      needs.check-pages.outputs.enabled == 'true' &&
+      needs.build.result == 'success'
+
     runs-on: ubuntu-latest
 
     environment:
@@ -49,6 +78,7 @@ jobs:
 
   update-readme:
     needs: deploy
+    if: needs.deploy.result == 'success'
     runs-on: ubuntu-latest
 
     steps:
