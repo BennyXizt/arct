@@ -5,4 +5,4 @@ The original design **does not belong to me** and is used strictly for education
 
 ## 🔗 Live Demo
 
-👉 **[Open Website](https://bennyxizt.github.io/WEBSITE/)**
+👉 **[Open Website](<!-- LIVE_DEMO_URL -->)**

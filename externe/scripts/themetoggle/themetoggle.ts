@@ -1,4 +1,4 @@
-import { type themeAttributes, isThemeAttribute } from "./types/plugin.type.js"
+import { isThemeAttribute } from "./types/plugin.type.js"
 
 export const themetogglePointerClickArray = [themetogglePointerClick, '[data-fsc-themetoggle]']
 

@@ -1,0 +1,42 @@
+name: Update README Live Demo
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  update-readme:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+
+      - name: Update Live Demo URL
+        env:
+          REPOSITORY: ${{ github.repository }}
+        run: |
+          OWNER="${REPOSITORY%%/*}"
+          REPO="${REPOSITORY#*/}"
+
+          URL="https://${OWNER}.github.io/${REPO}/"
+
+          sed -i "s|<!-- LIVE_DEMO_URL -->|${URL}|" README.md
+
+      - name: Commit README
+        run: |
+          if git diff --quiet README.md; then
+            echo "README is already up to date"
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+
+          git add README.md
+          git commit -m "docs: update live demo URL"
+          git push
