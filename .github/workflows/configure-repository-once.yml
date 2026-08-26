@@ -13,15 +13,6 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Set workflow permissions to Read and write
-        env:
-          GH_TOKEN: ${{ github.token }}
-        run: |
-          gh api \
-            --method PUT \
-            "/repos/${{ github.repository }}/actions/permissions/workflow" \
-            -f default_workflow_permissions=write
-
       - name: Create DEPLOY_ENABLED
         env:
           GH_TOKEN: ${{ github.token }}
