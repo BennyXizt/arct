@@ -1,0 +1,71 @@
+<%
+	blockClass = 'services'
+
+	articles = [
+		{
+			title: 'Architecture Portfolio',
+			text: [
+				`There are many variations of passages of Lorem is as Ipsum available but the majority have suffered alteration`,
+			]
+		},
+		{
+			title: 'planning process',
+			text: [
+				`There are many variations of passages of Lorem is as Ipsum available but the majority have suffered alteration`,
+			]
+		},
+		{
+			title: 'unique design',
+			text: [
+				`There are many variations of passages of Lorem is as Ipsum available but the majority have suffered alteration`,
+			]
+		},
+		{
+			title: 'consultation',
+			text: [
+				`There are many variations of passages of Lorem is as Ipsum available but the majority have suffered alteration`,
+			]
+		},
+	]
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>'>
+	<div class='<%=blockClass%>__container container'>
+		<div class="<%=blockClass%>__container-inner container-inner"> 
+			<%- include('src/ejs/components/title.ejs', {
+				title_component: {
+					wrapper: {
+						block: `${blockClass}__body`
+					},
+					this: {
+						parent: blockClass,
+					},
+					title: {
+						tag: 'h2',
+						label: 'view my services'
+					},
+					subtitle: [
+						`Id at urna non viverra eu volutpat porttitor elementum. Viverra senectus dui ultricies dolor. Varius nibh velit pellentesque sapien, sapien neque dignissim.`,
+					]
+				}
+			})%>
+			<ul class="<%=blockClass%>__items">
+				<% subBlockClass = `card${blockClass[0].toUpperCase() + blockClass.slice(1)}` %>
+				<% for(const article of articles) { %>
+					<li class="<%=blockClass%>__item">
+						<article class="<%=blockClass%>__card <%=subBlockClass%>">
+							<h4 class="<%=subBlockClass%>__title">
+								<%=article.title%>
+							</h4>
+							<div class="<%=subBlockClass%>__text">
+								<% for(const text of article.text) { %>
+									<p><%=text%></p>
+								<% } %>
+							</div>
+						</article>
+					</li>
+				<% } %>
+			</ul>
+		</div>
+	</div>
+</section>

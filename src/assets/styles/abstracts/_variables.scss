@@ -47,6 +47,7 @@ $COLORS: (
     gray: #818181,
     gray_lite: #cfcfcf,
     gray_lite_2: #979797,
+    white_100: #f9f9f9,
     
     background: map.get($BASE, background_color),
 
@@ -69,7 +70,11 @@ $THEME: (
 
         body-text-color: map.get($COLORS, gray),
 
+        primary-title-color: map.get($COLORS, preDark),
+
         primary-background-color: map.get($COLORS, background),
+
+        primary-border-color: map.get($COLORS, white_100),
     ),
     dark: (
         secondary-text-color: map.get($COLORS, default),
@@ -142,8 +147,8 @@ $HEADERS: (
    h4: (
         font_size_original: 24px,
         font_size_adaptive: 18px,
-        // line_height: 32px,
-        // font_weight: 600,
+        line_height: 2,
+        font_weight: 500,
         // font_family: sans-serif,
         // font_style: regular,
         // letter_spacing: 3px,

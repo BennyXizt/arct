@@ -131,9 +131,9 @@ body {
       justify-content: space-between;
 
       @include fluid((
-          gap: 50px 10px,
-          padding-left: (166px 15px) (arg5 getMedia(tablet)),
-          padding-right: (166px 15px) (arg5 getMedia(tablet)),
+          gap: 20px 10px,
+          padding-left: (166px 15px) (arg3 getMedia(ultra)) (arg5 getMedia(normal)),
+          padding-right: (166px 15px) (arg3 getMedia(ultra)) (arg5 getMedia(normal)),
       ));
     }
 }
@@ -142,8 +142,8 @@ body {
   & > * {
     &:not(:first-child) {
       @include fluid((
-        margin-top: (240 120) (arg5 getMedia(tablet)),
-        margin-bottom: (260 120) (arg5 getMedia(tablet)),
+        margin-top: (240 50) (arg5 getMedia(tablet)),
+        margin-bottom: (260 50) (arg5 getMedia(tablet)),
       ));
     }
   }

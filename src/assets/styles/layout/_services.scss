@@ -1,0 +1,58 @@
+@use 'sass:map';
+
+.services {
+    &__body {
+        @include rem(flex-basis, 480px);
+    }
+    &__items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+
+        @include rem(flex, 1 1 429px);
+        @include fluid(gap, 52 20);
+    }
+    &__text {
+        @include rem(max-width, 460px);
+    }
+
+    @media (min-width: 986px) {
+        &__body {
+            position: sticky;
+            
+            @include rem(top, 120px);
+        }
+    }
+
+    @media (min-width: getMedia(mobile)) and (max-width: 985px) {
+        &__body {
+            flex-grow: 1;
+            text-align: center;
+            align-items: center;
+        }
+    }
+}
+
+.cardServices {
+    height: 100%;
+    border: 1px solid getThemeTag(primary-border-color);
+    box-shadow: 0 21px 44px 0 rgba(0, 0, 0, 0.04);
+
+    @include fluid(padding, (50 15)(63 25));
+
+    &__title {
+        color: getThemeTag(primary-title-color);
+        text-transform: capitalize;
+
+        &:not(:last-child) {
+            @include rem(margin-bottom, 6px);
+        }
+    }
+
+    &__text {
+        p {
+            &:not(:last-child) {
+                @include rem(margin-bottom, 10px);
+            }
+        }
+    }
+}
