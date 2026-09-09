@@ -1,0 +1,41 @@
+<%
+	blockClass = 'achievements'
+
+	achievements = [
+		{
+			label: `Projects Done`,
+			value: 750
+		},
+		{
+			label: `Regular Clients`,
+			value: 315
+		},
+		{
+			label: `Years Experience`,
+			value: 19
+		},
+	]
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>'>
+	<div class='<%=blockClass%>__container container'>
+		<% for(const achievement of achievements) { %>
+			<div class="<%=blockClass%>__item">
+				<%- include('externe/components/content/Counter/Counter.ejs', { 
+					counter_component: {
+						this: {
+							parent: blockClass,
+							dataAttribute: [
+								// 'data-fsc-counter-once'
+							]
+						},
+						value: achievement.value
+					}
+				}) %>
+				<div class="<%=blockClass%>__label">
+					<%=achievement.label%>
+				</div>
+			</div>
+		<% } %>
+	</div>
+</section>
