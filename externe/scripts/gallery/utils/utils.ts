@@ -61,6 +61,8 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
         nextFigureHTML.classList.add('gallery-lightbox__figure', 'next-left')
     }
 
+    currFigureHTML.classList.remove('current')
+
     nextFigureHTML.append(imageHTML)
     container?.insertAdjacentElement('beforeend', nextFigureHTML)
 
@@ -76,12 +78,13 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
         gallery.image = gallery.images[gallery.index].cloneNode() as HTMLImageElement
         gallery.moveTo = undefined
         gallery.isActive = false
+
+        nextFigureHTML.classList.add('current')
         
     }, { once: true })
 
     requestAnimationFrame(() => {
         nextFigureHTML.classList.remove('next-right', 'next-left')
-        nextFigureHTML.classList.add('current')
     })
     
     if(counterHTML)
