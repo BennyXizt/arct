@@ -27,8 +27,11 @@ export function galleryAutoload() {
             index: 0,
             moveTo: undefined,
             total: images.length,
-            isActive: false,
             isScallableAllowed,
+            isReady: false,
+            // move
+            isActive: false,
+            
         }
 
         galleryElements.push(galleryElement)
@@ -91,12 +94,18 @@ export function galleryCloseClick(target: HTMLElement, event: Event) {
 
     if(!lightBox) return
 
+    const gallery = galleryElements.find(e => e.gallery === target)
+
+    if(!gallery) return    
+
     const figureHTML = lightBox.querySelector<HTMLElement>('.gallery-lightbox__figure')
 
     figureHTML?.remove()
     lightBox.classList.remove('active')
     lightBox.setAttribute('inert', "")
     lightBox.removeAttribute('data-fsc-gallery-root')
+
+    gallery.isReady = false
 }
 
 export function galleryMoveClick(target: HTMLElement, _?: PointerEvent) {
@@ -110,7 +119,7 @@ export function galleryMoveClick(target: HTMLElement, _?: PointerEvent) {
 
     const gallery = galleryElements.find(e => e.gallery === HTMLGallery)
 
-    if(!gallery || gallery.isActive) return    
+    if(!gallery || gallery.isActive || !gallery.isReady) return    
 
     gallery.isActive = true
 

@@ -35,6 +35,13 @@ export function createImage(gallery: GalleryElementInterface, lightBox: HTMLElem
 
     figureHTML.append(gallery.image)
     imagesHTML.append(figureHTML)
+
+    lightBox.addEventListener('transitionend', (event) => {
+        if (event.propertyName !== 'opacity' || !(event.currentTarget instanceof HTMLElement)) return
+
+        gallery.isReady = true
+       
+    }, { once: true })
     
     if(counterHTML)
         counterHTML.innerHTML = `${gallery.index + 1} / ${gallery.images.length}`
