@@ -1,5 +1,21 @@
 @use 'sass:map';
 
+@font-face {
+  font-family: "icons";
+  src: url(data:application/octet-stream;base64,d09GMgABAAAAAAOYAAsAAAAAB9gAAANJAAEAAAAAAAAAAAAAAAAAAAAAAAAAAAAAHFQGYACDGgqDPIMIATYCJAMUCwwABCAFg3IHfRvSBhEVlK1kXxzYxsyG7rCUwaCdgxgHTSBHg/zGhqa+r8HTt1b+6uqe2+s5JJLHAQALwC7CAQrDKhGeRyUsI/M2AAbm1dDOzleKnM4NRt3SCwxJ6gvtxX7Whs+3tWmHrVs6qo4pOQ+60zPyrPDh8mEZVyU7cEx5BdQYDWDZgaPpMAun9YjAa4Ff5IJ+s+ViqfhdqFoq+uzwHgTwtDGCmdKabUDKQW8hBRRgoVaBJl0ORsNeIOYosEy6EEMI1p6rZXIXB+Y49BK4Wfy+RLSLAYNT6AnzuzUB4G0kkdUfwHo7cWcV9hvAAQo0vUwl63nDMloFmlD8lMFSJ7dbBCIbj0eSMd79Dw8Eg2JBAig1CYAxBC1EkvAphAZ8IFTwgdCC9UXu5QDwQABcBR5CoiojSxAUycNJhYlFW/o7zJUBdK3LWiVn6FVcypohG8I4MTTQDSLLDI8k0Sv41OV+Hco+4ZuWAWNzB3rMpT9p2YMcrwOcfXaCT77xYguUc89PcX55+eyiweFFVzrLyGp3rX5vcnWfsewYPFweZ65z9U+sHLHX2AcO1qZY63Osv9Knv780XOWouXlVtvaKqSp5T91ZMaB34Z4xVOywBAaDXPaXDgzkXCxlzFD7RzYe5X/Y4HcUPpP/WUUbXM7ya0ey6/U40lYky5IpyTTQPgl87fu/wON/Rc6F/76vWFh3YOQodIBe0nIAvVhAl+CLpgpd1std/E3Nm3OTh/7FQl0a49v7232Str/4IhDDwGrmGlbW6JLWMW0GU5MokMnNQygABvDKDXEypfHuHJPgVqeCIQHX8LQSsZMAsJB0giMkhxc4onIQPI3cLw7J5HFEbCKCZ6cgGFI4TFA8JwEWcpngyOFHCPDcJ3hW/2eH1Eiwbwdb98R6olwE47/ri+JathD5ofkZGVqUXLGCYgM317GqASM8QMpWkYhhFO6wVL9RHZMgMFN/6pc87NqSrXtiPVEuoqoKfFEGdGM1EOETcoBMYHnKXLG6abEBbq5jVA1ghI4HCNJ99JU+IrYF4/SuDkv1aXb4xoRANTJrBf7NouEr9QAe+ggnRlSsOAnI3ibCi0do1HNMbeWZieg20SZt3VjrzxUvljiv3ObT0ZZ8twMAAAA=) format('woff2');
+}
+
+[class^="icons-"], [class*=" icons-"] {
+  font-family: 'icons' !important;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icons-arrow-left-solid-full::before { content: "\e001"; }
+.icons-arrow-right-solid-full::before { content: "\e002"; }
+.icons-download-solid-full::before { content: "\e003"; }
+.icons-x-solid-full::before { content: "\e004"; }
 
 .gallery-lightbox {
     display: flex;
@@ -17,6 +33,11 @@
     visibility: hidden;
 
     @include transition(opacity, visibilty);
+
+    button {
+        cursor: pointer;
+        @include rem(padding, 7px);
+    }
     
     &__overlay {
         position: absolute;
@@ -78,10 +99,6 @@
         }
     }
 
-    &__close {
-        @include rem(padding, 7px);
-    }
-
     &.active {
         opacity: 1;
         visibility: visible;
@@ -102,6 +119,11 @@
     &__content {
         @include rem(column-gap, 40px);
     }
+
+    [class^="icons-"], [class*=" icons-"] {
+        @include rem(font-size, 24px);
+    }
+    
     
     // &__images {
     //     height: 100%;

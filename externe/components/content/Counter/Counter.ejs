@@ -43,9 +43,15 @@
 		thisDataAttributes += ` data-fsc-counter`
 
 		if(typeof counter_component.value.end !== 'undefined' && counter_component.value.end) {
-			thisDataAttributes += ` data-fsc-counter-finalvalue=${counter_component.value.end}`
+			finalvalue = counter_component.value.end
+
+			thisDataAttributes += ` data-fsc-counter-finalvalue=${finalvalue}`
+			thisStyles = `style='width: ${finalvalue.toString().length}ch'`
 		} else {
-			thisDataAttributes += ` data-fsc-counter-finalvalue=${counter_component.value}`
+			finalvalue = counter_component.value
+			
+			thisDataAttributes += ` data-fsc-counter-finalvalue=${finalvalue}`
+			thisStyles = `style='width: ${finalvalue.toString().length}ch'`
 		}
 	}
 

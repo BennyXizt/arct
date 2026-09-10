@@ -9,11 +9,30 @@ export function createImage(gallery: GalleryElementInterface, lightBox: HTMLElem
 
     if(!gallery.image || !imagesHTML) return
 
+    const srcset = gallery.image.getAttribute('srcset')
+
     gallery.image.removeAttribute('class')
 
     gallery.image.classList.add('gallery-lightbox__image')
 
     figureHTML.classList.add('gallery-lightbox__figure', 'current')
+
+    if (srcset && gallery.isScallableAllowed) {
+       const maxImage = gallery.image
+            .srcset
+            .split(',')
+            .map(item => {
+                const [src, width] = item.trim().split(/\s+/)
+
+                return { src, width: parseInt(width) }
+            })
+            .reduce((max, image) => image.width > max.width ? image : max)
+
+        gallery.image.src = maxImage.src
+        gallery.image.removeAttribute('srcset')
+        gallery.image.removeAttribute('sizes')
+    }
+
     figureHTML.append(gallery.image)
     imagesHTML.append(figureHTML)
     

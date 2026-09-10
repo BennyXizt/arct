@@ -38,6 +38,7 @@ export function step(counter: CounterElementInterface, timestamp: number) {
             (timestamp) => step(counter, timestamp)
         )
     } else {
+        counter.counter.removeAttribute('style')
         cancelAnimationFrame(counter.animationID!)
     }
 }

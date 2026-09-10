@@ -7,4 +7,5 @@ export interface GalleryElementInterface {
     moveTo: string | undefined
     total: number
     isActive: boolean
+    isScallableAllowed: boolean
 }

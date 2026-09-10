@@ -23,8 +23,7 @@ export interface SVGFolderInterface {
     dummy?: {
         destination: string
         fileName: string
-    },
-    convertType: number
+    }
 }
 export interface SVGConvertToFile {
     watchDir: string

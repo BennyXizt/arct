@@ -38,6 +38,9 @@ export function counterAutoload() {
             startValue = Number.parseFloat(counter.innerHTML),
             floatToFixed = isInteger ? 0 : finalValueAttr.match(/\.(.+)$/)![1].length
             
+        
+        counter.style.width = `${finalValueAttr.length}ch`
+
         const counterElement = {
             // base
             counter,
@@ -84,7 +87,8 @@ export function counterObserver(entry: IntersectionObserverEntry, observer: Inte
     } else {
         if(counter.intersected && (counter.isFinite || counter.currentValue >= counter.endValue - counter.offset) ) {
             counter.counter.textContent = counter.endValue!.toString()
-
+            counter.counter.removeAttribute('style')
+            
             observer.unobserve(HTMLElement) 
         } else if(counter.intersected) {
             counter.currentValue = counter.endValue - counter.offset

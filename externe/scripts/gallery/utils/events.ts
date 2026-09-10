@@ -12,7 +12,13 @@ export function galleryAutoload() {
     const galleries = document.querySelectorAll('[data-fsc-gallery]') as NodeListOf<HTMLElement>
 
     for(const gallery of galleries) {
-        const images = gallery.querySelectorAll('img')
+        const 
+            images = gallery.querySelectorAll('img'),
+            pureIsScallableAllowed = gallery.getAttribute('data-fsc-gallery-allow-scallable')
+
+        const isScallableAllowed = 
+                pureIsScallableAllowed === 'true' || pureIsScallableAllowed === ''
+                    ? true : false
 
         const galleryElement = {
             gallery,
@@ -22,6 +28,7 @@ export function galleryAutoload() {
             moveTo: undefined,
             total: images.length,
             isActive: false,
+            isScallableAllowed,
         }
 
         galleryElements.push(galleryElement)
@@ -29,17 +36,19 @@ export function galleryAutoload() {
 
     const lightBox = 
     `
-        <div class="gallery-lightbox">
+       <div class="gallery-lightbox" >
             <div class="gallery-lightbox__overlay"></div>
             <div class="gallery-lightbox__top">
                 <span class="gallery-lightbox__counter"></span>
-                <button class="gallery-lightbox__close">X</button>
+                <div class="gallery-lightbox__tools">
+                    <button class="gallery-lightbox__download icons-download-solid-full"></button>
+                    <button class="gallery-lightbox__close icons-x-solid-full"></button>
+                </div>
             </div>
             <div class="gallery-lightbox__content">
-                <button data-fsc-gallery-button-left class="gallery-lightbox__button">Left</button>
-                <div class="gallery-lightbox__images">
-                   </div>
-                <button data-fsc-gallery-button-right class="gallery-lightbox__button">Right</button>
+                <button data-fsc-gallery-button-left class="gallery-lightbox__button icons-arrow-left-solid-full"></button>
+                <div class="gallery-lightbox__images"></div>
+                <button data-fsc-gallery-button-right class="gallery-lightbox__button icons-arrow-right-solid-full"></button>
             </div>
         </div>
     `
@@ -76,8 +85,8 @@ export function galleryOpenClick(target: HTMLElement, event: Event) {
     lightBox.setAttribute('data-fsc-gallery-root', `.${target.className}`)
 }
 
-export function galleryCloseClick(target: HTMLElement, _?: PointerEvent) {
-    const lightBox = document.querySelector('.gallery-lightbox')
+export function galleryCloseClick(target: HTMLElement, _2?: PointerEvent) {
+    const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
 
     if(!lightBox) return
 
@@ -113,4 +122,21 @@ export function galleryMoveClick(target: HTMLElement, _?: PointerEvent) {
     }
 
     moveImage(gallery, lightBox)
+}
+
+export function galleryDownloadClick(target: HTMLElement, _?: PointerEvent) {
+    const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
+
+    if(!lightBox) return  
+
+    const image = lightBox.querySelector<HTMLImageElement>('figure.current img')
+
+    if(!image) return
+
+    const link = document.createElement('a')
+
+    link.href = image.src
+    link.download = image.src.split('/').pop()?.split('?')[0] || 'image.jpg'
+
+    link.click()
 }
