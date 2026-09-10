@@ -92,11 +92,7 @@ export function galleryOpenClick(target: HTMLElement, event: Event) {
 export function galleryCloseClick(target: HTMLElement, event: Event) {
     const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
 
-    if(!lightBox) return
-
-    const gallery = galleryElements.find(e => e.gallery === target)
-
-    if(!gallery) return    
+    if(!lightBox) return 
 
     const figureHTML = lightBox.querySelector<HTMLElement>('.gallery-lightbox__figure')
 
@@ -105,7 +101,9 @@ export function galleryCloseClick(target: HTMLElement, event: Event) {
     lightBox.setAttribute('inert', "")
     lightBox.removeAttribute('data-fsc-gallery-root')
 
-    gallery.isReady = false
+    galleryElements.forEach(gallery => {
+        gallery.isReady = false
+    })
 }
 
 export function galleryMoveClick(target: HTMLElement, _?: PointerEvent) {
