@@ -60,6 +60,7 @@ export function galleryAutoload() {
 
 export function galleryOpenClick(target: HTMLElement, event: Event) {
     event.preventDefault()
+    event.stopPropagation()
 
     const lightBox = document.querySelector<HTMLElement>('.gallery-lightbox')
 
@@ -86,8 +87,6 @@ export function galleryOpenClick(target: HTMLElement, event: Event) {
 }
 
 export function galleryCloseClick(target: HTMLElement, event: Event) {
-    event.preventDefault()
-        event.stopPropagation()
     const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
 
     if(!lightBox) return
