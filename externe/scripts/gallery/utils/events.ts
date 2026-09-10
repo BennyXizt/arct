@@ -37,7 +37,7 @@ export function galleryAutoload() {
     const lightBox = 
     `
        <div class="gallery-lightbox" >
-            <div class="gallery-lightbox__overlay"></div>
+            <button class="gallery-lightbox__overlay"></button>
             <div class="gallery-lightbox__top">
                 <span class="gallery-lightbox__counter"></span>
                 <div class="gallery-lightbox__tools">
@@ -85,7 +85,7 @@ export function galleryOpenClick(target: HTMLElement, event: Event) {
     lightBox.setAttribute('data-fsc-gallery-root', `.${target.className}`)
 }
 
-export function galleryCloseClick(target: HTMLElement, _2?: PointerEvent) {
+export function galleryCloseClick(target: HTMLElement, _?: Event) {
     const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
 
     if(!lightBox) return

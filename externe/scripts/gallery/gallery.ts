@@ -18,7 +18,7 @@ export { galleryAutoload } from './utils/events.js'
 // export const galleryObserverArray                 = [galleryObserver, '[data-fsc-gallery]', intersectionOptions]
 // export const galleryOnKeyUpArray                  = [galleryOnKeyUp, '[data-fsc-gallery]']
 export const galleryCloseOnXClickArray          = [galleryCloseClick, '.gallery-lightbox__close']
-export const galleryCloseOnOverlayPointerClickArray = [galleryCloseClick, '.gallery-lightbox__overlay']
+export const galleryCloseOnOverlayClickArray    = [galleryCloseClick, '.gallery-lightbox__overlay']
 export const galleryMoveClickArray              = [galleryMoveClick, '.gallery-lightbox__button']
 export const galleryOpenClickArray              = [galleryOpenClick, '[data-fsc-gallery]']
 export const galleryDownloadClickArray          = [galleryDownloadClick, '.gallery-lightbox__download']

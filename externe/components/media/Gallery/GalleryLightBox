@@ -1,5 +1,5 @@
 <div class="gallery-lightbox" >
-    <div class="gallery-lightbox__overlay"></div>
+    <button class="gallery-lightbox__overlay"></button>
     <div class="gallery-lightbox__top">
         <span class="gallery-lightbox__counter"></span>
         <div class="gallery-lightbox__tools">
