@@ -85,7 +85,9 @@ export function galleryOpenClick(target: HTMLElement, event: Event) {
     lightBox.setAttribute('data-fsc-gallery-root', `.${target.className}`)
 }
 
-export function galleryCloseClick(target: HTMLElement, _?: Event) {
+export function galleryCloseClick(target: HTMLElement, event: Event) {
+    event.preventDefault()
+        event.stopPropagation()
     const lightBox = target.closest<HTMLElement>('.gallery-lightbox')
 
     if(!lightBox) return
