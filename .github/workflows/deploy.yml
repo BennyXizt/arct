@@ -48,16 +48,13 @@ jobs:
           node-version: 20
           cache: npm
 
-      - name: Debug dependencies
+      - name: Update npm
+        run: npm install -g npm@11.18.0
+
+      - name: Check versions
         run: |
-            echo "=== COMMIT ==="
-            git rev-parse HEAD
-            echo "=== package.json ==="
-            cat package.json
-            echo "=== chokidar in lock ==="
-            grep -A5 '"node_modules/chokidar"' package-lock.json
-            echo "=== npm version ==="
-            npm --version
+          node --version
+          npm --version
 
       - run: npm ci
       - run: npm run build
