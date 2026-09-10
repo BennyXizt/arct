@@ -80,12 +80,8 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
     }, { once: true })
 
     requestAnimationFrame(() => {
+        nextFigureHTML.classList.remove('next-right', 'next-left')
         nextFigureHTML.classList.add('current')
-
-        requestAnimationFrame(() => {
-            nextFigureHTML.classList.remove('next-right')
-            nextFigureHTML.classList.remove('next-left')
-        })
     })
     
     if(counterHTML)
