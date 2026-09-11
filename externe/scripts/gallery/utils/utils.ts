@@ -39,7 +39,7 @@ export function createImage(gallery: GalleryElementInterface, lightBox: HTMLElem
     lightBox.addEventListener('transitionend', (event) => {
         if (event.propertyName !== 'opacity' || !(event.currentTarget instanceof HTMLElement)) return
 
-        gallery.isReady = true
+        gallery.isRendered = true
        
     }, { once: true })
     
@@ -84,7 +84,7 @@ export function moveImage(gallery: GalleryElementInterface, lightBox: HTMLElemen
 
         gallery.image = gallery.images[gallery.index].cloneNode() as HTMLImageElement
         gallery.moveTo = undefined
-        gallery.isActive = false
+        gallery.isMoving = false
 
         nextFigureHTML.classList.add('current')
         

@@ -1,0 +1,102 @@
+<%
+	blockClass = 'testimonials'
+
+	var carouselElements = 
+		[
+			{
+				content: {
+					title: {
+						tag: 'h2',
+						label: 'what clients says'
+					},
+					review: `teasf`,
+					name: `tesx`,
+					position: `asgf`,
+				},
+			},
+		].map((carousel, i) => {
+			return {
+				content: [
+					include('src/ejs/components/title.ejs', { title_component: {
+						this: {
+							parent: blockClass,
+						},
+						title: carousel.content.title,
+					} }),
+					`
+						<div class="${blockClass}__body">
+							<div class="${blockClass}__review">${carousel.content.review}</div>
+							<div class="${blockClass}__name">${carousel.content.name}</div>
+							<div class="${blockClass}__position">${carousel.content.position}</div>
+						</div>
+					`
+				],
+			}
+		})
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>'>
+	<div class='<%=blockClass%>__container container'>
+		<%- include('externe/components/media/Image/Image.ejs', {
+			image_component: {
+				this: {
+					parent: blockClass,
+				},
+				img: {
+					src: `media/image/testimonials/${'testimonial1'}-lg.jpg`,
+					alt: 'testimonial1',
+					width: 1273,
+					height: 938,
+					loading: 'lazy',
+					srcset: [
+						`media/image/testimonials/${'testimonial1'}-sm.jpg 480w`,
+						`media/image/testimonials/${'testimonial1'}-md.jpg 800w`,
+						`media/image/testimonials/${'testimonial1'}-lg.jpg 1200w`,
+						`media/image/testimonials/${'testimonial1'}-xl.jpg 1600w`,
+						`media/image/testimonials/${'testimonial1'}-2xl.jpg 2400w`
+					],
+					sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+				},
+				images: [
+					{  
+						type: 'image/avif', 
+						srcset: [
+							`media/image/testimonials/${'testimonial1'}-sm.avif 480w`,
+							`media/image/testimonials/${'testimonial1'}-md.avif 800w`,
+							`media/image/testimonials/${'testimonial1'}-lg.avif 1200w`,
+							`media/image/testimonials/${'testimonial1'}-xl.avif 1600w`,
+							`media/image/testimonials/${'testimonial1'}-2xl.avif 2400w`
+						],
+						sizes: '(min-width: 767.98px) 66.31vw, 100vw',
+					},
+					{  
+						type: 'image/webp', 
+						srcset: [
+							`media/image/testimonials/${'testimonial1'}-sm.webp 480w`,
+							`media/image/testimonials/${'testimonial1'}-md.webp 800w`,
+							`media/image/testimonials/${'testimonial1'}-lg.webp 1200w`,
+							`media/image/testimonials/${'testimonial1'}-xl.webp 1600w`,
+							`media/image/testimonials/${'testimonial1'}-2xl.webp 2400w`
+						],
+						sizes: '(min-width: 767.98px) 66.31vw, 100vw'
+					},
+				]
+			}
+		}) %>
+
+		<%- include('externe/components/media/Carousel/Carousel.ejs', {
+			carousel_component: {
+				this: {
+					block: blockClass,
+					dataAttribute: [
+						'data-fsc-carousel-interval=77777777',
+						'data-fsc-carousel-allow-disabled',
+						'data-fsc-carousel-allow-draggable',
+					]
+				},
+				list: carouselElements
+			}
+		}) %>
+	</div>
+</section>
+

@@ -18,7 +18,8 @@
 	'./layout/about',
 	'./layout/portfolio',
 	'./layout/services',
-	'./layout/achievements';
+	'./layout/achievements',
+	'./layout/testimonials';
 // internal layout END
 
 @import
@@ -29,6 +30,7 @@
 // internal components START
 @import
   './components/logo',
+  './components/gallery',
   './components/carousel',
   './components/headerMenu',
   './components/button',

@@ -28,9 +28,8 @@ export function galleryAutoload() {
             moveTo: undefined,
             total: images.length,
             isScallableAllowed,
-            isReady: false,
-            // move
-            isActive: false,
+            isRendered: false,
+            isMoving: false,
             
         }
 
@@ -102,7 +101,7 @@ export function galleryCloseClick(target: HTMLElement, event: Event) {
     lightBox.removeAttribute('data-fsc-gallery-root')
 
     galleryElements.forEach(gallery => {
-        gallery.isReady = false
+        gallery.isRendered = false
     })
 }
 
@@ -117,9 +116,9 @@ export function galleryMoveClick(target: HTMLElement, _?: PointerEvent) {
 
     const gallery = galleryElements.find(e => e.gallery === HTMLGallery)
 
-    if(!gallery || gallery.isActive || !gallery.isReady) return    
+    if(!gallery || gallery.isMoving || !gallery.isRendered) return    
 
-    gallery.isActive = true
+    gallery.isMoving = true
 
     if(target.hasAttribute('data-fsc-gallery-button-right')) {
         gallery.moveTo = 'right'

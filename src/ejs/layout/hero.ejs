@@ -24,7 +24,13 @@
 			},
 		].map((e, i) => {
 			return {
-				content: e.content,
+				content: [
+					`<h1 class="carousel__title">${e.content.title}</h1>`,
+					`<div class="carousel__body">
+						<div class="carousel__text">${e.content.text.map(text => `<p>${text}</p>`).join('')}</div>
+						${include('src/ejs/components/button.ejs', { button_component: e.content.button_component })}
+					</div>`
+				],
 				image_component: {
 					this: {
 						parent: 'carousel',
@@ -75,18 +81,36 @@
 				
 			}
 		})
+
+	var carouselButtons = {
+		left: include('externe/components/media/Icon/Icon.ejs', {
+			icon_component: {
+				name: 'slider-arrow'
+			}
+		}),
+		right: include('externe/components/media/Icon/Icon.ejs', {
+			icon_component: {
+				name: 'slider-arrow'
+			}
+		}),
+	}
+
+	var carouselDot = 
+		`<span class="dots-carousel__dot"></span>`
 %>
 
 <%- include('externe/components/media/Carousel/Carousel.ejs', {
-		carousel_component: {
-			this: {
-				parent: 'hero',
-				dataAttribute: [
-					'data-fsc-carousel-interval=77777777',
-					'data-fsc-carousel-allow-disabled',
-					'data-fsc-carousel-allow-draggable',
-				]
-			},
-			list: carouselElements
-		}
-	}) %>
+	carousel_component: {
+		this: {
+			parent: 'hero',
+			dataAttribute: [
+				'data-fsc-carousel-interval=77777777',
+				'data-fsc-carousel-allow-disabled',
+				'data-fsc-carousel-allow-draggable',
+			]
+		},
+		list: carouselElements,
+		buttons: carouselButtons,
+		dot: carouselDot
+	}
+}) %>
