@@ -11,31 +11,43 @@
 		{
             'href': '#about',
             'anchor': 'About',
-            'dataAttribute': ['data-fsc-scrollto']
+            'dataAttribute': [
+                'data-fsc-scrollto',
+                'data-fsc-scrollto-dynamic',
+            ]
         },
 		{
             'href': '#services',
             'anchor': 'Services',
-            'dataAttribute': ['data-fsc-scrollto']
+            'dataAttribute': [
+                'data-fsc-scrollto',
+                'data-fsc-scrollto-dynamic',
+            ]
         },
 		{
             'href': '#portfolio',
             'anchor': 'Portfolio',
-            'dataAttribute': ['data-fsc-scrollto']
+            'dataAttribute': [
+                'data-fsc-scrollto',
+                'data-fsc-scrollto-dynamic',
+            ]
         },
 		{
             'href': '#contact',
             'anchor': 'Contact',
-            'dataAttribute': ['data-fsc-scrollto']
+            'dataAttribute': [
+                'data-fsc-scrollto',
+                'data-fsc-scrollto-dynamic',
+            ]
         },
 	]
 
-    var dataAttributes = [
+    var thisDataAttributes = [
         'data-fsc-scroll',
         'data-fsc-scroll-trigger=down',
     ]
 %>
-<header class="header" <%=dataAttributes.join(' ')%> >
+<header class="header" <%=thisDataAttributes.join(' ')%> >
     <div class="header__container container">
         <%- include('externe/components/menu/Logo/Logo.ejs', {
             logo_component: {
