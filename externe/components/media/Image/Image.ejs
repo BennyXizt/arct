@@ -94,7 +94,7 @@
 	<figure <%-wrapperThisDataAttributes%> class='<%=wrapperThisClass%>' <%-wrapperThisID%> <%-wrapperThisStyles%>>
 <% } %>
         <% if(displayType === 'picture') { %>
-            <picture>
+            <picture class='<%=blockClass%>__picture'>
                 <% for(const source of image_component.images) { %>
                     <% if (source.media?.label) { %> <!-- <%= `${source.media.label} ${source.type}` %> --> <% } else { %> <!-- <%= source.type %> -->  <% } %>
                     <source 
@@ -116,26 +116,29 @@
                 <% } %>
         <% } %>
 
-            <img <%=thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%> src="<%= image?.src %>"
-                <% if (image?.alt) { %> alt="<%= image.alt %>" <% } %>
-                <% if (image?.width) { %> width="<%= image.width %>" <% } %>
-                <% if (image?.height) { %> height="<%= image.height %>" <% } %>
-                <% if (image?.loading) { %> loading="<%= image.loading %>" <% } %>
-                <% if (image?.decoding) { %> decoding="<%= image.decoding %>" <% } %>
-                <% if (image?.srcset) { 
-                    let srcset = ''
+        <img src="<%= image?.src %>"
+            <% if(displayType === 'picture') { %> class='<%=blockClass%>__image' <% } %>
+            <% if(displayType !== 'picture') { %> <%=thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%> <% } %>
 
-                    if(typeof image.srcset === 'string') {
-                        srcset = image.srcset
-                    } else if(typeof image.srcset === 'object') {
-                        srcset = image.srcset.join(', ')
-                    }
-                %> 
-                    srcset="<%= srcset %>" 
+            <% if (image?.alt) { %> alt="<%= image.alt %>" <% } %>
+            <% if (image?.width) { %> width="<%= image.width %>" <% } %>
+            <% if (image?.height) { %> height="<%= image.height %>" <% } %>
+            <% if (image?.loading) { %> loading="<%= image.loading %>" <% } %>
+            <% if (image?.decoding) { %> decoding="<%= image.decoding %>" <% } %>
+            <% if (image?.srcset) { 
+                let srcset = ''
 
-                    <% if (image?.sizes) { %> sizes="<%= image.sizes %>" <% } else { %>  sizes="100vw" <% } %>
-                <% } %>
-            >
+                if(typeof image.srcset === 'string') {
+                    srcset = image.srcset
+                } else if(typeof image.srcset === 'object') {
+                    srcset = image.srcset.join(', ')
+                }
+            %> 
+                srcset="<%= srcset %>" 
+
+                <% if (image?.sizes) { %> sizes="<%= image.sizes %>" <% } else { %>  sizes="100vw" <% } %>
+            <% } %>
+        >
 
         <% if(displayType === 'picture') { %>
          </picture>

@@ -3,6 +3,7 @@ export interface CarouselElementInterface {
     // base
     carousel: HTMLElement
     carouselList: HTMLElement
+    childrens: HTMLElement[]
     originalDirection: string
     direction: string
     dimention: number

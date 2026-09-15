@@ -1,12 +1,13 @@
 
 
 export interface SetupComponent {
-    parent?: string,
-    block?: string,
-    class?: string | string[],
-    id?: string | string[],
+    parent?: string
+    block?: string
+    class?: string | string[]
+    component?: string
+    id?: string | string[]
     tag?: string,
-    style?: string | string[],
-    dataAttribute?: string | string[],
+    style?: string | string[]
+    dataAttribute?: string | string[]
     componentName: string
 } 

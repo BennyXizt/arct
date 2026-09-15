@@ -1,4 +1,4 @@
-import { SetupComponent } from "./types/plugin.interface"
+import { SetupComponent } from "./types/plugin.interface.js"
 
 export const externe = {
     setupEJSComponent
@@ -6,12 +6,9 @@ export const externe = {
 
 function setupEJSComponent(component: SetupComponent) {
     let 
-        thisClass = component.componentName,
+        thisClass = component.component || component.componentName,
 	    blockClass = thisClass
-	if(typeof component.block !== 'undefined' && component.block)
-        blockClass = component.block
 	
-
 	if(typeof component.parent !== 'undefined' && component.parent)
         thisClass = `${component.parent}__${thisClass} ${blockClass}`
     else if(typeof component.class !== 'undefined' && component.class) {
@@ -19,8 +16,16 @@ function setupEJSComponent(component: SetupComponent) {
             thisClass = `${component.class} ${blockClass}`
         else if(typeof component.class === 'object') 
             thisClass = `${component.class.join(' ')} ${blockClass}`
-	} 
-    else thisClass = blockClass
+	} else if(typeof component.block !== 'undefined' && component.block) {
+		thisClass = component.block
+	} else thisClass = blockClass
+
+	if(typeof component.component !== 'undefined' && component.component) {
+		blockClass = component.component
+	} else if(typeof component.block !== 'undefined' && component.block) {
+		blockClass = component.block
+	}
+        
 
 	let thisID = ''
 	if(typeof component.id !== 'undefined' && component.id) {

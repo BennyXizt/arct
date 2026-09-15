@@ -32,13 +32,18 @@ export function carouselAutoload() {
                 pureIsDraggableAllowed === 'true' || pureIsDraggableAllowed === ''
                     ? true : false
                     
-        const { dimention, offset, length } = calculateCarouselProps(carouselList)
+        const childrens = Array.from(
+            carouselList.querySelectorAll<HTMLElement>('[data-fsc-carousel-item]')
+        )
+
+        const { dimention, offset, length } = calculateCarouselProps(childrens)
 
         const carouselElement = 
             {
                 // base
                 carousel,
                 carouselList,
+                childrens,
                 originalDirection: formattedDirection,
                 direction: formattedDirection, 
                 dimention, 
@@ -146,7 +151,7 @@ export function carouselOnResize(observer: ResizeObserverEntry) {
     
     if(!carousel) return
 
-    const { dimention, offset } = calculateCarouselProps(carousel.carouselList)
+    const { dimention, offset } = calculateCarouselProps(carousel.childrens)
 
     carousel.dimention = dimention
     carousel.offset = offset

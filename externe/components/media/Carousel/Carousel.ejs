@@ -19,7 +19,8 @@
 //		  left: 'HTMLButton',
 //		  right: 'HTMLButton',
 //		},
-//		dot: 'HTMLDot'
+//		dot: 'HTMLDot' | 'disabled',
+//		counter: 'disabled',
 //	}
 //}) %>
 %>
@@ -36,6 +37,31 @@
 	thisTag = 'article'
 
     isContent = carousel_component.list.length > 1
+
+    isCounterDisabled = false
+
+    if(typeof carousel_component.counter !== 'undefined' && carousel_component.counter) {
+        carousel_component.counter === 'disabled' ? isCounterDisabled = true : isCounterDisabled = false
+    }
+
+    isDotDisabled = false
+
+    dotTypes = ['bullet', 'number']
+    dotType = 'number'
+    dotBlockClass = `dots-${blockClass}`
+    dotBlockClassModificator = ''
+
+    if(typeof carousel_component.dot !== 'undefined' && carousel_component.dot) { 
+        carousel_component.dot === 'disabled' ? isDotDisabled = true : isDotDisabled = false
+
+        if(dotTypes.includes(carousel_component.dot)) {
+            dotType = carousel_component.dot
+
+            dotBlockClassModificator = `dots-carousel--${carousel_component.dot}`
+        } else {
+            dotType = 'custom'
+        }
+    }
 %>
 
 <<%=thisTag%> data-fsc-carousel <%-thisDataAttributes%> class='<%=thisClass%>' <%-thisID%> <%-thisStyles%>>
@@ -65,7 +91,7 @@
         
 		<% if(isContent && (typeof carousel_component.buttons !== 'undefined' && carousel_component.buttons)) { %>
             <% subBlockClass = `controls-${blockClass}` %> 
-            <div class="<%=blockClass%>__controls <%=subBlockClass%>">
+            <div class="<%=blockClass%>__controls <%=subBlockClass%>" data-fsc-carousel-controls>
                 <div class="<%=subBlockClass%>__wrapper">
                     <% if(typeof carousel_component.buttons.left !== undefined && carousel_component.buttons.left) { %>
                         <button class="<%=subBlockClass%>__control" data-fsc-carousel-button-left>
@@ -81,28 +107,29 @@
             </div>
         <% } %>
 
-        <% if(isContent) { %>
-		    <% subBlockClass = `dots-${blockClass}` %> 
-            <div class="<%=blockClass%>__dots <%=subBlockClass%>">
-                <ul class="<%=subBlockClass%>__list" data-fsc-carousel-dots>
+        <% if(!isDotDisabled && isContent) { %>
+            <div class="<%=blockClass%>__dots <%=dotBlockClass%> <%=dotBlockClassModificator%>" data-fsc-carousel-dots-div>
+                <ul class="<%=dotBlockClass%>__list" data-fsc-carousel-dots>
                     <% for (var i = 0; i < carousel_component.list.length; i++) { %>
-                        <li class="<%=subBlockClass%>__element" data-fsc-carousel-dot>
-                            <button class="<%=subBlockClass%>__button">
-                                <% if(typeof carousel_component.dot !== 'undefined' && carousel_component.dot) { %>
-                                    <%- carousel_component.dot%>
-                                <% } else { %>
-                                    <span class="<%=subBlockClass%>__dot">
+                        <li class="<%=dotBlockClass%>__element" data-fsc-carousel-dot>
+                            <button class="<%=dotBlockClass%>__button">
+                                <% if(dotType === 'number') { %>
+                                    <span class="<%=dotBlockClass%>__dot">
                                         <%= i + 1%>
                                     </span>
+                                <% } else if(dotType === 'bullet') { %>
+                                    <span class="<%=dotBlockClass%>__dot"></span>
+                                <% } else { %>
+                                    <%- carousel_component.dot%>
                                 <% } %>
                             </button>
                         </li>
                     <% } %>
                 </ul>
             </div>
-         <% } %>
+        <% } %>
 		
-        <% if(isContent) { %>
+        <% if(!isCounterDisabled && isContent) { %>
             <div class="<%=blockClass%>__counter">
                 <span data-fsc-carousel-timer></span>
                 <span data-fsc-carousel-counter></span>

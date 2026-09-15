@@ -1,33 +1,44 @@
 <%
 	blockClass = 'testimonials'
+	carouselBlock = `carousel-${blockClass}`
 
 	var carouselElements = 
 		[
 			{
 				content: {
-					title: {
-						tag: 'h2',
-						label: 'what clients says'
-					},
-					review: `teasf`,
-					name: `tesx`,
-					position: `asgf`,
+					review: [
+						`“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est et nibh eleifend neque ultrices. Sit nulla eget vulputate bibendum sit. Fringilla lacus rhoncus posuere lectus. Sectetur adipi elit proin est et nibh”`,
+						`“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est et nibh eleifend neque ultrices. Sit nulla eget vulputate bibendum sit. Fringilla lacus rhoncus posuere lectus. Sectetur adipi elit proin est et nibh”`,
+					],
+					name: `armando gonzález`,
+					position: `CEO, unity real state`,
+				},
+			},
+			{
+				content: {
+					review: [
+						`“Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin est et nibh eleifend neque ultrices. Sit nulla eget vulputate bibendum sit. Fringilla lacus rhoncus posuere lectus. Sectetur adipi elit proin est et nibh”`,
+					],
+					name: `armando gonzález`,
+					position: `CEO, unity real state`,
 				},
 			},
 		].map((carousel, i) => {
 			return {
 				content: [
-					include('src/ejs/components/title.ejs', { title_component: {
-						this: {
-							parent: blockClass,
-						},
-						title: carousel.content.title,
-					} }),
 					`
-						<div class="${blockClass}__body">
-							<div class="${blockClass}__review">${carousel.content.review}</div>
-							<div class="${blockClass}__name">${carousel.content.name}</div>
-							<div class="${blockClass}__position">${carousel.content.position}</div>
+						<div class="${carouselBlock}__body">
+							${include('externe/components/media/Icon/Icon.ejs', {
+								icon_component: {
+									this: {
+										parent: carouselBlock
+									},
+									name: 'quotes'
+								}
+							})}
+							<div class="${carouselBlock}__review">${carousel.content.review.map(e => `<p>${e}</p>`).join('') }</div>
+							<div class="${carouselBlock}__name">${carousel.content.name}</div>
+							<div class="${carouselBlock}__position">${carousel.content.position}</div>
 						</div>
 					`
 				],
@@ -40,7 +51,7 @@
 		<%- include('externe/components/media/Image/Image.ejs', {
 			image_component: {
 				this: {
-					parent: blockClass,
+					block: blockClass,
 				},
 				img: {
 					src: `media/image/testimonials/${'testimonial1'}-lg.jpg`,
@@ -84,19 +95,32 @@
 			}
 		}) %>
 
-		<%- include('externe/components/media/Carousel/Carousel.ejs', {
-			carousel_component: {
+		<div class="<%=blockClass%>__content">
+			<%- include('src/ejs/components/title.ejs', { title_component: {
 				this: {
-					block: blockClass,
-					dataAttribute: [
-						'data-fsc-carousel-interval=77777777',
-						'data-fsc-carousel-allow-disabled',
-						'data-fsc-carousel-allow-draggable',
-					]
+					parent: blockClass,
 				},
-				list: carouselElements
-			}
-		}) %>
+				title: {
+					tag: 'h2',
+					label: 'what clients says'
+				},
+			} })%>
+			<%- include('externe/components/media/Carousel/Carousel.ejs', {
+				carousel_component: {
+					this: {
+						block: `${blockClass}__carousel ${carouselBlock}`,
+						component: carouselBlock,
+						dataAttribute: [
+							'data-fsc-carousel-interval=77777777',
+							'data-fsc-carousel-allow-disabled',
+							'data-fsc-carousel-allow-draggable',
+						]
+					},
+					list: carouselElements,
+					counter: 'disabled',
+					dot: 'bullet'
+				}
+			}) %>
+		</div>
 	</div>
 </section>
-

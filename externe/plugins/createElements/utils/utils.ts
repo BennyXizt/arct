@@ -83,6 +83,7 @@ export function createEJSFile({ejsDir, blockType, componentName, fs}: {
                 `// <\\%- include('src/ejs/components/${componentName}.ejs', { \n` +
                 `//\t${componentName}_component: {\n` +
                 `//\t\tthis: {\n` +
+                `//\t\t\tcomponent: '${componentName}',\n` +
                 `//\t\t\tparent: 'parentClass',\n` +
                 `//\t\t\tblock: 'childBlockClass',\n` +
                 `//\t\t\tclass: ['childClass'],\n` +
@@ -92,6 +93,7 @@ export function createEJSFile({ejsDir, blockType, componentName, fs}: {
                 `//\t\t\tdataAttribute: ['customDataAttributes'], \n` +
                 `//\t\t},\n` +
                 `//\t\twrapper: {\n` +
+                `//\t\t\tcomponent: '${componentName}',\n` +
                 `//\t\t\tparent: 'wrapperParentClass',\n` +
                 `//\t\t\tblock: 'wrapperChildBlockClass',\n` +
                 `//\t\t\tclass: ['wrapperChildClass'],\n` +
@@ -99,7 +101,7 @@ export function createEJSFile({ejsDir, blockType, componentName, fs}: {
                 `//\t\t\ttag: 'div',\n` +
                 `//\t\t\tstyle: ['customStyle'],\n` +
                 `//\t\t\tdataAttribute: ['customDataAttributes'], \n` +
-                `//\t\t}\n` +
+                `//\t\t},\n` +
                 `//\t}\n` +
                 `//}) %>\n` +
                 `%>\n` +

@@ -6,100 +6,74 @@
     a, img {
         -webkit-user-drag: none;
     }
-    
-    .carousel {
-        &__list {
-            display: grid;
-            grid-auto-flow: column;
-            grid-auto-columns: 100%;
-            align-items: start;
-            will-change: transform;
-            touch-action: pan-y;
-            user-select: none;
 
-            @include transition(transform, height);
+    ul[data-fsc-carousel-list] {
+        display: grid;
+        grid-auto-flow: column;
+        grid-auto-columns: 100%;
+        align-items: start;
+        will-change: transform;
+        touch-action: pan-y;
+        user-select: none;
+
+        @include transition(transform, height);
+
+        &.dragging {
+            @include transition(height);
+        }
+
+        @media (pointer: fine) {
+            cursor: grab;
 
             &.dragging {
-                @include transition(height);
-            }
-
-            @media (pointer: fine) {
-                cursor: grab;
-
-                &.dragging {
-                    cursor: grabbing;
-                }
+                cursor: grabbing;
             }
         }
-
-        &__element {
-            min-width: 0;
-
-            img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                object-position: center;
-            }
-        }
-
-       
     }
 
-    .controls-carousel {
+    li[data-fsc-carousel-item] {
+        min-width: 0;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+    }
+
+    div[data-fsc-carousel-controls],
+    div[data-fsc-carousel-dots-div]  {
         pointer-events: none;
 
-        &__control {
+        button {
             pointer-events: all;
             cursor: pointer;
         }
     }
 
     .dots-carousel {
-        pointer-events: none;
+        &--bullet {
+            button {
+                @include rem(padding, 10px 5px);
+            }
+            span {
+                display: block;
+                opacity: .5;
+                
+                @include transition(background-color, opacity);
+            }
+            li {
+                display: flex;
+                justify-content: center;
+                align-items: center;
 
-        &__button {
-            pointer-events: all;
-            cursor: pointer;
+                &.active {
+                    span {
+                        opacity: 1;
+                    }
+                }
+            }
         }
     }
-
-    // .dots-carousel {
-    //     &__list {
-    //         display: flex;
-    //         flex-flow: row nowrap;
-    //         align-items: center;
-    //         justify-content: center;
-    //     }
-    //     &__button {
-    //         cursor: pointer;
-    //         @include rem(padding, 10px 5px);
-    //     }
-    //     &__dot {
-    //         display: block;
-    //         border-radius: 100%;
-    //         background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background_default));
-    //         opacity: .5;
-
-    //         @include transition(background-color, opacity);
-    //         @include rem((
-    //             width: 10px,
-    //             height: 10px
-    //         ));
-    //     }
-    //     &__element {
-    //         display: flex;
-    //         justify-content: center;
-    //         align-items: center;
-
-    //         &.active {
-    //             .dots-slider {
-    //                 &__dot {
-    //                     opacity: 1;
-    //                     background-color: if(map.get($SETTINGS, theme), getThemeTag(primary-background-color), map.get($COLORS, background_default));
-    //                 }
-    //             }
-    //         }
-    //     }
-    // }
 }

@@ -130,14 +130,31 @@ function renderTimer(carousel: CarouselElementInterface) {
     element.innerHTML = carousel.timerSeconds!.toString()
 }
 
-export function calculateCarouselProps(carouselList: HTMLElement) {
-    const
-        childrens = carouselList.querySelectorAll('[data-fsc-carousel-item]')
+export function calculateCarouselProps(childrens: HTMLElement[]) {
+    const length = childrens.length
 
-    const
-        length: number = childrens.length,
-        offset: number = childrens[0].getBoundingClientRect().width,
-        dimention: number = offset * length
+    if (!length) {
+        return {
+            length: 0,
+            offset: 0,
+            dimention: 0
+        }
+    }
+
+    const first = childrens[0]
+
+    let offset = first.getBoundingClientRect().width
+
+    if (childrens.length > 1) {
+        const firstRect = first.getBoundingClientRect()
+        const secondRect = childrens[1].getBoundingClientRect()
+
+        // Расстояние от начала первого элемента
+        // до начала второго учитывает width + gap + margin
+        offset = secondRect.left - firstRect.left
+    }
+
+    const dimention = offset * length
 
     return { length, offset, dimention }
 }
