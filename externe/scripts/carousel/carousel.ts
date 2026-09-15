@@ -8,6 +8,11 @@
  * - data-fsc-carousel-interval           — тик смены слайдера
  * - data-fsc-carousel-allow-disabled     — выключить кнопку, если дальше нет доступного слайдера (default: перейти на первый слайд)
  * - data-fsc-carousel-allow-draggable    — разрешить перетаскивание слайдов (default: нет)
+ *  
+ * Интерактивные HTML элементы `data-fsc-carousel-*`:
+ * - data-fsc-carousel-html-interval-label                    — инициализирует элемент как карусель
+ * - data-fsc-carousel-html-interval-svg                    — инициализирует элемент как карусель
+ * - data-fsc-carousel-html-counter                    — инициализирует элемент как карусель
  */
 
 import { carouselDotPointerClick, carouselLeftPointerClick, carouselObserver, carouselRightPointerClick, carouselOnResize, carouselDragEventPointerClick, carouselDragEventPointerMove, carouselDragEventPointerUp } from "./utils/events.js";

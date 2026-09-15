@@ -123,13 +123,16 @@
 		this: {
 			parent: 'hero',
 			dataAttribute: [
-				'data-fsc-carousel-interval=77777777',
+				'data-fsc-carousel-interval=15000',
 				'data-fsc-carousel-allow-disabled',
 				'data-fsc-carousel-allow-draggable',
 			]
 		},
 		list: carouselElements,
 		buttons: carouselButtons,
-		dot: carouselDot
+		dot: carouselDot,
+		counters: {
+			interval: 'disabled',
+		}
 	}
 }) %>

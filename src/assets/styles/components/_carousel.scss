@@ -87,12 +87,17 @@
             justify-content: center;
         }
 
-        &__counter {
+        &__counters {
             position: absolute;
             display: flex;
             flex-flow: row wrap;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-end;
+
+            svg {
+                width: 100%;
+                height: 100%;
+            }
 
             @include fluid((
                 left: 98px 10px,
@@ -100,6 +105,27 @@
                 top: 162px 70px,
                 gap: 16px 8px
             ));
+        }
+
+        &__interval {
+            position: relative;
+            aspect-ratio: 1;
+
+            @include fluid(width, 60px 45px);
+
+            span {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+
+                display: flex;
+                justify-content: center;
+                align-items: center;
+
+                @include fluid(font-size, 16 12);
+            }
         }
 
         @include media(tablet) {

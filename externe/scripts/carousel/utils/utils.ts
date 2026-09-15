@@ -6,30 +6,31 @@ export function animate(carousel: CarouselElementInterface) {
         return
     }
 
-    if(!carousel.timerNext) {
-        carousel.timerNext = Date.now() + carousel.timerInterval
+    if(!carousel.intervalNext) {
+        carousel.intervalNext = Date.now() + carousel.intervalMs
     }
 
     const now = Date.now()
 
-    let remaining = carousel.timerNext - now
+    let remaining = carousel.intervalNext - now
 
     const seconds = Math.max(0, Math.ceil(remaining / 1000))
 
     if(remaining <= 0) {
         step(carousel)
 
-        carousel.timerNext = now + carousel.timerInterval
-        remaining = carousel.timerNext - Date.now()
+        carousel.intervalNext = now + carousel.intervalMs
+        remaining = carousel.intervalNext - Date.now()
+    } else if(seconds !== carousel.intervalSeconds) {
+        carousel.intervalSeconds = seconds
 
-    } else if(seconds !== carousel.timerSeconds) {
-        carousel.timerSeconds = seconds
-        
-        renderTimer(carousel)
+        renderInterval(carousel)
+        renderSVGInterval(carousel)
     } 
 
     carousel.animationID = requestAnimationFrame(() => animate(carousel))
 }
+
 export function step(carousel: CarouselElementInterface) {
     if(carousel.direction == 'left') {
         if(carousel.index < carousel.length - 1) {
@@ -56,8 +57,8 @@ export function step(carousel: CarouselElementInterface) {
 
     if(carousel.direction !== carousel.originalDirection) carousel.direction = carousel.originalDirection
 
-    toggleDotActive(carousel)
     renderCounter(carousel)
+    toggleDotActive(carousel)
     toggleButtonDisabled(carousel)
 
     carousel.carouselList.style.transform = `translate3d(${carousel.position}px, 0, 0)`
@@ -89,45 +90,46 @@ export function toggleButtonDisabled(carousel: CarouselElementInterface) {
     if(!carousel.isDisabledAllowed) return
 
     if(carousel.index === 0 && carousel.length === 1) {
-        carousel.buttonLeft?.setAttribute('disabled', '')
-        carousel.buttonRight?.setAttribute('disabled', '')
-    } else if(carousel.index === 0 && carousel.buttonLeft) {
-        carousel.buttonLeft.setAttribute('disabled', '')
+        carousel.HTMLButtonLeft?.setAttribute('disabled', '')
+        carousel.HTMLButtonRight?.setAttribute('disabled', '')
+    } else if(carousel.index === 0 && carousel.HTMLButtonLeft) {
+        carousel.HTMLButtonLeft.setAttribute('disabled', '')
 
-        if(carousel.buttonRight && carousel.buttonRight.hasAttribute('disabled'))
-            carousel.buttonRight.removeAttribute('disabled')
-    } else if(carousel.index === carousel.length - 1 && carousel.buttonRight) {
-        carousel.buttonRight.setAttribute('disabled', '')
+        if(carousel.HTMLButtonRight && carousel.HTMLButtonRight.hasAttribute('disabled'))
+            carousel.HTMLButtonRight.removeAttribute('disabled')
+    } else if(carousel.index === carousel.length - 1 && carousel.HTMLButtonRight) {
+        carousel.HTMLButtonRight.setAttribute('disabled', '')
 
-        if(carousel.buttonLeft && carousel.buttonLeft.hasAttribute('disabled'))
-            carousel.buttonLeft.removeAttribute('disabled')
+        if(carousel.HTMLButtonLeft && carousel.HTMLButtonLeft.hasAttribute('disabled'))
+            carousel.HTMLButtonLeft.removeAttribute('disabled')
     } else {
-        if(carousel.buttonLeft && carousel.buttonLeft.hasAttribute('disabled'))
-            carousel.buttonLeft.removeAttribute('disabled')
-        if(carousel.buttonRight && carousel.buttonRight.hasAttribute('disabled'))
-            carousel.buttonRight.removeAttribute('disabled')
+        if(carousel.HTMLButtonLeft && carousel.HTMLButtonLeft.hasAttribute('disabled'))
+            carousel.HTMLButtonLeft.removeAttribute('disabled')
+        if(carousel.HTMLButtonRight && carousel.HTMLButtonRight.hasAttribute('disabled'))
+            carousel.HTMLButtonRight.removeAttribute('disabled')
     }
 }
 
 export function renderCounter(carousel: CarouselElementInterface) {
-    const
-        element = carousel.carousel.querySelector('[data-fsc-carousel-counter]')
-   
-    if(!element) return
+    if(!carousel.HTMLCounter) return
 
-    const
-        slides = carousel.carouselList.children
+    const slides = carousel.carouselList.children
 
-    element.innerHTML = `${carousel.index + 1} / ${slides.length}`
+    carousel.HTMLCounter.innerHTML = `${carousel.index + 1} / ${slides.length}`
 }
 
-function renderTimer(carousel: CarouselElementInterface) {
-    const
-        element = carousel.carousel.querySelector('[data-fsc-carousel-timer]')
-   
-    if(!element) return
+function renderInterval(carousel: CarouselElementInterface) {
+    if(!carousel.HTMLInterval) return
 
-    element.innerHTML = carousel.timerSeconds!.toString()
+    carousel.HTMLInterval.innerHTML = carousel.intervalSeconds!.toString()
+}
+
+function renderSVGInterval(carousel: CarouselElementInterface) {
+    if(!carousel.HTMLSVGInterval) return
+
+    const progress = carousel.intervalSeconds! / (carousel.intervalMs / 1000)
+
+    carousel.HTMLSVGInterval.style.strokeDashoffset = `${carousel.intervalSVGLength * (1 - progress)}`
 }
 
 export function calculateCarouselProps(childrens: HTMLElement[]) {

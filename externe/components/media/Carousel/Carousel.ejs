@@ -2,27 +2,31 @@
 // Пример вызова в шаблоне (EJS):
 //
 // <\%- include('externe/components/media/Carousel/Carousel.ejs', { 
-//	carousel_component: {
-//		this: {
-//			parent: 'parentClass',
-//			block: 'childBlockClass',
-//			class: ['childClass'],
-//			id: ['childID'],
-//			tag: 'div',
-//			style: ['customStyle'],
-//			dataAttribute: ['customDataAttributes'], 
-//		},
-//		list: [
-//			{image_component: {}, content: {}}
-//		],
-//		buttons: {
-//		  left: 'HTMLButton',
-//		  right: 'HTMLButton',
-//		},
-//		dot: 'HTMLDot' | 'disabled',
-//		counter: 'disabled',
-//	}
-//}) %>
+// 	carousel_component: {
+// 		this: {
+// 			parent: 'parentClass',
+// 			block: 'childBlockClass',
+// 			class: ['childClass'],
+// 			id: ['childID'],
+// 			tag: 'div',
+// 			style: ['customStyle'],
+// 			dataAttribute: ['customDataAttributes'], 
+// 		},
+// 		list: [
+// 			{image_component: {}, content: {}}
+// 		],
+// 		buttons: {
+// 		  left: 'HTMLButton',
+// 		  right: 'HTMLButton',
+// 		},
+// 		dot: 'HTMLDot' | 'disabled',
+// 		counters: {
+// 		  interval: 'disabled',
+// 		  intervalSVG: 'disabled',
+// 		  counter: 'disabled',
+// 		}
+// 	}
+// }) %>
 %>
 <%
 	if(
@@ -38,10 +42,21 @@
 
     isContent = carousel_component.list.length > 1
 
-    isCounterDisabled = false
+    isIntervalDisabled = false
+    isIntervalSVGDisabled = false
+    isIntervalCounterDisabled = false
 
-    if(typeof carousel_component.counter !== 'undefined' && carousel_component.counter) {
-        carousel_component.counter === 'disabled' ? isCounterDisabled = true : isCounterDisabled = false
+    if(typeof carousel_component.counters !== 'undefined' && carousel_component.counters) {
+        if(typeof carousel_component.counters.interval !== 'undefined' && carousel_component.counters.interval) {
+            carousel_component.counters.interval === 'disabled' ? isIntervalDisabled = true : isIntervalDisabled = false
+        }
+        if(typeof carousel_component.counters.intervalSVG !== 'undefined' && carousel_component.counters.intervalSVG) {
+            carousel_component.counters.intervalSVG === 'disabled' ? isIntervalSVGDisabled = true : isIntervalSVGDisabled = false
+        }
+        if(typeof carousel_component.counters.counter !== 'undefined' && carousel_component.counters.counter) {
+            carousel_component.counters.counter === 'disabled' ? isIntervalCounterDisabled = true : isIntervalCounterDisabled = false
+        }
+        
     }
 
     isDotDisabled = false
@@ -128,11 +143,45 @@
                 </ul>
             </div>
         <% } %>
-		
-        <% if(!isCounterDisabled && isContent) { %>
-            <div class="<%=blockClass%>__counter">
-                <span data-fsc-carousel-timer></span>
-                <span data-fsc-carousel-counter></span>
+        
+        <% if(isContent) { %>
+            <div class="<%=blockClass%>__counters">
+                <% if(!isIntervalDisabled) { %>
+                    <span data-fsc-carousel-html-interval-label></span>
+                <% } %>
+                <div class="<%=blockClass%>__interval">
+                    <% if(!isIntervalSVGDisabled) { %>
+                        <svg viewBox="0 0 40 40">
+                            <!-- BACKGROUND -->
+                            <circle
+                                class="<%=blockClass%>__svg-background"
+                                cx="20"
+                                cy="20"
+                                r="17"
+                                fill="none"
+                                stroke="gray"
+                                stroke-width="3"
+                            />
+
+                            <!-- MAIN / PROGRESS -->
+                            <circle
+                                class="<%=blockClass%>__svg-foreground"
+                                data-fsc-carousel-html-interval-svg
+                                cx="20"
+                                cy="20"
+                                r="17"
+                                fill="none"
+                                stroke="black"
+                                stroke-width="3"
+                                stroke-linecap="round"
+                                transform="rotate(-90 20 20)"
+                            />
+                        </svg>
+                    <% } %>
+                    <% if(!isIntervalCounterDisabled) { %>
+                        <span data-fsc-carousel-html-counter></span>
+                    <% } %>
+                </div>
             </div>
         <% } %>
 		

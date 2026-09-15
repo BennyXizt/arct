@@ -12,6 +12,7 @@ export interface CarouselElementInterface {
     position: number
     index: number
     step: number | undefined
+    HTMLCounter: HTMLElement | null
     
     // intersection
     visible: boolean
@@ -24,13 +25,16 @@ export interface CarouselElementInterface {
     draggingMoveX: number | undefined
     draggingIsMoved: boolean
 
-    // timer
-    timerInterval: number
-    timerNext: number | undefined
-    timerSeconds: number | undefined
+    // interval
+    intervalMs: number
+    intervalNext: number | undefined
+    intervalSeconds: number | undefined
+    intervalSVGLength: number
+    HTMLInterval: HTMLElement | null
+    HTMLSVGInterval: SVGCircleElement | null
 
     // disabled
     isDisabledAllowed: boolean
-    buttonLeft: HTMLElement | null
-    buttonRight: HTMLElement | null
+    HTMLButtonLeft: HTMLElement | null
+    HTMLButtonRight: HTMLElement | null
 }

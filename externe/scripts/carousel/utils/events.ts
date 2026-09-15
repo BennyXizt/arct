@@ -14,24 +14,36 @@ export function carouselAutoload() {
         if (!carouselList || carouselList.getAttribute('data-fsc-carousel-initialized')) continue
 
         const
-            pureDirection = carousel.getAttribute('data-fsc-carousel-direction'),
-            pureInterval = carousel.getAttribute('data-fsc-carousel-interval'),
-            pureIsDisabledAllowed = carousel.getAttribute('data-fsc-carousel-allow-disabled'),
-            pureIsDraggableAllowed = carousel.getAttribute('data-fsc-carousel-allow-draggable'),
-            buttonLeft = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-left]'),
-            buttonRight = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-right]')
+            HTMLButtonLeft = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-left]'),
+            HTMLButtonRight = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-right]'),
+            HTMLInterval = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-interval-label]'),
+            HTMLSVGInterval = carousel.querySelector<SVGCircleElement>('[data-fsc-carousel-html-interval-svg]'),
+            HTMLCounter = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-counter]')
 
         const
-            formattedDirection: Direction = 
-                isDirection(pureDirection) ? pureDirection : 'left',
-            formattedInterval: number = pureInterval ? Number.parseInt(pureInterval) : 3000,
-            formattedIsDisabledAllowed = 
-                pureIsDisabledAllowed === 'true' || pureIsDisabledAllowed === ''
+            directionAttr = carousel.getAttribute('data-fsc-carousel-direction'),
+            intervalAttr = carousel.getAttribute('data-fsc-carousel-interval'),
+            isDisabledAllowedAttr = carousel.getAttribute('data-fsc-carousel-allow-disabled'),
+            isDraggableAllowedAttr = carousel.getAttribute('data-fsc-carousel-allow-draggable')
+
+        const
+            direction: Direction = 
+                isDirection(directionAttr) ? directionAttr : 'left',
+            intervalMs: number = intervalAttr ? Number.parseInt(intervalAttr) : 3000,
+            isDisabledAllowed = 
+                isDisabledAllowedAttr === 'true' || isDisabledAllowedAttr === ''
                     ? true : false,
-            formattedIsDraggableAllowed = 
-                pureIsDraggableAllowed === 'true' || pureIsDraggableAllowed === ''
-                    ? true : false
+            isDraggableAllowed = 
+                isDraggableAllowedAttr === 'true' || isDraggableAllowedAttr === ''
+                    ? true : false,
+            intervalSVGLength = HTMLSVGInterval
+                ? 2 * Math.PI * HTMLSVGInterval.r.baseVal.value
+                : 0
                     
+        if(HTMLSVGInterval) {
+            HTMLSVGInterval.style.strokeDasharray = `${intervalSVGLength}`
+        }
+
         const childrens = Array.from(
             carouselList.querySelectorAll<HTMLElement>('[data-fsc-carousel-item]')
         )
@@ -44,36 +56,40 @@ export function carouselAutoload() {
                 carousel,
                 carouselList,
                 childrens,
-                originalDirection: formattedDirection,
-                direction: formattedDirection, 
+                originalDirection: direction,
+                direction, 
                 dimention, 
                 offset, 
                 length, 
                 position: 0, 
                 index: 0, 
                 step: undefined, 
+                HTMLCounter,
 
                 // intersection
                 visible: false, 
                 animationID: undefined,
 
                 // drag
-                isDraggableAllowed: formattedIsDraggableAllowed, 
+                isDraggableAllowed, 
                 isDragging: false,
                 draggingStartX: undefined,
                 draggingMoveXPlusPointer: undefined,
                 draggingMoveX: undefined,
                 draggingIsMoved: false,
 
-                // timer
-                timerInterval: formattedInterval, 
-                timerNext: undefined, 
-                timerSeconds: undefined, 
+                // interval
+                intervalMs, 
+                intervalNext: undefined, 
+                intervalSeconds: undefined, 
+                intervalSVGLength,
+                HTMLInterval,
+                HTMLSVGInterval,
 
                 // disabled
-                isDisabledAllowed: formattedIsDisabledAllowed, 
-                buttonLeft, 
-                buttonRight, 
+                isDisabledAllowed, 
+                HTMLButtonLeft, 
+                HTMLButtonRight, 
             }
 
         carouselElements.push(carouselElement)
@@ -108,7 +124,7 @@ export function carouselLeftPointerClick(element: HTMLElement) {
 
     if(!carousel) return
     
-    carousel.timerNext = Date.now() + carousel.timerInterval
+    carousel.intervalNext = Date.now() + carousel.intervalMs
     carousel.direction = 'right'
     step(carousel)
 }
@@ -124,7 +140,7 @@ export function carouselRightPointerClick(element: HTMLElement) {
 
     if(!carousel) return
     
-    carousel.timerNext = Date.now() + carousel.timerInterval
+    carousel.intervalNext = Date.now() + carousel.intervalMs
     carousel.direction = 'left'
     step(carousel)
 }
@@ -140,7 +156,7 @@ export function carouselDotPointerClick(element: HTMLElement) {
 
     if(!carousel) return
     
-    carousel.timerNext = Date.now() + carousel.timerInterval
+    carousel.intervalNext = Date.now() + carousel.intervalMs
     carousel.direction = 'step'
     carousel.step = offset
     step(carousel)
@@ -217,7 +233,7 @@ export function carouselDragEventPointerUp(event: PointerEvent) {
             carousel.index -= 1
         }
         else {
-            carousel.timerNext = Date.now() + carousel.timerInterval
+            carousel.intervalNext = Date.now() + carousel.intervalMs
 
             if(carousel.draggingMoveX > 0) {
                 carousel.direction = 'right'
