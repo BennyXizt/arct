@@ -17,16 +17,18 @@ export function animate(carousel: CarouselElementInterface) {
     const seconds = Math.max(0, Math.ceil(remaining / 1000))
 
     if(remaining <= 0) {
-        step(carousel)
-
         carousel.intervalNext = now + carousel.intervalMs
         remaining = carousel.intervalNext - Date.now()
+
+        step(carousel)
     } else if(seconds !== carousel.intervalSeconds) {
         carousel.intervalSeconds = seconds
 
         renderInterval(carousel)
-        renderSVGInterval(carousel)
     } 
+
+    renderBullet(carousel, remaining)
+    renderSVGInterval(carousel)
 
     carousel.animationID = requestAnimationFrame(() => animate(carousel))
 }
@@ -65,24 +67,26 @@ export function step(carousel: CarouselElementInterface) {
 }
 
 export function toggleDotActive(carousel: CarouselElementInterface) {
+    if(!carousel.HTMLBulletList) return
+
     const 
         slides = carousel.carouselList.children,
         slide = Array.from(slides)[carousel.index] as HTMLElement,
-        dotsHTML = carousel.carousel.querySelector('[data-fsc-carousel-dots]')
+        dots = carousel.HTMLBulletList.children,
+        dot = Array.from(dots)[carousel.index],
+        bullet = dot.querySelector<HTMLElement>('[data-fsc-carousel-html-bullet]'),
+        bullets = carousel.HTMLBulletList.querySelectorAll<HTMLElement>('[data-fsc-carousel-html-bullet]')
 
-    if(!dotsHTML) return
-        
-    const
-        dots = dotsHTML.children,
-        dot = Array.from(dots)[carousel.index]
-
-    for (var item of [...slides, ...dots]) {
+    for (var item of [...slides, ...dots, ...bullets]) {
         item.classList.remove('active')
+        item.removeAttribute('style')
     }
-
+    
     slide.classList.toggle('active')
     dot.classList.toggle('active')
 
+    carousel.HTMLBullet = bullet
+    
     carousel.carouselList.style.height = `${slide.offsetHeight}px`
 }
 
@@ -124,6 +128,24 @@ function renderInterval(carousel: CarouselElementInterface) {
     carousel.HTMLInterval.innerHTML = carousel.intervalSeconds!.toString()
 }
 
+function renderBullet(carousel: CarouselElementInterface, remaining: number) {
+    if(!carousel.HTMLBullet) return
+
+    const minScale =
+        carousel.intervalBulletWidth / carousel.HTMLBullet.clientWidth
+
+    const progress = Math.max(
+        0,
+        Math.min(1, remaining / carousel.intervalMs)
+    )
+
+    const scale =
+        minScale + (1 - minScale) * progress
+
+    
+    carousel.HTMLBullet.style.transform = `scaleX(${scale})`
+}
+
 function renderSVGInterval(carousel: CarouselElementInterface) {
     if(!carousel.HTMLSVGInterval) return
 
@@ -139,7 +161,7 @@ export function calculateCarouselProps(childrens: HTMLElement[]) {
         return {
             length: 0,
             offset: 0,
-            dimention: 0
+            dimension: 0
         }
     }
 
@@ -156,7 +178,7 @@ export function calculateCarouselProps(childrens: HTMLElement[]) {
         offset = secondRect.left - firstRect.left
     }
 
-    const dimention = offset * length
+    const dimension = offset * length
 
-    return { length, offset, dimention }
+    return { length, offset, dimension }
 }

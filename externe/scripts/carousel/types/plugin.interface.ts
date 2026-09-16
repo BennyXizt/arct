@@ -6,7 +6,7 @@ export interface CarouselElementInterface {
     childrens: HTMLElement[]
     originalDirection: string
     direction: string
-    dimention: number
+    dimension: number
     offset: number
     length: number
     position: number
@@ -30,8 +30,11 @@ export interface CarouselElementInterface {
     intervalNext: number | undefined
     intervalSeconds: number | undefined
     intervalSVGLength: number
+    intervalBulletWidth: number
     HTMLInterval: HTMLElement | null
     HTMLSVGInterval: SVGCircleElement | null
+    HTMLBullet: HTMLElement | null
+    HTMLBulletList: HTMLElement | null
 
     // disabled
     isDisabledAllowed: boolean

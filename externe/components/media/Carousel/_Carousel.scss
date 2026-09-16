@@ -43,7 +43,7 @@
     }
 
     div[data-fsc-carousel-controls],
-    div[data-fsc-carousel-dots-div]  {
+    div[data-fsc-carousel-dots]  {
         pointer-events: none;
 
         button {
@@ -54,23 +54,40 @@
 
     .dots-carousel {
         &--bullet {
-            button {
+            button[class*='__button'] {
                 @include rem(padding, 10px 5px);
             }
-            span {
+
+            span[class*='__dot'] {
                 display: block;
                 opacity: .5;
                 
                 @include transition(background-color, opacity);
             }
+
+            div[class*='__wrapper'] {
+                position: relative;
+
+                &::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+
             li {
                 display: flex;
                 justify-content: center;
                 align-items: center;
 
                 &.active {
+                    
                     span {
                         opacity: 1;
+                        transform-origin: left center;
                     }
                 }
             }

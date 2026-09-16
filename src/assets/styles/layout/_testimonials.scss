@@ -103,12 +103,19 @@
             align-items: center;
         }
 
+        &__wrapper {
+            background-color: map.get($COLORS, gray_lite_5);
+        }
+
         &__element {
             &.active {
                 .dots-carousel-testimonials {
                     &__dot {
                         background-color: getThemeTag(accent-text-color);
+
+                        @include rem(width, 80px);
                     }
+                    
                 }
             }
         }

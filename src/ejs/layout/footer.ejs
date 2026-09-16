@@ -1,5 +1,28 @@
  <footer class="footer">
-    <div class="footer__container _container">
-    
+    <div class="footer__container container">
+         <%- include('externe/components/content/Marquee/Marquee.ejs', {
+            marquee_component: {
+               this: {
+                        parent: 'parentClass',
+                        class: ['childClass'],
+                        tag: 'div',
+                        style: ['customStyle'],
+                        dataAttribute: ['customDataAttributes'] 
+                     },
+               images: [
+                     {
+                     src: 'src',
+                     alt: 'alt',
+                     width: 600,
+                     height: 400,
+                     loading: 'lazy',
+                     decoding: 'async'
+                     }
+               ],
+               data: [
+                     'someText'
+               ]
+            }
+         }) %>
     </div>
  </footer>

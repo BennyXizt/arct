@@ -10,9 +10,10 @@
  * - data-fsc-carousel-allow-draggable    — разрешить перетаскивание слайдов (default: нет)
  *  
  * Интерактивные HTML элементы `data-fsc-carousel-*`:
- * - data-fsc-carousel-html-interval-label                    — инициализирует элемент как карусель
- * - data-fsc-carousel-html-interval-svg                    — инициализирует элемент как карусель
- * - data-fsc-carousel-html-counter                    — инициализирует элемент как карусель
+ * - data-fsc-carousel-html-interval-label — счетчик конца времени до переключения слайда
+ * - data-fsc-carousel-html-interval-svg   — круг конца времени до переключения слайда
+ * - data-fsc-carousel-html-counter        — текущий слайд / кол-во слайдов
+ * - data-fsc-carousel-html-bullet         — интерактивный bullet
  */
 
 import { carouselDotPointerClick, carouselLeftPointerClick, carouselObserver, carouselRightPointerClick, carouselOnResize, carouselDragEventPointerClick, carouselDragEventPointerMove, carouselDragEventPointerUp } from "./utils/events.js";

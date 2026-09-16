@@ -123,8 +123,8 @@
         <% } %>
 
         <% if(!isDotDisabled && isContent) { %>
-            <div class="<%=blockClass%>__dots <%=dotBlockClass%> <%=dotBlockClassModificator%>" data-fsc-carousel-dots-div>
-                <ul class="<%=dotBlockClass%>__list" data-fsc-carousel-dots>
+            <div class="<%=blockClass%>__dots <%=dotBlockClass%> <%=dotBlockClassModificator%>" data-fsc-carousel-dots>
+                <ul class="<%=dotBlockClass%>__list">
                     <% for (var i = 0; i < carousel_component.list.length; i++) { %>
                         <li class="<%=dotBlockClass%>__element" data-fsc-carousel-dot>
                             <button class="<%=dotBlockClass%>__button">
@@ -133,7 +133,9 @@
                                         <%= i + 1%>
                                     </span>
                                 <% } else if(dotType === 'bullet') { %>
-                                    <span class="<%=dotBlockClass%>__dot"></span>
+                                    <div class="<%=dotBlockClass%>__wrapper">
+                                        <span class="<%=dotBlockClass%>__dot" data-fsc-carousel-html-bullet></span>
+                                    </div>
                                 <% } else { %>
                                     <%- carousel_component.dot%>
                                 <% } %>

@@ -10,30 +10,30 @@
 //   4. Каждый <li class="marquee__item"> содержит один компонент <Image> с переданными параметрами
   
 //   Пример использования компонента:
-//   <\%- include('externe/components/marquee/marquee.ejs', {
-//        marquee_component: {
-//            this: {
-//			    parent: 'parentClass',
-//			    class: ['childClass'],
-//			    tag: 'div',
-//			    style: ['customStyle'],
-//			    dataAttribute: ['customDataAttributes'] 
-//		      }
-//            images: [
-//              {
-//                src: 'src',
-//                alt: 'alt',
-//                width: 600,
-//                height: 400,
-//                loading: 'lazy',
-//                decoding: 'async'
-//              }
-//            ],
-//            data: [
-//              'someText'
-//            ]
-//        }
-//    }) %>
+// <\%- include('externe/components/content/Marquee/Marquee.ejs', {
+//     marquee_component: {
+//         this: {
+//                 parent: 'parentClass',
+//                 class: ['childClass'],
+//                 tag: 'div',
+//                 style: ['customStyle'],
+//                 dataAttribute: ['customDataAttributes'] 
+//             },
+//         images: [
+//             {
+//             src: 'src',
+//             alt: 'alt',
+//             width: 600,
+//             height: 400,
+//             loading: 'lazy',
+//             decoding: 'async'
+//             }
+//         ],
+//         data: [
+//             'someText'
+//         ]
+//     }
+// }) %>
 %>
 
 <% 
@@ -109,7 +109,7 @@
         <% if(typeof marqueeImages !== 'undefined' && marqueeImages) { %>
             <% for(const image of marqueeImages) { %>
                 <li class="marquee__item" data-fsc-marquee-item>
-                    <%- include('../Image/Image.ejs', {
+                    <%- include('../../media/Image/Image.ejs', {
                         image_component: {
                             block: 'marquee',
                             img: image

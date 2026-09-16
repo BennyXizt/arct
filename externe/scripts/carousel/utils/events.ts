@@ -18,7 +18,9 @@ export function carouselAutoload() {
             HTMLButtonRight = carousel.querySelector<HTMLElement>('[data-fsc-carousel-button-right]'),
             HTMLInterval = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-interval-label]'),
             HTMLSVGInterval = carousel.querySelector<SVGCircleElement>('[data-fsc-carousel-html-interval-svg]'),
-            HTMLCounter = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-counter]')
+            HTMLCounter = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-counter]'),
+            HTMLBullet = carousel.querySelector<HTMLElement>('[data-fsc-carousel-html-bullet]'),
+            HTMLBulletList = carousel.querySelector<HTMLElement>('[data-fsc-carousel-dots] ul')
 
         const
             directionAttr = carousel.getAttribute('data-fsc-carousel-direction'),
@@ -39,7 +41,9 @@ export function carouselAutoload() {
             intervalSVGLength = HTMLSVGInterval
                 ? 2 * Math.PI * HTMLSVGInterval.r.baseVal.value
                 : 0
-                    
+         
+        const intervalBulletWidth = HTMLBullet?.clientWidth ?? 0
+            
         if(HTMLSVGInterval) {
             HTMLSVGInterval.style.strokeDasharray = `${intervalSVGLength}`
         }
@@ -48,7 +52,7 @@ export function carouselAutoload() {
             carouselList.querySelectorAll<HTMLElement>('[data-fsc-carousel-item]')
         )
 
-        const { dimention, offset, length } = calculateCarouselProps(childrens)
+        const { dimension, offset, length } = calculateCarouselProps(childrens)
 
         const carouselElement = 
             {
@@ -58,7 +62,7 @@ export function carouselAutoload() {
                 childrens,
                 originalDirection: direction,
                 direction, 
-                dimention, 
+                dimension, 
                 offset, 
                 length, 
                 position: 0, 
@@ -83,8 +87,11 @@ export function carouselAutoload() {
                 intervalNext: undefined, 
                 intervalSeconds: undefined, 
                 intervalSVGLength,
+                intervalBulletWidth,
                 HTMLInterval,
                 HTMLSVGInterval,
+                HTMLBullet,
+                HTMLBulletList,
 
                 // disabled
                 isDisabledAllowed, 
@@ -108,7 +115,16 @@ export function carouselObserver(entry: IntersectionObserverEntry, _: Intersecti
 
     carousel.visible = entry.isIntersecting 
 
-    if (carousel.visible && !carousel.animationID) {
+    if (!carousel.visible) {
+        if (carousel.animationID !== undefined) {
+            cancelAnimationFrame(carousel.animationID)
+            carousel.animationID = undefined
+        }
+
+        return
+    }
+
+    if (carousel.visible && carousel.animationID === undefined) {
         animate(carousel)
     }
 }
@@ -167,13 +183,15 @@ export function carouselOnResize(observer: ResizeObserverEntry) {
     
     if(!carousel) return
 
-    const { dimention, offset } = calculateCarouselProps(carousel.childrens)
+    const { dimension, offset } = calculateCarouselProps(carousel.childrens)
 
-    carousel.dimention = dimention
+    carousel.dimension = dimension
     carousel.offset = offset
-    carousel.index -= 1
+    
+    carousel.position = -carousel.index * carousel.offset
 
-    step(carousel)
+    carousel.carouselList.style.transform =
+        `translate3d(${carousel.position}px, 0, 0)`
 }
 
 export function carouselDragEventPointerClick(element: HTMLElement, event: PointerEvent) {
