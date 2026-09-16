@@ -1,28 +1,23 @@
  <footer class="footer">
     <div class="footer__container container">
-         <%- include('externe/components/content/Marquee/Marquee.ejs', {
-            marquee_component: {
-               this: {
-                        parent: 'parentClass',
-                        class: ['childClass'],
-                        tag: 'div',
-                        style: ['customStyle'],
-                        dataAttribute: ['customDataAttributes'] 
-                     },
-               images: [
-                     {
-                     src: 'src',
-                     alt: 'alt',
-                     width: 600,
-                     height: 400,
-                     loading: 'lazy',
-                     decoding: 'async'
-                     }
-               ],
-               data: [
-                     'someText'
-               ]
-            }
-         }) %>
+         <div class="footer__container-inner container-inner">
+            <%- include('externe/components/content/Marquee/Marquee.ejs', {
+               marquee_component: {
+                  this: {
+                     class: 'footer__copyright',
+                     component: 'copyright-footer',
+                     dataAttribute: [
+                        // 'data-fsc-marquee-pause',
+                        // 'data-fsc-marquee-direction=right',
+                     ]
+                  },
+                  type: 'double',
+                  content: [
+                     '<p>© 2021 TemplatesJungle. All rights reserved.</p>',
+                     '<div>Designed <a href="https://templatesjungle.com/">by TemplatesJungle</a></div>',
+                  ],
+               }
+            }) %>
+         </div>
     </div>
  </footer>

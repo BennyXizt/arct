@@ -4,6 +4,7 @@
 // <\%- include('externe/components/media/Carousel/Carousel.ejs', { 
 // 	carousel_component: {
 // 		this: {
+// 			componentName: 'component',
 // 			parent: 'parentClass',
 // 			block: 'childBlockClass',
 // 			class: ['childClass'],
@@ -36,9 +37,12 @@
 		return
 	}
 
+    carousel_component.this = {
+        ...carousel_component.this,
+        tag: carousel_component.this?.tag ? carousel_component.this?.tag : 'article'
+    }
+
 	var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...carousel_component.this, componentName: 'carousel'})
-	
-	thisTag = 'article'
 
     isContent = carousel_component.list.length > 1
 

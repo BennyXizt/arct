@@ -1,9 +1,12 @@
 [data-fsc-marquee-carousel] {
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
-    animation: carousel_animate 60s linear infinite;
-    will-change: transform;
+    [data-fsc-marquee-list] {
+        width: max-content;
+        display: flex;
+        flex-flow: row nowrap;
+        align-items: center;
+        animation: carousel_animate 60s linear infinite;
+        will-change: transform;
+    }
 
     @keyframes carousel_animate {
         0% {
@@ -22,11 +25,18 @@
     overflow: hidden;
     mask-image: linear-gradient(to right, rgba(0, 0, 0, 0) 0%, rgb(0, 0, 0) 12.5%, rgb(0, 0, 0) 87.5%, rgba(0, 0, 0, 0) 100%);
 
-    .marquee {    
-        &__inner {
-            display: flex;
-            gap: 15px;
-            will-change: transform;
-        }
+    > [data-fsc-marquee-wrapper] {
+        display: flex;
+        width: max-content;
+        will-change: transform;
+    }
+
+    > [data-fsc-marquee-list] {
+        width: max-content;
+        will-change: transform;
+    }
+
+    [data-fsc-marquee-list] {
+        display: flex;
     }
 }

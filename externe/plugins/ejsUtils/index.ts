@@ -25,8 +25,7 @@ function setupEJSComponent(component: SetupComponent) {
 	} else if(typeof component.block !== 'undefined' && component.block) {
 		blockClass = component.block
 	}
-        
-
+	
 	let thisID = ''
 	if(typeof component.id !== 'undefined' && component.id) {
 		if(typeof component.id === 'string') 

@@ -28,7 +28,7 @@ export function animate(carousel: CarouselElementInterface) {
     } 
 
     renderBullet(carousel, remaining)
-    renderSVGInterval(carousel)
+    renderSVGInterval(carousel, remaining)
 
     carousel.animationID = requestAnimationFrame(() => animate(carousel))
 }
@@ -146,12 +146,16 @@ function renderBullet(carousel: CarouselElementInterface, remaining: number) {
     carousel.HTMLBullet.style.transform = `scaleX(${scale})`
 }
 
-function renderSVGInterval(carousel: CarouselElementInterface) {
+function renderSVGInterval(carousel: CarouselElementInterface, remaining: number) {
     if(!carousel.HTMLSVGInterval) return
 
-    const progress = carousel.intervalSeconds! / (carousel.intervalMs / 1000)
+    const progress = Math.max(
+        0,
+        Math.min(1, remaining / carousel.intervalMs)
+    )
 
-    carousel.HTMLSVGInterval.style.strokeDashoffset = `${carousel.intervalSVGLength * (1 - progress)}`
+    carousel.HTMLSVGInterval.style.strokeDashoffset =
+        `${carousel.intervalSVGLength * (1 - progress)}`
 }
 
 export function calculateCarouselProps(childrens: HTMLElement[]) {

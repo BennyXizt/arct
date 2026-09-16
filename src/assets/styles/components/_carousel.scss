@@ -123,8 +123,18 @@
                 display: flex;
                 justify-content: center;
                 align-items: center;
+                color: map.get($COLORS, gray);
 
                 @include fluid(font-size, 16 12);
+            }
+        }
+
+        &__svg {
+            &-background {
+                stroke: map.get($COLORS, gray_lite);
+            }
+            &-foreground {
+                stroke: getThemeTag(accent-text-color);
             }
         }
 

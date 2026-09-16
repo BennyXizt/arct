@@ -10,10 +10,14 @@
  * - data-fsc-marquee-direction — направление движения: 'left' или 'right' (по умолчанию 'left')
  * - data-fsc-marquee-start     — начальное смещение в px (по умолчанию 0)
  * - data-fsc-marquee-item      — отдельный элемент карусели
+ * - data-fsc-marquee-type      — тип копирования
+ *  - default (элементы копируются в одну ленту)
+ *  - double (создается еще одна лента)
+ * - data-fsc-marquee-pause     — не выполнять marquee
  */
 
-import { MarqueeElementInterface } from "./types/plugin.interface"
-import type { MarqueeDirection } from "./types/plugin.type"
+import type { MarqueeElementInterface } from "./types/plugin.interface.js"
+import { isDirection, type MarqueeType, type MarqueeDirection, isType } from "./types/plugin.type.js"
 
 const marqueeElements: MarqueeElementInterface[] = []
 
@@ -21,65 +25,110 @@ export function marqueeAutoload() {
     const marquees = document.querySelectorAll('[data-fsc-marquee]') as NodeListOf<HTMLElement>
 
     for (const marquee of marquees) {
+        const HTMLList = marquee.querySelector<HTMLElement>('[data-fsc-marquee-list]')
+
+        if (!HTMLList || marquee.getAttribute('data-fsc-marquee-initialized')) continue
+
+        const HTMLWrapper = marquee.querySelector<HTMLElement>('[data-fsc-marquee-wrapper]')
+
+        const
+            speedAttr = marquee.getAttribute('data-fsc-marquee-speed'),
+            directionAttr = marquee.getAttribute('data-fsc-marquee-direction'),
+            offsetAttr = marquee.getAttribute('data-fsc-marquee-start'),
+            typeAttr = marquee.getAttribute('data-fsc-marquee-type'),
+            isPaused = marquee.hasAttribute('data-fsc-marquee-pause')
+
+        const
+            speed = speedAttr ? Number.parseInt(speedAttr) : 1000,
+            direction: MarqueeDirection = isDirection(directionAttr) ? directionAttr : 'left',
+            offset = offsetAttr ? Number.parseInt(offsetAttr) : 0,
+            type: MarqueeType = isType(typeAttr) ? typeAttr : 'default'
+
+        const gap = Number.parseFloat(getComputedStyle(HTMLList).columnGap) || 0
+
+        const marqueeElement = {
+            marquee,
+            HTMLWrapper,
+            HTMLList,
+            type,
+            gap,
+            speed,
+            offset,
+            direction,
+            dimension: 0,
+            visible: false, 
+            animationID: undefined,
+        }
+
+        copyElements(marqueeElement)
+
+        marquee.setAttribute('data-fsc-marquee-initialized', 'true')
+
+        if(isPaused) continue
+
+        marqueeElements.push(marqueeElement)
+    }
+}
+
+export function copyElements(marquee: MarqueeElementInterface) { 
+    const 
+        childrens = marquee.HTMLList.querySelectorAll('[data-fsc-marquee-item]'),
+        childrenArray = Array.from(childrens) as HTMLElement[],
+        rootWidth = marquee.HTMLList.getBoundingClientRect().width,
+        maxIndex = childrens.length - 1,
+        isHorizontal = marquee.direction === 'left' || marquee.direction === 'right'
+
+    if (!childrens.length) return
+
+    let currIndex = 0
+
+    if(marquee.type === 'default') {
+        marquee.dimension = isHorizontal ? 
+                Array.from(childrens).reduce(
+                    (acc, el) => acc + (el as HTMLElement).getBoundingClientRect().width,
+                0) + marquee.gap * (childrens.length - 1) : 
+                marquee.marquee.getBoundingClientRect().height
+
+        while(marquee.dimension <= rootWidth) {
+            const clone = childrenArray[currIndex].cloneNode(true) as HTMLElement
+
+            clone.setAttribute('data-fsc-marquee-clone', '')
+            marquee.HTMLList.appendChild(clone)
+
+            currIndex = currIndex === maxIndex ? 0 : ++currIndex
+
+            marquee.dimension += clone.getBoundingClientRect().width + marquee.gap
+        }
+
         const 
-            root = marquee.querySelector<HTMLElement>('[data-fsc-marquee-list]')
+            newChildrens = marquee.HTMLList.querySelectorAll('[data-fsc-marquee-item]'),
+            newChildrenArray = Array.from(newChildrens) as HTMLElement[]
+    
+        for(const child of newChildrenArray) {
+            const clone = child.cloneNode(true) as HTMLElement
+            clone.setAttribute('data-fsc-marquee-clone', '')
+            marquee.HTMLList.appendChild(clone)
+        }
+    } else if(marquee.type === 'double' && marquee.HTMLWrapper) {
+        const clone = marquee.HTMLList.cloneNode(true) as HTMLElement
 
-        if (!root || root.getAttribute('data-fsc-marquee-initialized')) continue
+        clone.setAttribute('data-fsc-marquee-clone', '')
+        marquee.HTMLWrapper.appendChild(clone)
 
-        const
-            speed = marquee.getAttribute('data-fsc-marquee-speed') ? parseInt(marquee.getAttribute('data-fsc-marquee-speed')!) : 1000,
-            direction = marquee.getAttribute('data-fsc-marquee-direction'),
-            offset = marquee.getAttribute('data-fsc-marquee-start') ? parseInt(marquee.getAttribute('data-fsc-marquee-start')!) : 0,
-            childrens = root.querySelectorAll('[data-fsc-marquee-item]'),
-            gap = Number.parseFloat(getComputedStyle(root).columnGap)
-
-        const
-            typisiertDirection: MarqueeDirection = 
-                direction === 'left' || direction === 'right' || direction === 'top' || direction === 'bottom'
-                    ? direction : 'left',
-            isHorizontal = typisiertDirection === 'left' || typisiertDirection === 'right'
-        
-        if(isHorizontal) {
-            let childrensWidth = Array.from(childrens).reduce(
-                (acc, el) => acc + (el as HTMLElement).getBoundingClientRect().width,
-            0) + gap * (childrens.length - 1)
-
-            const 
-                childrenArray = Array.from(childrens) as HTMLElement[],
-                rootWidth = root.getBoundingClientRect().width,
-                maxIndex = childrens.length - 1
-
-            let currIndex = 0
-            while(childrensWidth <= rootWidth) {
-                const clone = childrenArray[currIndex].cloneNode(true) as HTMLElement
-                clone.setAttribute('data-fsc-marquee-clone', '')
-                root.appendChild(clone)
-
-                currIndex = currIndex === maxIndex ? 0 : ++currIndex
-
-                childrensWidth += clone.getBoundingClientRect().width + gap
-            }
-
-            const 
-                newChildrens = root.querySelectorAll('[data-fsc-marquee-item]'),
-                newChildrenArray = Array.from(newChildrens) as HTMLElement[]
+        const 
+            firstElement = marquee.HTMLList.querySelector<HTMLElement>('[data-fsc-marquee-item]'),
+            originalRect = marquee.HTMLList.getBoundingClientRect(),
+            cloneRect = clone.getBoundingClientRect()    
             
-            for(const child of newChildrenArray) {
-                const clone = child.cloneNode(true) as HTMLElement
-                clone.setAttribute('data-fsc-marquee-clone', '')
-                root.appendChild(clone)
-            }
+        if (firstElement) {
+            marquee.gap = firstElement.getBoundingClientRect().width
 
-            marqueeElements.push({marquee, root, dimention: childrensWidth, gap, speed, offset, direction: typisiertDirection, visible: false, animationID: undefined})
-
+            marquee.HTMLWrapper.style.columnGap = `${marquee.gap}px`
         }
-        else {
-            const childrensHeight = marquee.getBoundingClientRect().height
-            marqueeElements.push({marquee, root, dimention: childrensHeight, gap, speed, offset, direction: typisiertDirection, visible: false, animationID: undefined})
 
-        }
-        
-        root.setAttribute('data-fsc-marquee-initialized', 'true')
+        marquee.dimension = isHorizontal
+            ? cloneRect.left - originalRect.left
+            : cloneRect.top - originalRect.top
     }
 }
 
@@ -109,7 +158,7 @@ function step(marquee: MarqueeElementInterface) {
     if(marquee.direction === 'left') {
         marquee.offset -= marquee.speed / 1000
 
-        if (marquee.offset < -marquee.dimention) {
+        if (marquee.offset < -marquee.dimension) {
             marquee.offset = marquee.gap
         }
     }
@@ -117,13 +166,13 @@ function step(marquee: MarqueeElementInterface) {
         marquee.offset += marquee.speed / 1000
 
         if (marquee.offset >= marquee.gap) {
-            marquee.offset = -marquee.dimention
+            marquee.offset = -marquee.dimension
         }
     }
     else if(marquee.direction === 'top') {
         marquee.offset -= marquee.speed / 1000
 
-        if (marquee.offset < -marquee.dimention) {
+        if (marquee.offset < -marquee.dimension) {
             marquee.offset = marquee.gap
         }
         
@@ -132,15 +181,17 @@ function step(marquee: MarqueeElementInterface) {
         marquee.offset += marquee.speed / 1000
 
         if (marquee.offset >= marquee.gap) {
-            marquee.offset = -marquee.dimention
+            marquee.offset = -marquee.dimension
         }
     }
 
     if(isHorizontal) {
-        marquee.root.style.transform = `translate3d(${marquee.offset}px, 0, 0)`
+        if(marquee.HTMLWrapper) marquee.HTMLWrapper.style.transform = `translate3d(${marquee.offset}px, 0, 0)`
+        else marquee.HTMLList.style.transform = `translate3d(${marquee.offset}px, 0, 0)`
     }
     else {
-        marquee.root.style.transform = `translate3d(0, ${marquee.offset}px, 0)`
+        if(marquee.HTMLWrapper) marquee.HTMLWrapper.style.transform = `translate3d(0, ${marquee.offset}px, 0)`
+        else marquee.HTMLList.style.transform = `translate3d(0, ${marquee.offset}px, 0)`
     }
         
     marquee.animationID = requestAnimationFrame(() => step(marquee))

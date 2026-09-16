@@ -13,12 +13,15 @@
 // <\%- include('externe/components/content/Marquee/Marquee.ejs', {
 //     marquee_component: {
 //         this: {
-//                 parent: 'parentClass',
-//                 class: ['childClass'],
-//                 tag: 'div',
-//                 style: ['customStyle'],
-//                 dataAttribute: ['customDataAttributes'] 
-//             },
+//             component: 'component',
+//             parent: 'parentClass',
+//             block: 'childBlockClass',
+//             class: ['childClass'],
+//             id: ['childID'],
+//             tag: 'div',
+//             style: ['customStyle'],
+//             dataAttribute: ['customDataAttributes'], 
+//         },
 //         images: [
 //             {
 //             src: 'src',
@@ -41,88 +44,47 @@
         return
     }
 
-    var marqueeImages = undefined
-    var marqueeData = undefined
-
-    var thisClass = 'marquee'
-	if(
-        (typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
-        (typeof marquee_component.this.parent !== 'undefined' && marquee_component.this.parent)
-    ) {
-		thisClass = `${marquee_component.this.parent}__marquee marquee`
-	} else if(
-        (typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
-        (typeof marquee_component.this.class !== 'undefined' && marquee_component.this.class)
-    ) {
-        if(typeof marquee_component.this.class === 'string') {
-			thisClass = `${marquee_component.this.class} marquee`
-		} else if(typeof marquee_component.this.class === 'object') {
-			thisClass = `${marquee_component.this.class.join(' ')} marquee`
-		}
+    marquee_component.this = {
+        ...marquee_component.this,
+        tag: marquee_component.this?.tag ? marquee_component.this?.tag : 'article',
+        dataAttribute: [
+            'data-fsc-marquee',
+            ...marquee_component.this.dataAttribute,
+        ]
     }
 
-    var thisTag = 'article'
-	if(
-		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
-		(typeof marquee_component.this.tag !== 'undefined' && marquee_component.this.tag)
-	) {
-		thisTag = marquee_component.this.tag
-	}
+    var {blockClass, thisClass, thisID, thisTag, thisStyles, thisDataAttributes} = externe.setupEJSComponent({...marquee_component.this, componentName: 'marquee'})
 
-    var thisStyles = undefined
-    if(
-		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
-		(typeof marquee_component.this.style !== 'undefined' && marquee_component.this.style)
-	) {
-        if(typeof marquee_component.this.style === 'string') {
-			thisStyles = `style='${marquee_component.this.style}'`
-		} else if(typeof marquee_component.this.style === 'object') {
-			thisStyles = `style='${marquee_component.this.style.join(' ')}'`
-		}
-	}
+    isDouble = false
 
-    var thisDataAttributes = 'data-fsc-marquee'
-	if(
-		(typeof marquee_component.this !== 'undefined' && marquee_component.this) &&
-		(typeof marquee_component.this.dataAttribute !== 'undefined' && marquee_component.this.dataAttribute)
-	) {
-		if(typeof marquee_component.this.dataAttribute === 'string')
-        {
-            thisDataAttributes += ' ' + marquee_component.this.dataAttribute
+    if(typeof marquee_component.type !== 'undefined' && marquee_component.type) {
+        if(marquee_component.type === 'double') {
+            isDouble = true
+
+            thisDataAttributes += ' data-fsc-marquee-type=double'
         }
-        else if(typeof marquee_component.this.dataAttribute === 'object')
-        {
-            thisDataAttributes += ' ' + marquee_component.this.dataAttribute.join(' ')
-        }
-        
-	}
-
-    if(typeof marquee_component.images !== 'undefined' && marquee_component.images) {
-        marqueeImages = marquee_component.images
-    } else if(typeof marquee_component.data !== 'undefined' && marquee_component.data) {
-        marqueeData = marquee_component.data
     }
 %>
 
 <<%=thisTag%> class='<%=thisClass%>' <%-thisDataAttributes%> <%-thisStyles%>>
-    <ul class="marquee__inner" data-fsc-marquee-list>
-        <% if(typeof marqueeImages !== 'undefined' && marqueeImages) { %>
-            <% for(const image of marqueeImages) { %>
-                <li class="marquee__item" data-fsc-marquee-item>
-                    <%- include('../../media/Image/Image.ejs', {
-                        image_component: {
-                            block: 'marquee',
-                            img: image
-                        } 
-                    }) %>
-                </li>           
-            <% } %>
-        <% } else if(typeof marqueeData !== 'undefined' && marqueeData) { %>
-            <% for(const item of marqueeData) { %>
-                <li class="marquee__item" data-fsc-marquee-item>
-                    <%= item %>
-                </li>           
-            <% } %>
+    <% if(Array.isArray(marquee_component.content)) { %>
+        <% if(isDouble) { %>
+            <div class="<%=blockClass%>__wrapper" data-fsc-marquee-wrapper>
         <% } %>
-    </ul>
+
+        <ul class="<%=blockClass%>__list" data-fsc-marquee-list>
+        
+            <% for(const content of marquee_component.content) { %>
+                <li class="<%=blockClass%>__item" data-fsc-marquee-item>
+                    <%-content%>
+                </li>
+            <% } %>
+        
+        </ul>
+
+        <% if(isDouble) { %>
+            </div>
+        <% } %>
+        
+    <% } %>
 </<%=thisTag%>>

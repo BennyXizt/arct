@@ -2,4 +2,14 @@
 
 .footer {
    
+    .copyright-footer {
+        &__wrapper {
+            // gap: 312px;
+        }
+        &__list {
+            flex: 0 0 calc(100dvw - 60px);
+            align-items: center;
+            justify-content: space-between;
+        }
+    }
 }
