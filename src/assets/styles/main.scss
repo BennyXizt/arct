@@ -19,12 +19,14 @@
   './layout/portfolio',
   './layout/services',
   './layout/achievements',
-  './layout/testimonials';
+  './layout/testimonials',
+	'./layout/faq';
 // internal layout END
 
 @import
   '../../../externe/components/menu/ThemeToggle/ThemeToggle',
   '../../../externe/components/media/Gallery/Gallery',
+  '../../../externe/components/content/Accordion/Accordion',
   '../../../externe/components/content/Marquee/Marquee',
   '../../../externe/components/menu/Burger/Burger';
 

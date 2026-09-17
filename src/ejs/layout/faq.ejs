@@ -1,0 +1,81 @@
+<%
+	blockClass = 'faq'
+
+	accordionBlock = 'accordion-faq'
+
+	accordions = [
+		{
+			title: `What type of projects do you do?`,
+			text: [
+				`Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nisi, augue urna, mauris elementum ligula semper enim. Tristique sed sit facilisis ultrices rhoncus eget ullamcorper tellus.`,
+			],
+		},
+		{
+			title: `How much time I will spend on planning?`,
+			text: [
+				`Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nisi, augue urna, mauris elementum ligula semper enim. Tristique sed sit facilisis ultrices rhoncus eget ullamcorper tellus.`,
+			],
+		},
+		{
+			title: `Can I specify delivery date when ordering?`,
+			text: [
+				`Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nisi, augue urna, mauris elementum ligula semper enim. Tristique sed sit facilisis ultrices rhoncus eget ullamcorper tellus.`,
+			],
+		},
+		{
+			title: `Are there any discounts included?`,
+			text: [
+				`Lorem ipsum dolor sit amet, consectetur adipiscing elit. In nisi, augue urna, mauris elementum ligula semper enim. Tristique sed sit facilisis ultrices rhoncus eget ullamcorper tellus.`,
+			],
+		},
+	].map((accordion, index) => {
+		return {
+			this: {
+				class: `${blockClass}__accordion`,
+				component: accordionBlock,
+				dataAttribute: index === 0 && 'data-fsc-accordion-active'
+			},
+			summary: {
+				content: [
+					`<span class="${accordionBlock}__title">${accordion.title}</span>`,
+					`<button class="${accordionBlock}__button" data-fsc-accordion-touch></button>`
+				]
+			},
+			body: {
+				content: accordion.text.map(e => `<p>${e}</p>`).join('')
+			},
+			behaviour: 'default', 
+		}
+	})
+%>
+
+<section class='layout__<%=blockClass%> <%=blockClass%>'>
+	<div class='<%=blockClass%>__container container'>
+		<div class='<%=blockClass%>__container-inner container-inner'>
+			<%- include('src/ejs/components/title.ejs', {
+				title_component: {
+					wrapper: {
+						block: `${blockClass}__body`
+					},
+					this: {
+						parent: blockClass,
+					},
+					title: {
+						tag: 'h2',
+						label: 'FAQS'
+					},
+					subtitle: [
+						`Id at urna non viverra eu volutpat porttitor elementum. Viverra senectus dui ultricies dolor.`,
+					]
+				}
+			})%>
+			<div class="<%=blockClass%>__items">
+				<% for(const accordion_component of accordions) { %>
+					<%- include('externe/components/content/Accordion/Accordion.ejs', {
+						accordion_component: accordion_component
+					}) %>
+				<% } %>
+			</div>
+		</div>
+	</div>
+</section>

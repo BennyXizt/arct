@@ -1,0 +1,111 @@
+@use 'sass:map';
+
+@mixin accordionHover {
+    .accordion-faq {
+        &__summary {
+            &:not(:last-child) {
+                @include rem(margin-bottom, 10px);
+            }
+        }
+
+        &__body {
+            p  {
+                &:not(:last-child) {
+                    @include rem(margin-bottom, 10px);
+                }
+            }
+        }
+
+        &__button {
+            &::before {
+                transform: translate(-50%, -50%) rotate(180deg);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(180deg);
+            }
+        }
+    }
+}
+
+.faq {
+    &__items {
+        display: flex;
+        flex-direction: column;
+
+        @include rem((
+            flex: 1 1 360px,
+            row-gap: 35px
+        ));
+    }
+
+    @media (min-width: 986px) {
+        &__body {
+            position: sticky;
+            
+            @include rem((
+                top: 120px,
+                flex: 1 1 480px,
+            ));
+        }
+    }
+
+    .accordion-faq {
+        box-shadow: 0 20px 37px 0 rgba(0, 0, 0, 0.02);
+        border: 1px solid map.get($COLORS, white_100);
+        border-bottom-color: map.get($COLORS, gray_lite);
+
+        @include fluid(padding, (30px 15px) (40px 15px));
+
+        &__title {
+            line-height: 1.7;
+            letter-spacing: -1%;
+            color: map.get($COLORS, preDark);
+
+            @include fluid(font-size, 30 20);
+        }
+
+        &__body {
+            color: map.get($COLORS, gray);
+        }
+
+        &__button {
+            flex-shrink: 0;
+            position: relative;
+
+            &::before,
+            &::after {
+                content: '';
+                width: 100%;
+                height: 3px;
+                background-color: map.get($COLORS, preDark);
+                border-radius: 2px;
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+
+                @include transition(transform);
+            }
+
+            &::after {
+                transform: translate(-50%, -50%) rotate(90deg);
+            }
+
+            @include rem((
+                width: 22px,
+                height: 22px,
+            ));
+        }
+
+        @media (hover: hover) and (pointer: fine) {
+            &:hover {
+                @include accordionHover;
+            }
+        }
+
+        &[data-fsc-accordion-active] {
+            @include accordionHover;
+        }
+    }
+}

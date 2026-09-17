@@ -1,9 +1,6 @@
 @use 'sass:map';
 
 .services {
-    &__body {
-        @include rem(flex-basis, 480px);
-    }
     &__items {
         display: grid;
         grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
@@ -19,7 +16,10 @@
         &__body {
             position: sticky;
             
-            @include rem(top, 120px);
+            @include rem((
+                top: 120px,
+                flex-basis: 480px,
+            ));
         }
     }
 

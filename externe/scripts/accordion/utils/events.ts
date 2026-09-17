@@ -8,7 +8,7 @@ export function accordionAutoload() {
 
     for(const accordion of accordions) {
         const
-            isHoverNeeded = accordion.hasAttribute('data-fsc-accordion-nohover') ?? true,
+            isHoverNeeded = accordion.hasAttribute('data-fsc-accordion-allow-nohover') ?? true,
             behaviour = accordion?.getAttribute('data-fsc-accordion-behaviour') ?? 'default',
             media = accordion?.getAttribute('data-fsc-accordion-media-query'),
             body = accordion.querySelector('[data-fsc-accordion-body]') as HTMLElement || accordion.querySelector('.accordion__body') as HTMLElement

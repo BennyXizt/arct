@@ -1,49 +1,77 @@
 @use 'sass:map';
 
-.accordion {
-    &[data-fsc-accordion-behaviour='default'] {
-        @mixin accordionHover {
-            .accordion {
-                &__body {
-                    opacity: 1;
-                    visibility: visible;
-                    transform: scaleY(1);
-                    max-height: 500px;
-                }
-                &__title {
-                    &-icon {
-                        transform: rotate(180deg);
-                    }
-                }
-            }
+@mixin accordionHover {
+    [data-fsc-accordion-body] {
+        opacity: 1;
+        visibility: visible;
+        transform: scaleY(1);
+        max-height: 500px;
+    }
+
+    [data-fsc-accordion-touch] {
+        transform: rotate(180deg);
+    }
+}
+
+@mixin accordionHoverActive {
+    [data-fsc-accordion-body] {
+        transform: scaleY(0);
+        transform-origin: top;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+    }
+
+    [data-fsc-accordion-touch] {
+        transform: rotate(0deg);
+    }
+}
+
+%accordionHide {
+    [data-fsc-accordion-body] {
+        transform: scaleY(0);
+        transform-origin: top;
+        max-height: 0;
+        opacity: 0;
+        visibility: hidden;
+
+        @include transition(max-height, transform, opacity, visibility);
+    }
+
+    @media (hover: hover) and (pointer: fine) {
+        &:hover {
+            @include accordionHover;
         }
+    }
 
-        .accordion {
-            &__summary {
-                cursor: pointer;
-                display: flex;
-                justify-content: space-between;
-            }
+    &[data-fsc-accordion-active] {
+        @include accordionHover;
+    }
+}
 
-            &__body {
-                transform: scaleY(0);
-                transform-origin: top;
-                max-height: 0;
-                opacity: 0;
-                visibility: hidden;
+[data-fsc-accordion] {
+    [data-fsc-accordion-summary] {
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: text;
+    }
 
-                @include transition(max-height, transform, opacity, visibility);
-            }
-        }
-
+    &[data-fsc-accordion-behaviour='active'] {
         @media (hover: hover) and (pointer: fine) {
             &:hover {
-                @include accordionHover;
+                @include accordionHoverActive;
             }
         }
 
         &[data-fsc-accordion-active] {
-            @include accordionHover;
+            @include accordionHoverActive;
         }
+    }
+
+    &[data-fsc-accordion-behaviour='default'],
+    &[data-fsc-accordion-behaviour='alternative'] {
+        @extend %accordionHide;
     }
 }
